@@ -1,0 +1,75 @@
+TABLO SILME 
+    => drop table tablo_ismi;
+    => drop table tablo_ismi CASCADE; -> tabloyu referans alan tablolari da siler 
+
+TABLO ADI DEGISTIRME 
+    => alter table student rename to ogrenci; 
+    => alter tale ogrenci rename to student;
+
+
+TABLOYA SUTUN EKLEME 
+    => alter table student add birthYear char(4); 
+
+TABLODAN SUTUN SILME 
+    => alter table student drop birthYear;
+
+TABLO STUN ADI DEGISTIRME 
+    => alter table student rename name to isim;
+
+TABLOYA KAYIT EKLEME 
+
+TABLODAN KAYIT SILME 
+
+
+TABLODAKI KAYDI GUNCELLEME 
+    => update student set firstName='Ayse' where stdno=123
+
+
+TABLODA STRING SEARCH 
+    -> soyadinda r harfi olan kisileri listeleyin 
+        select * from student where lastname like '%r%';
+
+    -> ogrenci numarasi 123 ile 200 arasinda olan kisileri listeleyin
+
+        select * from student where stdno between 123 and 200  
+        array[jjj]
+        array[jjj]
+        array[jjj]
+    -> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

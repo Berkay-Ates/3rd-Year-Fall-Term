@@ -1,0 +1,200 @@
+entry to the lab 
+    => en genc calisanin calistigi projelerin ismini bulunuz 
+        select fname
+        from employee, works_on, project
+        where ssn=essn and dno=dnumber and bdate = (select min(bdate) from employee)
+
+
+GROUP (AGGREGATE) FUNCTIONS 
+    
+    =>Avg()
+    =>Count()
+    =>MIN()
+    =>MAX()
+    =>SUM()
+
+    *** Select having ifadelerinde aggregate fonksiyonleri kullanilirlar 
+    *** where ifadelerinden sonra kullanilmazlar 
+
+
+AS Anahtar sozcugu 
+    => AS anahtar sozcugu ile default gelen isimler yerine istedigimiz isimleri aggregate fonksiyonlarinin ciktilarina verebiliriz 
+    
+        select avg(salary) AS ortalamaMaas, sum(salary) AS toplamMaas 
+        from employee 
+
+    => as kullanmadan da istersek bir isimlendirme yapabiliriz  
+        select avg(salary) ortalamaMaas, sum(salary) toplamMaas
+        from employee
+
+
+GROUP BY 
+    => Gruplamalar yapip grup fonksiyonunu kullanmamizi saglar 
+
+        => project tablosunu dnum kolonuna gore gruplandirmak, ve her bir departmanda kac tane proeje oldugunu yazdirmak istersek
+
+            select dnum, count(*)
+            from project
+            GROUP BY dnum
+
+        => Bilgisayar muhendisligi bolumundeki herbir dersin kac kisi tarafindan alindigini listeleyiniz
+            
+            select code, count(*)
+            from take 
+            where code like '%BLM%'
+            GROUP BY code
+
+
+ORDER BY    
+    => Select ifadesinden dondurulen satirlari belirtilen olcutlere gore artan veya azalan duzende siralamamizi saglar
+        ORDER BY default olarak kucukten buyuge dogru siralar, eger istersek ORDER BY id DESC diyerek DESC ifadesi ile 
+        buyukten kucuge dogru siralamasini da saglayabiliriz 
+        
+        => 2012 girisli ogrencilerin numaralainin kucukten buyuge dogru sirali olacak sekilde kayitlarini gosteriniz 
+
+            select code,id
+            from take 
+            where id like '12%'
+            ORDER BY 
+            
+HAVING  
+    => Gruplari filtrelemek icin, where ifadesi yerine having ifadesi kullanilir 
+    => AGGREGATE fonksiyonlarini WHERE ifadesinden sonra kullanamayiz, Having ile kullanabiliriz 
+    => Havingden once group by ifadesi kullanilmalidir. Yani having GROUP BY ile kullanilmalidir.
+
+        => Ortalama maasin 40000 den fazla oldugu departmanlarin numaralarini listeleyin 
+
+            select dno, avg(salary)
+            from employee
+            group by dno
+            having avg(salary)>40000;
+
+        => 5 numarali departman disindaki departmanlar arasindan, ortalama maasi 40000$ dan fazla olan 
+           departmanlarin numaralarini ve bu departmandaki ortalama maaslari bulan sorguyu yaziniz 
+           
+           select avg(salary),dno 
+           from employee
+           group by dno 
+           having avg(salary) > 40000 
+           and dno <> 5;
+
+
+LIMIT  
+    => Sorgu sonucundaki olusan tabloda belli bir araliktaki satirlari almak icin kullanilir 
+        
+        => ilk 3 kayidi getir 
+            => select code,id 
+                from take 
+                limit 3
+
+        => 5 kayittan sonraki ilk 3 kaydi getir 
+             => select code,id 
+                from take 
+                limit 3 offset 5
+
+
+        => en cok maas alan iscinin ismini ve soyismini getiren sorguyu order ve limit ile cozunuz 
+
+            => select fname, lname 
+                from employee 
+                order by salary DESC
+                limit 1s
+
+
+
+IS NULL 
+    => icerigi bos olan degerleri gormek istedigimizde IS NULL keywordunu kullaniriz 
+        Tablodaki null degeri bos gorunen bir alandaki degerdir
+
+        => select ssn,superssn
+           from employee
+           where superssn is NULL
+
+
+EXTRACT Anahtar sozcugu 
+    => Date tipinde belirtilen girdilerden yil,ay,gun,kacinci hafta vs bilgisini almamizi saglar 
+        => select EXTRACT(year from bdate) from employee;
+
+
+
+
+
+
+==> KULLANILAN SORGULARIN GENEL SIRALAMASI SU SEKILDEDIR 
+        
+        SELECT 
+        FROM 
+        WHERE 
+        GROUP BY 
+        HAVING 
+        ORDER BY 
+        LIMITs
+
+
+
+
+    ORN: Sales departmaninda kac kisinin calistigini toplam maaslarini, en yuksek maaslari, en dusuk maasi en yuksek maasi 
+        ve ortalam maasi bulunuz 
+
+        select min(salary), sum(salary), max(salary), avg(salary), count(*)
+        from employee, department
+        where departmanin = sales and dno=dnumber 
+
+
+    ORN: Middleware projesinde kac kisinin calistigini ve bu calisanlarin ortalama maaslarini bulunuz
+        select avg(salary) as ortalamaMaas, count(salary) as kisisayisi
+        from employee, works_on, project
+        where ssn=essn and pno=pnumber  and pname='Middleware';
+
+    ORN: En genc calisanin calistigi projelerin numaralarini listeleyiniz 
+        select pname 
+        from employee, works_on, project
+        where bdate = (select max(bdate) from employee) and essn =   and pno=pnumber;
+
+
+    ORN:Her bir projede calisanlarin ortalama maasini bulup proje isimlerine gore alfabetik olarak siralayiniz 
+        select pname, avg(salary) 
+        from employee, works_on, project
+        where essn = ssn and pnumber = pno
+        GROUP BY pname
+        ORDER by pname;
+
+    
+    ORN: Her bir departmanda her bir cinsiyetten kacar isci oldugunu ve bu iscilerin ortalama maaslarini bulunuz 
+        select dno,sex,count(*),avg(salary)
+        from employee 
+        GROUP BY dno,sex;
+
+
+    ORN: 2012 Girisli ogrenciler arasinda sadece 1 kisi tarafindan alinan derslerin kodlarini ve dersi alan 
+        ogrencilerin id'lerini listeleyin
+
+
+        select id,code 
+        from take
+        where id like '12%' 
+        group by code
+        having count(*) = 1
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,165 @@
+8255 PPI 
+
+=> 8255 programlanabilir cevre arayuzu (programmable peripheral interface) olarak isimlendirilen uc adet genel amacli iskele varindiran 8bit veri genisligine sahip TTl upumlu G/C birimlerini mikroislemci ile baglamak icin kullanilan bir programlanabilir arayuz devresidir. 
+
+Genel kullanim amaci 
+=> temel paralel G/C
+=> tetikleme temelli paralel G/C olarak verilebilir
+
+
+8255 fonksiyonel devresi 8 adet veri (D7-D0) iki adet address (A0-A1) okuma kontrol _RD, yazma kontrol _WR , yetkilendirme _CS , reset uclarina ve her biri 8 uclu 3 adet iskeleye (PortA , PortB, PortC) sahiptir).
+
+
+A1	A0	_RD	_WR	_CS		islem(okuma)
+0	0	0	1	0		portA => veri yolu
+0	1	0	1	0		portB => veri yolu 
+1	0	0	1	0		portC => veri yolu 
+1	1	0	1	0 		kontrol kelimesi => Veri yolu 
+
+0	0	1	0	0		veri yolu => A 
+0	1	1	0	0		veri yolu => B
+1	0	1	0	0		veri yolu => C
+1	1	1	0	0		veri yolu => kontrol kelimesi 
+
+
+
+PortA 
+port A sekiz bit cikis yonlu tampon mandal ve sekiz bit giris yonlu mandal yazmaclari barindirir. Dolayisiyla PortA sekiz bit giris veya sekiz bit cikis birimi olarak kullanilabilir. 
+
+PortB 
+PortB sekiz bit cikis yonlu tampon ve sekiz bit giris yonlu mandal yazmaclari barindirir. Dolayisiyla portB sekiz bit giris veya sekiz bit cikis birimi olarak kullanilabilir. 
+
+PortC
+portC iki adet dort bit cikis yonlu tampon/mandal ve iki adet dort bit giris yonlu tampon barindirir. Dolayisiyla portCl ve portCH 4 er bit G/C birimleri olarak kullanilabirilrler. PortC kip1 ve kip2 de kontrol ve drum yazmaclari olarak calisir buna gore 8255te iki adet sekiz bitlik ve iki adet dort bitlik iskeleler oldugu soylenebilir. 
+
+
+
+8255 KIPLERI 
+
+8255 icin 4 farkli kip tanimlanabilir bunlar BIT kipi, kip0, kip1 ve kip 2 
+Bit kipi (BSR bit set reset) portC uclarinda lojik 0 veya lojik 1 degerleri olusturmak icin kullanilabilecek bir kiptir. Kip1 kesme aktiflestirme bitleri INTEA, INTEB ile kip2 kesme aktiflestirme bitleri inte1 ve inte2 ayarlamada kullanilir. 
+
+Kip0 basit giris cikis kipidir led, yedi parcali gosterge buton ve tus taram takimi surme gibi handshaking gerektirmeyen giris cikis islemlerinde kullanilir.  
+
+
+=>BIT KIPI (Bit Set Reset Mode)
+Bit kipi 8255 PortC uclarindan herhangi bir bitine lojik 0 veya 1 yazmak icin tanimlanmistir. BSR kipi bir bitlik temel cikis icin kullanilabilecegi gibi kip1 ve kip2de bit bazinda ayarlamalar yapmak icin de kullanilir. 
+
+
+=>KIP0
+Temel G/C islemlerinde ornegin dogrudan cikis birimi (LED) surme dogrudan giris birimi (button) okuma islemlerinde KIP0 kullanilir. KIP0 ile sekiz bitlik PortA, sekiz bitlik PortB, dort bitlik porCL ve dort bitlik Portch den her biri ayri ayri giris veya cikis yonlu olarak ayarlanabilir. 
+
+
+=>Kip1
+Tek yonlu tetikleme paralel veri aktarimi icin KIP1 kullanilir. GrupA veya grupB kip1 de kullanilabilr. 
+
+GrupA giris yonlu olarak kullaniliyorsa veri PortA dan okunurken PortC3, PortC4, PortC5 kontrol uclari olarak calismaktadir. GrupA giris olarak kullanildiginda bosta kalan PortC6 ve PortC7 ise G/C icin kullanilabilir. 
+
+GrupA cikis yonlu olarak kullaniliyorsa veri PortA'dan gonderilirken PortC3, PortC6, PortC7 kontrol uclari olarak calismaktadir. Grup A cikis olarak kullanildiginda bosta kalan PortC4 ve PortC5 ise G/C icin kullanilir. 
+
+
+GrupB giris yonlu olarak kullaniliyorsa veri portB den okunurken, PortC0, PortC1, PortC2 kontrol uclari olarak calismaktadir.
+
+GrupB cikis yonlu olarak kullaniliyorsa veri PortB'den gonderilirken PortC0, PortC1, PortC2 kontrol uclari olarak calismaktadir. 
+
+
+
+=> Kip 1 giris yonlu kullanildiginda tetikleme temelli kontrol uclari ve gorevleri su sekilde olusur 
+
+_STB(STROBE) 
+=> 8255 acisindan bir giris ucudur. Bu uctaki lojik 0 seviyesi veri uclarindaki degerin giris yazmaclarina kopyalanmasini baslatir. 
+
+
+=> IBF (Interrupt Buffer Full)
+8255 acisindan bir cikis ucudur. Bu uctaki lojik 1 seviyesi verinin giris yazmacina kopyalanmis oldugunu bildirir. Bu uc bir bakima verinin alinmis oldugunu bildiren onay ucudur. IBF ucu; _STB girisinin lojik 0 olmasindan belirli bir sure sonra lojik 1 seviyesine gecer. IBF ucu; _RD ucunun dusen kenariyla ise lojik 0 seviyesine gecer. 
+
+
+=> INTR (INTERRUPT Request Enable) 
+8255 acisindan bir cikis ucudur. 8255 te verinin hazir oldugu 8086 ya bir kesme istegi ile bildirilmek istenirse bunun icin INTR ucu kullanilabilir. INTR ucu; _STB lojik 1, IBF lojik 1 ve INTE lojik 1 oldugunda lojik 1 seviyesine gecer. INTR ucu ; _RD ucunun yukselen kenariyla ise lojik 0 seviyesine gecer. 
+
+
+
+=> INTE (Interrupt Request Enable) 
+KEsme temelli veri okuma yapabilmek icin INTE bitlerinin BSR kipinde lojik 1 seviyesinde ayarlanmalari gerekmektedir. INTEA PortC4, INTEB ise PortC2 ile kontrol edilir. 
+
+
+
+==> Kip1 cikis yonlu kullanildiginda tetikleme temelli kontrol uclari ve grevleri su sekilde olusur. 
+
+
+=> _OBF (Output Buffer Full) 
+8255 acisindan bir cikis ucudur. _OBF ucu; 8086'nin disari aktarilmak uzere 8255 e veri yazmasiyla yani _WR ucunun yukselen kenariyla lojik1 seviyesine gecer. OBF ucu ; _ACK ucunun lojik 0 olmasiyla lojik 0  seviyesine gecer. 
+
+=> _ACK (Acknowledge) 
+8255 acisindan bir giris ucudur. Bu ucta gorulen lojik 0 seviyesi veri uclarindan gonderilen degerin dis birim tarafindan kabul edilerek alindigi anlamina gelir. 
+
+
+=> INTR
+8255 acisindan bir cikis ucudur. 8255 in yeni veri gondermeye hazir oldugu 8086 ya bir kesme istegi ile bildirilmek istenirse bunun icin INTR ucu kullanilabilir. INTR ucu; _ACK lojik 1, _OBF lojik 1 ve INTE lojik 1 oldugunda lojik 1 seviyesine gecer. INTR ucu _WR ucunun dusen kenariyla ise lojik 0 seviyesine gecer. 
+
+
+=> INTE (Interrupt Enable) 
+KEsme temelli veri gonderme yapabilmek icin INTE bitlerinin BSR kipinde lojik 1 seviyesinde ayarlanmalari gerekmektedir. INTEA PortC6, INTEB ise PortC2 ile kontrol edilir. 
+
+
+
+
+
+8255 kip1 icin ayarlanmissa PORTC'den yapilan okumalarda durum yazmacina erisilmis olur.
+
+Okunan deger ise durum kelimesi (status word) olarak isimlandirilir.Status word ile _OBF, IBF, INTR degerleri ile I/O icin ayrilan PORTC uclari (giris yonlu Kip1 icin PortC6, PortC7, cikis yonlu Kip1 de PortC4 , PortC5) okunabilir. 8255 kullanilarak Kip1 ile veri gonderme veya alma islemi kontrol temelli veri aktarma (polling) ile gerceklestitilecekse, durum yazmaci bir dongu icerisinde okunarak ilgili _OBF ve IBF bitleri test edilir. BU islem ilgili bit'ler beklenen degere ulasana kadar tekrarlanir. Benzer bir kontrol INTR bitleri icin de yapilabilir.  
+
+
+
+
+KIP2
+Cift yonlu tetikleme temelli paralel veri aktarimi icin Kip2 kullanilabilir. 8255 icin sadece GrupA kip2 ile veri aktarimini desteklemektedir. GRUPA kip2 ile kullanilirken veri PortA ile yazilip okunur, PortC3, PortC4, PortC5, PortC6 ve PortC7 ise kontrol uclari olarak calismaktadir. Kip2 icin PortA yonu o an icin yurutulen komuta gore belirlenmektedir.
+
+
+.
+.
+.
+.
+.
+.
+.
+
+
+
+
+
+KODCOZUCU ILE ADDRESS COZUMLEME 
+=> 8 bitlik G/C adres degerleri ile islem yapilacak ise bunun G/C assembly komutlari sabit adres ile kullanilabilir. Bu durumda G/C biriminin adres araligi belirleyen 8 adet adres ucundan (A7-A0) gerekli olanlar ve cesitli kontrol uclari (M/_IO,_WR,_BHE) adres cozumleme icin 3x8 kod cozucu ile birlikte kullanilabilir. Bellek ve cevre birimlerinin secim uclari aktif 0 mantikta oldugundan aktif 0 cikisli 74138 tumdevresi adres cozumlemede kullanilabilri. 
+
+
+
+YEDI PARCALI GOSTERGE 
+Yedi (veya ondalik nokta ile sekiz) parcali gosterge LED'lerin uygun sekilde yerlestirilmesi ile ondalik onaltilik basamaklar veya cesitli alfasayisal degerler olusturabilen gostergelerdir. Yedi parcali gostergeler tek baslarina bir basamak gosterecek sekilde veya birden fazla kullanilara cok basamakli bir sayi gosterecek sekilde kullanilabilir. Yedi parcali gostergelerde sekiz tane veri ucu ve bir adet de ortak uc bulunur. Ortak uc kullanilan ledlerin katot uclarini birlestiriyorsa bu ortak uc ortak katatot uc olarak isimlendirilir.
+
+
+
+TUS TARAMA TAKIMI 
+Buton kullanimda bir port ucu bir butona ayrilmaktadir. BU durumda sayisal bir tus takimi uygulamasinda ornegin 0-9 arasi basamaklar ve iki ozel karakter icin toplam 12 uc gerekmektedir. Secenek olarak daha az uc gerektiren fakat karmasikligi buton taramaya gore dha fazla olan tus tarama takimi kullanilabilir. Tus takiminda basilan butonun bagli oldugu sutun ve satir uclari kisa devre yapilir. Tus takiminda basilan butonun bagli oldugu sutun ve satir uclari kisa devre yapilir. Tus taram takiminda sekiz adet ucla toplam 16 ated buton surulebilir. 
+
+Tus tarama takiminin surulmesinde sutunlar cikis yonlu olarak ayarlanmis satirlar ise giris yonlu olarak ayarlanmis 8255 uclarina baglanir. Her seferinde sadece bir sutun aktif edilerek sirasiyla tum sutunlar surulur. Son sutuna gelindiginde tekrar ilk sutuna donulerek islem tekrarlanir. Herhangi bir butona basilmamissa satirlardan varsayilan degerler okunacaktir. Herhangi bir butona basildiginda ise surulen sutun butonun sutununa denk geldigi anda butonun bulundugu satirda varsayilandan farkli deger okunur. Sutunlar sira ile sutuldugunden dolayi aktif sutun yazilim tarafindan bilinmektedir, benzer sekilde hangi satirdan varsayilan harici deger okundugu bilgisi de dikkate alinarak basilan butonun sutun-statir degerleri dolayisiyla buton degeri tespit edilir. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

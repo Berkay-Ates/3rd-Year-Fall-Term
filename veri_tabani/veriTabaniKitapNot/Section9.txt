@@ -1,0 +1,228 @@
+				APPLICATIONS DEVELOPMENT 
+The most common way in which users interact with databases is through an application program that provides a user interface at the front end and interfaces with a database at the back end.
+
+The growth of personal computers resulted in the development of database applications with graphical user interfaces, or GUIs. These interfaces depended on code running on a personal computer that directly communicated with a shared database. Such an architecture was called a client–server architecture.
+
+There were two drawbacks to using such applications: first, user machines had direct access to databases, leading to security risks. Second, any change to the application or the database required all the copies of the application, located on individual computers, to be updated together. Two approaches have evolved to avoid the above problems:
+
+1- Web browsers provide a universal front end, used by all kinds of information
+services. Browsers use a standardized syntax, the HyperText Markup Language
+(HTML) standard, which supports both formatted display of information and creation of forms-based interfaces.
+
+
+2- Application programs are installed on individual devices, which are primarily mobile devices. They communicate with backend applications through an API and do
+not have direct access to the database. The back end application provides services,
+including user authentication, and ensures that users can only access services that
+they are authorized to access.
+
+
+API that can be invoked from either mobile app or JavaScript code to carry out any required task at the back end. In fact, the same back end is often used to build multiple front ends, which could include web front ends with JavaScript, and multiple mobile platforms (primarily Android and iOS, today).
+
+
+
+				WEB FUNDAMETALS
+UNIFORM RESOURCE LOCATORS 
+URL is a globally unique name of each document that can be accessed on the web. 
+
+			http://www.acm.org/sigmod
+
+The first part of the URL indicates how the document is to be accessed: “http” indicates that the document is to be accessed by the HyperText Transfer Protocol (HTTP),which is a protocol for transferring Html documents. The second part gives the name of a machine that has a web server. The rest of the URL is the path name of the file on the machine or other unique identifier of a dcument within the machine. 
+
+
+HTML supports stylesheets, which can alter the default definitions of how an HTML
+formatting construct is displayed, as well as other display attributes such as background color of the page. The cascading stylesheet (CSS) standard allows the same stylesheet to be used for multiple HTML documents, giving a distinctive but uniform look to all the pages on a web site.
+
+Moreover there are lots of input types field providedd by the html. Such as data of file picker input types. 
+
+
+WEB SERVERS AND SESSIONS
+A web server is a program running on the server machine that accepts requests from
+a web browser and sends back results in the form of HTML documents. The browser
+and web server communicate via HTTP. Web servers provide powerful features beyond the simple transfer of documents. The most important feature is the ability to execute programs with arguments supplied by the user and to deliver the results back as an HTML document. 
+
+
+The common gateway interface (CGI) standard defines how the web server communicates with application programs. The application program typically communicates with a database server, through ODBC, JDBC, or other protocols, in order to get or store data.
+
+Using multiple levels of servers increases system overhead; the CGI interface starts a new process to service each request, which results in even greater overhead.
+
+
+Most web applications today therefore use a two-layer web application architecture,
+where the web and application servers are combined into a single server, as shown in. We study systems based on the two-layer architecture in more detail in subsequent sections. There is no continuous connection between the client and the web server; when a web server receives a request, a connection is temporarily created to send the request and receive the response from the web server. But the connection may then be closed, and the next request could come over a new connection.
+
+One important reason that HTTP is CONNECTIONLESS is that most computers have limits on the number of simultaneous connections they can accommodate, and if a large number of sites on the web open connections to a single server, this limit would be exceeded, denying service to further users.
+
+
+Extra information is usually maintained in the form of a COOKIE at the client;
+a cookie is simply a small piece of text containing identifying information and with an associated name. For example, google.com may set a cookie with the name prefs, which encodes preferences set by the user such as the preferred language and the number of answers displayed per page. Cookies can be stored permanently or for a limited time. 
+
+For the purpose of tracking a user session an application may generate a session identifier and send a  cookie named sessionID containing the session identifier.  the sessin identifier is also stored locally at the server .When a request comes in the application server request the cookie named sessionid from the client. If the client does not have the cookie stored or returns a value that is not currently recorded as a valid session identifier at the server the applications concludes that the request is not part of current session. 
+
+
+SERVLETS 
+The Java servlet specification defines an application programming interface for communication between the web/application server and the application program. The
+HttpServlet class in Java implements the servlet API specification; servlet classes used to implement specific functions are defined as subclasses of this class.
+
+The code for a servlet is loaded into the web/application server when the server
+is started, or when the server receives a remote HTTP request to execute a particular servlet. The task of a servlet is to process such a request, which may involve accessing a database to retrieve necessary information, and dynamically generating an HTML page to be returned to the client browser.
+
+Each servlet request results in a new thread within which the call is executed so multiple requests can be handled in paralled. Any values from the form menus and input fields on th web page as well as cookies pass through an objedt of the HttpServletRequest class that is created for the request and the reply to the request passes thought an object of the class HttpServletResponse. 
+
+The servlet code returns the results of the query to the requester by outputting them to the HttpServletResponse object response. Outputting the results to response is implemented by first getting a PrintWriter object out from response, and then printing the query result in HTML format to out. 
+
+
+SERVLET SESSIONS 
+Recall that the interaction between a browser and a web/application server is stateless. That is, each time the browser makes a request to the server, the browser needs to connect to the server, request some information, then disconnect from the server. Cookies can be used to recognize that a request is from the same browser session as an earlier request. However, cookies form a low-level mechanism, and programmers require a better abstraction to deal with sessions.
+
+
+Servlet tarafinda eger ilgili cookie de kullanici bilgileri yada herhangi bilgi yoksa kullanici servlt tarafindan loigna yollar. 
+
+
+SERVLET LIFE CYCLE
+The life cycle of a servlet is controlled by the web/application server in which the servlet as been deployed. When there is a client request for a specific servlet, the server first checks if an instance of the servlet exists or not. If not, the server loads the servlet class into the Java virtual machine (JVM) and creates an instance of the servlet class. In addition, the server calls the init() method to initialize the servlet instance. Notice that each servlet instance is initialized only once when it is loaded.
+
+ALTERNATIVE SERVER-SIE FRAMEWORKS 
+There are several alternatives to Java Servlets for processing requests at the application server including scripting languages and web applications fremeworks developed for languages such as Python. 
+
+SERVER-SIDE SCRIPTING 
+In server-side scripting, before delivering a web page, the server executes the scripts embedded within the HTML contents of the page. Each piece of script, when executed, can generate text that is added to the page (or may even delete content from the page). The source code of the scripts is removed from the page, so the client may not even be aware that the page originally had any code in it.
+
+
+Java Server Pages => JAVA + SERVLETS 
+Next we briefly describe Java Server Pages (JSP), a scripting language that allows
+HTML programmers to mix static HTML with dynamically generated HTML. The motivation is that, for many dynamic web pages, most of their content is still static (i.e.,
+the same content is present whenever the page is generated). The dynamic content of
+the web pages (which are generated, for example, on the basis of form parameters) is often a small part of the page. Creating such pages by writing servlet code results in a large amount of HTML being coded as Java strings. JSP instead allows Java code to be embedded in static HTML; the embedded Java code generates the dynamic part of the page. JSP scripts are actually translated into servlet code that is then compiled, but the application programmer is saved the trouble of writing much of the Java code to create the servlet.
+
+PHP 
+PHP is a scripting language that is widely used for server-side scripting. PHP code can be intermixed with HTML in a manner similar to JSP. The characters “<?php” indicate the start of PHP code, while the characters “?>” indicate the end of PHP code.
+
+WEB APPLICATION FRAMEWORKS
+Web application development frameworks ease the task of constructing web applications by providing features such as these:
+
+• A library of functions to support HTML and HTTP features, including sessions.
+• A template scripting system.
+• A controller that maps user interaction events such as form submits to appropriate functions that handle the event. The controller also manages authentication and sessions. Some frameworks also provide tools for managing authorizations.
+• A (relatively) declarative way of specifying a form with validation constraints on user inputs, from which the system generates HTML and Javascript/Ajax code to
+implement the form.
+
+Many of web frameworks also make it easy to create simple CRUD web interfaces; that is, interfaces that support create, read, update and delete of objects/tuples by generating code from an object model or a database.
+
+
+CLIENT-SIDE CODE AND WEB SERVICES 
+Client-side scripting languages are languages designed to be executed on the client’s web browser. The primary motivation for such scripting languages is flexible interaction with the user, providing features beyond the limited interaction power provided by HTML and HTML forms. Further, executing programs at the client site speeds up interaction greatly compared to every interaction being sent to a server site for processing.
+
+Any client-side interface needs to store and retrieve data from the back end. Directly accessing a database is not a good idea, since it not only exposes low-level details, but it also exposes the database to attacks. Instead, back ends provide access to store and retrieve data through web services
+
+=> Complexive input validations cannot be made with the html instead javascript is used for those kind of jobs. 
+
+
+RESPONSIVE USER INTERFACES 
+The browser parses HTML code into an in-memory tree structure defined by a standard called the Document Object Model (DOM). JavaScript code can modify the tree structure to carry out certain operations.
+
+INTERACTING WITH WEB SERVICES 
+Today, JavaScript is widely used to create dynamic web pages, using several technologies that are collectively called Ajax. Programs written in JavaScript can communicate with the web server asynchronously (that is, in the background, without blocking user interaction with the web browser), and can fetch data and display it. The JavaScript Object Notation, or JSON, representation described in Section 8.1.2 is the most widely used data format for transferring data, although other formats such as XML are also used.
+
+
+Web Services
+A web service is an application component that can be invoked over the web and functions, in effect, like an application programming interface. A web service request is sent using the HTTP protocol, it is executed at an application server, and the results are sent back to the calling program.
+Two approaches are widely used to implement web services. In the simpler approach, called REPRESENTATION STATE TRANSFER (or REST), web service function calls are
+executed by a standard HTTP request to a URL at an application server, with parameters sent as standard HTTP request parameters. The application server executes the request (which may involve updating the database at the server), generates and encodes the result, and returns the result as the result of the HTTP request. The most widely used encoding for the results today is the JSON representation, although XML, which we sawearlier in Section 8.1.3, is also used.
+
+
+DISCONNECT OPERATION
+Many applications wish to support some operations even when a client is disconnected from the application server. For example, a student may wish to complete an application form even if her laptop is disconnected from the network but have it saved back hen the laptop is reconnected. As another example, if an email client is built as a webapplication, a user may wish to compose an email even if her laptop is disconnected rom the network and have it sent when it is reconnected. Building such applicationsrequires local storage in the client machine.
+
+
+			  APPLICATION ARCHITECTURES
+• The presentation or user-interface layer, which deals with user interaction. A single application may have several different versions of this layer, corresponding to distinct kinds of interfaces such as web browsers and user interfaces of mobile
+phones, which have much smaller screens.
+In many implementations, the presentation/user-interface layer is itself conceptually broken up into layers, based on the model-view-controller(MVC) architecture. The model corresponds to the business-logic layer, described below. The view defines the presentation of data; a single underlying model can have different views depending on the specific software/device used to access the application. The controller receives events (user actions), executes actions on the model, and returns a view to the user. The MVC architecture is used in a number of web application frameworks.
+
+• The business-logic layer, which provides a high-level view of data and actions on
+data.
+
+• The data-access layer, which provides the interface between the business-logic layer and the underlying database.
+
+
+THE BUSINESS-LOGIC LAYER 
+ provides high level view of data and actions on data
+• often using an object data model
+ hides details of data storage schema
+
+The code implementing these actions ensures that business rules are satisfied; for
+example, the code would ensure that a student can enroll for a course only if she has already completed course prerequisites and has paid her tuition fees.
+In addition, the business logic includes workflows, which describe how a particular
+task that involves multiple participants is handled.
+
+
+THE DATA ACCESS LAYER AND OBJECT RELATIONAL MAPPING
+In the simplest scenario, where the business-logic layer uses the same data model as the database, the data-access layer simply hides the details of interfacing with the database. However, when the business-logic layer is written using an object-oriented programming language, it is natural to model data as objects, with methods invoked on objects.
+
+
+HYBERNATE ORM 
+The Hibernate system is widely used for mapping from Java objects to relations. Hibernate provides an implementation of the Java Persistence API (JPA). In Hibernate, the mapping from each Java class to one or more relations is specified in a mapping file.
+
+The mapping file can specify, for example, that a Java class called Student is mapped to the relation student, with the Java attribute ID mapped to the attribute student.ID, and so on.
+
+
+APPLICATION PERFORMANCE 
+REDUCINT OVERHEAD BY CACHING
+Suppose that the application code for servicing each user request connects to a
+database through JDBC. Creating a new JDBC connection may take several milliseconds, so opening a new connection for each user request is not a good idea if very high transaction rates are to be supported
+
+The connection pooling method is used to reduce this overhead; it works as follows:
+The connection pool manager (typically a part of the application server) creates a pool (that is, a set) of open ODBC/JDBC connections. Instead of opening a new connection to the database, the code servicing a user request (typically a servlet) asks for (requests) a connection from the connection pool and returns the connection to the pool when the code (servlet) completes its processing. If the pool has no unused connections when a connection is requested, a new connection is opened to the database (taking care not to exceed the maximum number of connections that the database system can support concurrently). If there are many open connections that have not been used for a while, the connection pool manager may close some of the open database connections.
+
+
+APPLICATION SECURITY 
+The first point where security has to be enforced is in the application. To do so,
+applications must authenticate users and ensure that users are only allowed to carryout authorized tasks.
+
+SQL Injection
+In SQL injection attacks, the attacker manages to get an application to execute an SQL query created by the attacker. In Section 5.1.1.5, we saw an example of an SQL injection vulnerability if user inputs are concatenated directly with an SQL query and submitted to the database.
+
+
+ Cross-Site Scripting and Request Forgery
+A web site that allows users to enter text, such as a comment or a name, and then stores it and later displays it to other users, is potentially vulnerable to a kind of attack called a cross-site scripting (XSS) attack. In such an attack, a malicious user enters code written in a client-side scripting language such as JavaScript or Flash instead of entering a valid name or comment. When a different user views the entered text, the browser executes the script, which can carry out actions such as sending private cookie information back to the malicious user or even executing an action on a different web server that the user may be logged into
+
+
+For example, suppose the user happens to be logged into her bank account at the
+time the script executes. The script could send cookie information related to the bank account login back to the malicious user, who could use the information to connect to the bank’s web server, fooling it into believing that the connection is from the original user. Or the script could access appropriate pages on the bank’s web site, with appropriately set parameters, to execute a money transfer. In fact, this particular problem can occur even without scripting by simply using a line of code such as
+
+<img src="https://mybank.com/transfermoney?amount=1000&toaccount=14523">
+
+Resmi yuklerken para transferi yapcak, cookielerde yada java servletlerde de kullanici giris yapmis oldugu icin komut ta kobul edilecektir. 
+
+assuming that the URL mybank.com/transfermoney accepts the specified parameters
+and carries out a money transfer. This latter kind of vulnerability is also called cross-site request forgery or XSRF (sometimes also called CSRF).
+
+TO PROTECT US FROM XSS or in another name XSRF 
+=> Prevent your we site from being used to launc XSS or XSRF attacks 
+=> Protect your web site from XSS or XSRF attacks launched from other sites 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,194 @@
+CREATE TYPE calisanlar AS (worker_ssn_no VARCHAR(9),worker_fname VARCHAR(15));
+
+CREATE OR REPLACE FUNCTION UNION_OZEL(p_name1 project.pname%TYPE, p_name2 project.pname%TYPE)
+RETURNS calisanlar[] AS $$
+
+DECLARE 
+	calisan1_cursor CURSOR FOR SELECT ssn,fname from employee, works_on, project where pname = p_name1 and essn=ssn and pnumber=pno;
+	calisan2_cursor CURSOR FOR SELECT ssn,fname from employee, works_on, project where pname = p_name2 and essn=ssn and pnumber=pno;
+	ortak_elemanlar calisanlar[]; 
+	i NUMERIC := 0;
+	j NUMERIC := 0;
+	tmp calisanlar;
+BEGIN 
+	
+	FOR item1 in calisan1_cursor LOOP
+		ortak_elemanlar[i] := item1;
+		i:=i+1;
+	END LOOP;
+	
+	FOR item2 in calisan2_cursor LOOP
+		FOR item1 in calisan1_cursor LOOP
+			IF item2.ssn = item1.ssn THEN 
+				j:=1;
+			END IF;
+		END LOOP; 
+			
+		IF j = 0 THEN 
+			RAISE NOTICE '%s %s',item2.ssn, item2.fname;
+			ortak_elemanlar[i] := item2;
+			i:=i+1;
+		END IF;
+		j:=0;
+	END LOOP;
+	
+	RETURN ortak_elemanlar;
+END 
+
+$$ LANGUAGE 'plpgsql';
+
+select  * from UNION_OZEL('ProductX','ProductY');
+
+SELECT ssn,fname from employee, works_on, project where pname = 'ProductX' and essn=ssn and pnumber=pno;
+SELECT ssn,fname from employee, works_on, project where pname = 'ProductY' and essn=ssn and pnumber=pno;
+
+
+-- ORKHAN COZUM QUIZ 1. soru
+CREATE TYPE calisanlar AS (worker_ssn_no CHAR(9),worker_fname VARCHAR(15));
+
+CREATE OR REPLACE FUNCTION UNION_OZEL(p_name1 project.pname%TYPE, p_name2 project.pname%TYPE)
+RETURNS calisanlar[] AS $$
+
+DECLARE 
+	calisan1_cursor CURSOR FOR SELECT ssn,fname from employee, works_on, project where pname = p_name1 and essn=ssn and pnumber=pno;
+	calisan2_cursor CURSOR FOR SELECT ssn,fname from employee, works_on, project where pname = p_name2 and essn=ssn and pnumber=pno;
+	union_elemanlar calisanlar[];
+	union_size integer;
+	i integer;
+	j integer;
+BEGIN 
+	union_size := 0;
+	FOR item1 in calisan1_cursor LOOP
+		union_size := union_size + 1;
+		union_elemanlar[union_size] := item1;
+
+	END LOOP;
+	
+	FOR item2 in calisan2_cursor LOOP
+		i := 1;
+		WHILE (i <= union_size and item2 <> union_elemanlar[i]) LOOP
+			i := i + 1;
+		END LOOP;
+		IF(union_size=0 or i > union_size) THEN
+			union_size := union_size + 1;
+			union_elemanlar[union_size] := item2;
+		END IF;
+	END LOOP;
+	
+	RETURN union_elemanlar;
+END;
+
+$$ LANGUAGE 'plpgsql';
+
+select  * from UNION_OZEL('ProductX','ProductY');
+
+drop type calisanlar
+
+-- Departmanlardaki erkek çalışanların sayısının kadın çalışanların sayısından fazla olmasını insert durumlarinda saglayan
+-- trigger'ı, trigger fonksiyonunu ve en az 1 tane tetikleyen ifadeyi yazınız (35P).
+CREATE TRIGGER cinsiyet_dagilimi_triggeri
+BEFORE INSERT
+ON employee
+FOR EACH ROW EXECUTE PROCEDURE cinsiyet_controlu()
+
+
+drop trigger cinsiyet_dagilimi_triggeri on employee;
+
+
+CREATE OR REPLACE FUNCTION cinsiyet_controlu()
+RETURNS TRIGGER AS $$
+
+BEGIN 
+	if new.sex = 'F' THEN 
+		if(select count(*) from employee where sex ='M') > (select count(*) from employee where sex ='F') then 
+			RAISE NOTICE 'Kadin sayisi baya artti ama hala dusuk yani';
+			return new;
+		else 
+			RAISE NOTICE 'Kadin sayisi erkek sayisinin 12 ustune cikmis vaziyette';
+			return null;
+		END IF;
+	else 
+		return null;
+	END IF;
+
+END 
+
+$$ LANGUAGE 'plpgsql';
+
+INSERT INTO employee VALUES 
+  ('Johna','B','Smith','101010111','09-Jan-55','731 Fondren, Houston, TX','F',30000,'333445555',5);
+select * from employee where sex = 'F' and fname = 'John'
+
+select count(*) from employee where sex ='F';
+select count(*) from employee where sex ='M';
+
+-- Departmanlardaki erkek çalışanların sayısının kadın çalışanların sayısından fazla olmasını engelleyen
+-- trigger'ı, trigger fonksiyonunu ve en az 1 tane tetikleyen ifadeyi yazınız
+
+CREATE TRIGGER erkek_sayisi_controller
+BEFORE INSERT OR DELETE 
+ON employee
+FOR EACH ROW EXECUTE PROCEDURE erkek_populasyon_controlu();
+
+
+CREATE OR REPLACE FUNCTION erkek_populasyon_controlu()
+RETURNS TRIGGER AS $$
+
+DECLARE 
+	male_count NUMERIC := (select count(*) from employee where sex = 'M');
+	female_count NUMERIC := (select count(*) from employee where sex ='F');
+
+BEGIN 
+	IF TG_OP = 'INSERT' THEN 
+		IF new.sex = 'M' THEN 
+			IF male_count +1 <= female_count THEN 
+				return new;
+			END IF;
+
+			RAISE EXCEPTION ' EKLEME sonucu erkek sayisi kadin sayisini gececegi icin ekleme iptal edildi';
+			return null;
+
+		ELSE 
+			-- 	female eklenmek istendi 
+			RETURN new;
+
+		END IF;
+
+	ELSIF TG_OP = 'DELETE' THEN 
+		IF(old.sex = 'F') THEN 
+			IF(female_count -1 > male_count) THEN 
+				return old;
+			END IF;
+
+			RAISE EXCEPTION ' SILME sonucu kadin sayisi erkek sayisini altina inecegi icin silme iptal edildi';
+			return null;
+		ELSE 
+			-- male silinmek istendi
+			return old;
+
+		END IF;
+
+	END IF;
+END;
+$$ LANGUAGE 'plpgsql';
+
+
+INSERT INTO employee VALUES 
+  ('Alicia','J','Zelaya','999887772','19-JUL-58','3321 Castle, Spring, TX','M',25000,'987654321',4);
+
+select * from employee where ssn = '999887771'
+
+delete from employee where ssn = '999887771'
+
+select count(*) from employee where sex ='F';
+select count(*) from employee where sex ='M';
+
+
+
+
+
+
+
+
+
+

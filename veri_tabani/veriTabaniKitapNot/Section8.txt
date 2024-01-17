@@ -1,0 +1,288 @@
+				COMPLEX DATA TYPES 
+
+SEMI STRUCTURED DATA 
+The relationsl data model has been extended in several ways to support the storage and data exchange needs of modern applications. semi structured data ornekleri
+flexible schema,  multi-valued types ((multi)set, array, map),  Nested Models(JSON, XML), key-value stores, document-store, graph-store..
+
+FLEXIBLE SCHEMA 
+Some database systems allow each tuple to potentially have a different set of attributes; such a representation is referred to as a wide column data representation. The set of attributes is not fixed in such a representation; each tuple may have a different set of attributes, and new attributes may be added as needed. A more restricted form of this representation is to have a fixed but very large number of attributes, with each tuple using only those attributes that it needs, leaving the rest with null values; such a representation is called a sparse column representation.
+
+
+MULTIVALUED DATA TYPES
+Many data representations allow attributes to contain non-atomic values. Many databases allow the storage of SETS,MULTISETS or ARRAYS as attribute values. Some representations allow attributes to store key-value maps, which store key-value paris. A key-value map, often just called a map, is a set of pairs, such that each key occurs in at most one element. 
+
+Support for multivalued attribute types was proposed earyl in the history of databases, and the associated data model was called the non first-normal-form or NFNF data model. 
+An array databaase is a db thar provides specialized support for arrays including efficient compressed storage and query language extensions to support operations on arrays. 
+
+NESTED DATA TYPES json and xml
+Many data representations allow attributes to be structured directly modeling composite attributes in the E-R model. For example an attribute name may have component attributes firstname and lastname. All of these data types rpresent a hierarchy of daya types and that structure leads to the use of the term NESTED DATA TYPES.
+
+Like the wide-table approach the JSON and XML representatins provide flexibility in theset of attributes that a recodr contains as well as the types of these attributes. However, the JSON and XML representations permit a more flexible structuring of data, where objects could have sub-objects; each object thus corresponds to a tree structure
+
+KNOWLEDGE REPRESENTATION 
+With the growth of the web, a need arose to represent extremely large knowledge bases, with potentially billions of facts. The Resource Description Format (RDF) data representation is one such representation that has found very wide acceptance.
+Like the E-R model which we studied earlier, RDF models data as objects that have
+attributes and have relationships with other objects. RDF data can be viewed as a set of triples (3-tuples), or as a graph, with objects and attribute values modeled as nodes and relationships and attribute names as edges. 
+
+
+JSON 
+
+The JavaScript Object Notation (JSON), is a textual representation of complex data
+types that is widely used to transmit data between applications and to store complex data. JSON supports the primitive data types integer, real and string, as well as arrays, and “objects,” which are a collection of (attribute name, value) pairs.
+
+Unlike relational representation, json is verbose and takes up more storage space for the same data. Further parsing the text to retrieve required fields can be very CPU intensive. Compressed representations that also make it easier to retrieve values without parsing are therefore papular for storage of data. For example a compressed binary called BSON (Binary Json) is used in many systems for string JSON data. 
+
+SQLhas been extended to support json: 
+1- JSON data can be stored as a JSON data type.
+2- SQL queries can generate JSON data from relatioal data. For example sql can convert each tuple to a json object. In addition there are also SQL extensions that allow creation of a JSON object from a collection of rows by using an aggregate function. 
+3- SQL queries can extract data from a JSONobject using some form of path constructs. For example in PostgreSQL, if a value v is of type JSON and has an attribute “ID”, v−>’ID’ would return the value of the “ID” attribute of v.
+
+
+XML 
+The XML data representation adds tags enclosed in angle brackest <>, to mark up enformation en a textual representation. Tags are used in pairs with  <tag> and </tag> delimiting the beginning and the end of the portion of the text to which the tag refers. 
+
+Unlike with a relational schema, new tags can be introduced easily adn with suitable names the data are self-documenting int that a human can understand or guess what a particular piece of data means based on the name. 
+
+The XQuery language was developed to support querying of XML data. However the SQL language itself has been extended to support XML in several ways 
+1-XML data can be stored as an XML data type. 
+2- SQL queries can generate XML data from relational data. Such extensions are very useful for packaging related pieces of data into one XML document. The extensions allow the construction of XML representations from individual rows. As well as the creation of an XML document from a collection of rows by using an XMLAGG aggregate function. 
+3- SQL queries can extract data from an XML data type value. 
+
+			RDF AND KNOWLEDGE GRAPHS
+The RESOURCE DESCRIPTION FRAMEWORK (RDF) is a data representation standard based on the entitty-relationship model. We provide an overview of RDF in this section. 
+	
+TRIPLE REPRESENTATION 
+The RDF model represents data by a set of TRIPLES that are in one of these two forms:
+	1. (ID, attribute-name, value)
+	2. (ID1, relationship-name, ID2)
+
+ID's are identifiers of entities, entitites are also referred to as resources in RDF. Note that unlike the E-R model the RDF model only support binary relationships. The first attribute of a triple is called its SUBJECT, the second attribute is called its PREDICATE, and the last attribute is called its OBJECT. Thus a triple has the structure (subject,predicate,object). 
+
+10101 	instance-of 	instructor .
+10101 	name        	"Srinivasan" .
+10101 	salary 	  	"6500" .
+
+Each of the attributes is represented as a seperate triple. The type information of objects is provided by the instance-of relationsip for example 10101 is identified as an instance of instructor, while 00128 is an instance of student. 
+
+In contrast to the E-R model and relational schemas, RDF allows new attributes to be easily added to an object and also to create new types of relationships. 
+
+
+			   GRAPH REPRESENTATION OF RDF 
+The RDF representation has a very natural graph interpretation. Entities and attribute values can be considered as nodes, and attribute names and relationships can be considered as edges between the nodes. The attribute/relationship name can be viewed as the label of the corresponding edge.
+
+A representation of information using the RDF graph model is referred to as a KNOWLEDGE GRAPH. Knowledge graphs are used ofr a variety of purposes. 
+
+
+				SPARQL 
+SPARQL is a query language designed to query RDF data. The language is on triple patterns which look like RDF triples but may contains variables. For example the triple pattern 
+
+		?cid title "intro to computer science"
+would match all triples whose predicate is 'title' and objects is 'intro to computer science'. Here ?cid is a variable that can match any value. 
+
+Queries can have multiple triple patterns, with variables shared across triples. Consider the following pair of triples:
+		?cid title "Intro. to Computer Science"
+		?sid course ?cid
+
+On the university-triple dataset shown in Figure 8.3, the first triple pattern matches the triple (CS-101, title, "Intro. to Computer Science"), while the second triple pattern matches (sec1, course, CS-101). The shared variable ?cid enforces a join condition between the two triple patterns.
+
+
+We can now show a complete SPARQL query. The following query retrieves names
+of all students who have taken a section whose course is titled “Intro. to Computer
+Science”.
+		select ?name
+			where {
+				?cid title "Intro. to Computer Science" .
+				?sid course ?cid .
+				?id takes ?sid .
+				?id name ?name .
+			}
+
+
+The shared variables between these triples enforce a join condition between the tuples matching each of these triples. 
+
+
+				OBJECT ORIENTATION 
+The object-orientation data model extends the relational data model by providing a richer type system, including complex data types and object orientation. 
+
+Having to express database access using a language(SQL)that is different from the programming language again makes the job of the programmer harder. It is desirable for many applications to have programming language constructs or extensions that permit direct access to data in the database without having to go through an intermediate language such as SQL. Three approaches are used practice for integrating object orientation with db systems:
+
+1- Build an OBJECT RELATIONAL DB SYSTEM, which adds object-oriented features to a relational db system. 
+
+2- Automatically convert data from the native object-oriented type system of the programming language to a relational representation for storage and vice versa for retrieval. Data conversion is specified using an OBJECT-RELATIONAL MAPPING. 
+
+3- Build an OBJECT-ORIENTED DATABASE SYSTEM, that is a database system that natively supports an object-oriented type system and allows direct access to data from an object-oriented programming language using the native type system of the language. 
+
+
+			OBJECT-RELATIONAL DATABASE SYSTEMS
+In tis section we outline how object-oriented features can  be added t orelational db systems. Many db systemes support array and table types; attributes of relations and os user-defined types can be declared to be of such array or table types. The support for such features as well as thee syntax varies widely by db systems. 
+
+
+	create type interest as table (
+			topic varchar(20),
+			degree of interest int
+			);
+	
+	create table users (
+			ID varchar(20),
+			name varchar(20),
+			interests interest
+			);
+
+			TYPE INHERITANCE 
+Consider the earlier definition of the type Person and the table people. We may want to store extra information in the database about people who are students and about people who are teachers. Since students and teachers are also people, we can use inheritance to define the student and teacher types in SQL:
+
+		create type Student under Person
+			(degree varchar(20)) ;
+
+		create type Teacher under Person
+			(salary integer);
+
+
+Both Student and Teacher inherit the attributes of Person—namely, ID, name, and address. Student and Teacher are said to be subtypes of Person, and Person is a supertype of Student, as well as of Teacher. Methods of a structured type are inherited by its subtypes, just as attributes are. However, a subtype can redefine the effect of a method. We omit details.
+
+
+			 	Table Inheritance
+Table inheritance allows a table to be declared as a subtable of another table and corresponds to the E-R notion of specialization/generalization. Several database systems support table inheritance, but in different ways.
+In PostgreSQL, we could create a table people and then create tables students and
+teachers as subtables of people as follows:
+
+			create table students
+				(degree varchar(20))
+				inherits people;
+
+			create table teachers
+				(salary integer)
+				inherits people;
+
+As a result every attribute present in the table people is also present in the subtables students and teachers. When we declare student and TEACHERS as subtables of PEOPLE, every tuple present in STUDENTS or TEACHERS becomes implicitly present in PEOPLE. Thus if a query uses the table PEOPLE it will find not only tuples directly inserted into that table but also tuples inserted into its subtables, namely students and teachers. However only those attributes that are present in people can be accessed by that query. SQL permits us to find tuples that are in people but not in its subtables by using 'only people' in place of people in a query.   
+
+=> Nesneleri birbirine isaret ettirerek daha kompleks veri tipleri olusturuyoruz ve boylece kompleks veri tipleri ust seviyedeki dilin objelerine benziyor. 
+
+
+REFERENCE TYPES IN SQL 
+
+
+
+OBJECT-RELATIONAL MAPPING 
+Object-Relational Mapping (ORM) systems allow a programmer to define a mapping between tuples in database relations and objects in the programming language. 
+An object, or a set of objects, can be retrieved based on a selection condition on
+its attributes; relevant data are retrieved from the underlying database based on the selection conditions, and one or more objects are created from the retrieved data, based on the prespecified mapping between objects and relations. The program can update retrieved objects, create new objects, or specify that an object is to be deleted, and then issue a save command; the mapping from objects to relations is then used to correspondingly update, insert, or delete tuples in the database. The primary goal of object-relational mapping systems is to ease the job of programmers who build applications by providing them an object model while retaining the benefits of using a robust relational database underneath.
+
+
+On the negative side, object-relational mapping systems can suffer from significant
+performance inefficiencies for bulk database updates, as well as for complex queries that are written directly in the imperative language. It is possible to update the database directly, bypassing the object-relational mapping system, and to write complex queries directly in SQL in cases where such inefficiencies are discovered.
+
+
+				TEXTUAL DATA 
+Textual data consists of unstructured text. The term information retrieval generally refers to the querying of unstructured textual data. In the traditional model used in the field of information retrieval, textual information is organized into documents. In a database, a text-valued attribute can be considered a document. In the context of the web, each web page can be considered to be a document
+
+
+				KEYWORD QUERIES 
+Information retrieval systems support the ability to retrieve documents with some desired information. The desired documents are typically described by a set of keywords —for example, the keywords “database system” may be used to locate documents on database systems, and the keywords “stock” and “scandal” may be used to locate articles about stock-market scandals. Documents have associated with them a set of keywords; typically, all the words in the documents are considered keywords. A keyword query retrieves documents whose set of keywords contains all the keywords in the query.
+
+Documentler icindeki dosyalarla isimiz oldugu icin dosyalari arastirmamiz google in kullandigi page ranking olayalarina bir bakis atmamiz lazim. 
+
+
+				RELEVANCE RANKING 
+The set of all documents that contain keywords in a query may be very large in particular therea re biliions of documents on the web adn most keyword queries on  a web search engine find hundreds of thousands of documents ocntaining someor all of the keywords. Not all the documents are eually relevant to a keyword query. Information retrieval systems therefore estimate relevance of documents to a query and return only highly ranked documents as answers. Relevance ranking is not an exact science but there are some well accepted approaches. 
+
+			RANKING USING TF-IDF
+TF= term frequency 
+IDF = inverse document frequency
+
+TF(d, t) = log(1 + n(d,t)/n(d)) where
+n(d,t) = number of occurrences of term t in document d and 
+n(d) = number of terms in document d
+
+The word term refers to a keyword occurring in a document, or given as part of a query.
+The first question to address is, given a particular term t, how relevant is a particular
+document d to the term.In the information retrieval community, the relevance of a document to a term is referred to as term frequency (TF), regardless of the exact formula used.
+
+A query Q may contain multiple keywords. The relevance of a document to a query with two or more keywords is estimated by combining the relevance measures of the document for each keyword. However, not all terms used as keywords are equal. Suppose a query uses two terms, one of which occurs frequently, such as “database”, and another that is less frequent, such
+as “Silberschatz”. A document containing “Silberschatz” but not “database” should be
+ranked higher than a document containing the term “database” but not “Silberschatz”.
+To fix this problem, weights are assigned to terms using the inverse document frequency (IDF), defined as:
+			
+			IDF(t) = 1/n(t)
+
+Where n(t) denotes the number of documents (among those indexed by the system) that contain the term t.
+
+
+The RELEVANCE of a document d to as set of terms Q is then defined as 
+		 r(d, Q) = ∑t∈Q TF(d, t) ∗ IDF(t)
+
+Proximity yani benzer veya yakin kelimelerin kullanilmasi ayrica a the gibi cok tekrar eden ve STOP WORD olarak adlandirilan kelimelerin dikkate alinamamsi da ranking mantiginda kullanilan yontenmlerden biridir. 
+
+
+RANKING USING HYPERLINKS 
+ Hyperlinks provide very important clues to importance
+ Google introduced PageRank, a measure of popularity/importance 
+based on hyperlinks to pages
+• Pages hyperlinked from many pages should have higher PageRank
+• Pages hyperlinked from pages with higher PageRank should have higher 
+PageRank
+• Formalized by random walk model
+
+
+Measuring Retrieval Effectiveness
+Ranking of results of a keyword query is not an exact science. Two metrics are used to
+measure how well an information-retrieval system is able to answer queries. The first,
+precision, measures what percentage of the retrieved documents are actually relevant
+to the query. The second, recall, measures what percentage of the documents relevant
+to the query were retrieved.
+• Precision: what percentage of returned results are actually relevant
+• Recall: what percentage of relevant results were returned
+
+
+KEYWORD QUERYING ON STRUCTURED DATA AND KNOWLEDGE GRAPHS
+Although querying on structured data are typically done using query languages such
+as SQL, users who are not familiar with the schema or the query language find it difficult to get information from such data. Based on the success of keyword querying in
+the context of information retrieval from the web, techniques have been developed to
+support keyword queries on structured and semi-structured data. One approach is to represent the data using graphs, and then perform keyword queries on the graphs. For example, tuples can be treated as nodes in the graph, and foreign key and other connections between tuples can be treated as edges in the graph. Keyword search is then modeled as finding tuples containing the given keywords and finding connecting paths between them in the corresponding graph.
+
+
+				SPATIAL DATA
+Spatial data support in database systems is important for efficiently storing, indexing,
+and querying of data on the basis of spatial locations. Two types of spatial data are particularly important: 
+
+• Geographic data such as road maps, land-usage maps, topographic elevation maps, political maps showing boundaries, land-ownership maps, and so on. Geographic information systems are special-purpose database systems tailored for storing geographic data. Geographic data is based on a round-earth coordinate system, with latitude, longitude, and elevation
+
+• Geometric data, which include spatial information about how objects—such as
+buildings, cars, or aircraft—are constructed. Geometric data is based on a two dimensional or three-dimensional Euclidean space, with X, Y , and Z coordinates.
+
+
+REPRESENTATION OF GEOMETRIC INFORMATION 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

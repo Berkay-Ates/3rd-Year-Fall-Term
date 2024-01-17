@@ -1,0 +1,381 @@
+PROCESS SYNCHRONIZATION
+A COOPERATING PROCESS is one that can affect or be affected by other processes executing in the system. Cooperating processes can either directly share a logical address space or be allowd to share data only thrugh files or messagess. 
+
+
+RACE CONDITION 
+A situation where several processes access and manipulate the same data concurrently and the outcame of the execution depends on the particular order in which the access takes place is called a RACE CONDITION. To guard against the race condition we need to endure that only one process at a time can be manipulating the variable counter.
+
+Race conditions frequently occur in opersting systems as different part of the system manipulate resources.  
+
+do { 
+	entry section 
+		critical section 
+	exit section
+		reminder section 
+}while(true)			
+
+
+THE CRITICAL SECTION PROBLEM 
+
+The important feature of the system is that when one process is executionng in its critical section no other process is allowed to execute in itscritical section. That is no two processes are executing in their critical sections at the same tiem. 
+
+Each process must request permission to enter its critical section. The section of code implementing this request is the ENTRY SECTION. The critical section may be followed by an EXIT SECTION. The remaining code is the REMINDER SECTION. 
+
+
+=> A solution to the critical-section probelme must satisfy the following three requirements 
+
+1- MUTUAL EXCLUSION , if process Pi is executing in tis critical section then no other processes can be executiong in their crititcal sections. 
+
+2- Progress, if no process is executing in tis critical section and some processes with to enter their crititcal sections, then only those processes that are not executing in their remainder sections can participate in deciding which will enter its crittical section nextm and this selection cannot be postponed indefinitely. 
+
+3- Bounded Waiting, There exissts a bound or limit on the number of times that other processes are allowed to enter their crititcal sections after a process has made a request to enter its critical section and before that request granted. 
+
+
+Race Condition durumu sadece processler arasinda degil ayni zamanda KERNEL icinde calisan processler arasinda da meydana gelebilir. Two general approaches are used to handee critical sections in operating systems PREEMPTIVE KERNELS and NONPREEEMPTIVE KERNELS. 
+
+=> A preemptive kernel allows a process to be preempted while it is running in kernel mode. A nonpreemptive kernel does not allow a process running in kernel mode to be preempted. In this situations a kernel-mode does not allow a process will run until it exists kernel mode, blocks or valuntarily yields control of the CPU. 
+
+
+Obviously a nonpreemptive kernel is essentially free from race conditions on kernel data structures as only one process is active in the kernel at a time. 
+
+
+A preemptive kernel may be more responsive since there is less risk taht a kernel mode process will run for an arbitrarily long period before relinquishing the processor to waiting processes. 
+
+
+PETERSON'S SOLUTION 
+
+do {
+	flag[i] = true;
+	turn = j;
+	while (flag[j] && turn == j);
+		critical section
+	flag[i] = false;
+		remainder section
+} while (true);
+
+
+=> Peterson's solution is restricted to two processes that alternate execution between their critical sections and reminder sections. 
+
+We now prove that PETERSON'S solution is correct for two processes. about those conditions,
+1. Mutual exclusion is preserved.
+2. The progress requirement is satisfied.
+3. The bounded-waiting requirement is met.
+
+SYNCHRONIZATION HARDWARE 
+Hardware features can make any programming task easier and improve system efficiency. The critical-secton problem could be solved simply in a single-processor environment if we could prevent interrupts from occuring while a shared variable was being modified. 
+
+
+The critical-section prolem could be solved simply in a single-processor environment if we could prevent interrupts from occuring while a shared v ariable was being modifiesd. In this way we could be sure that the current sequence of instructions would be allowed to execute in order without preemption. Not other instructions would be run so no unexpected modifications could be made to the saherd variable. This is often the approach taken by nonpreemptive kernels. 
+
+
+Unfortunately this solutions is not as feasible in multiprocessor environment. Disabling interrupts on a multiprocessor can be time consuming since the message is passed to all the processors. 
+
+Many modern computer systems therefore provide special hardware instructions that allow us either to test and modify the content of a word or to swap the contents of two  words atomically. 
+
+
+Rather than discussing one specific instruction or one specific machine, we abstract the main concepts behind these types f instructions by describing the test and set() and compare and swap()
+instructions.
+
+Both test_and_Set() and compare_and_spaw() is executed atomically.
+Although these structures satisfy the mutual exclusion requirement they do not satisfy the bounded watiing requirement. 
+
+
+MUTEX LOCKS 
+The hardware based solutions are complicated as well as generally inaccessible to application programmers. Instead operating systems designers build sofware tools to solve the critical section problem. The simples of these tool s is the MUTEX LOCK. A process must acquire the lock before entering a critical section it relases the lock when it exists the crititcal section. The acquire() function acquires the lock, and the release() function releasees the lock. 
+
+Calls to either acquire() or release() must be performed atomically. Thus mutex locks are often implemented using one of the hardware mechanisms. 
+
+The main disadvantage of the implementation given here is that mutex locks requres BUSY WAITING. While a process is in its critical section any other process that tries to enter its crititcal section must loop contunously in the call to acquire(). In fact this type of mutex lock is also called a SPINLOCK because the process the process spins while waiting for the lock to become available. 
+
+Spinlocks do have an advantage however in that no context switch is required when a process must wait on a lock and a context switch may take considerable time. Thus when locks are expected to be held for short times spinlocks are useful. 
+
+
+SEMAPHORES 
+A SEMAPHORE S is an integer variable that apart from initialization is accessed only through two standart atomic operations wait() and signal(). 
+
+
+
+wait(S) {
+while (S <= 0)
+; // busy wait
+S--;
+}
+
+signal(S) {
+S++;
+}
+
+SEMAPHORE USAGE 
+Operating systems often distinguish between counting and binary semaphores. The value of a COUNTING SEMAPHORE can range over an unrestricted domain. The value of a BINARY SEMAPHORE can range only between 0 and 1. 
+
+
+Counting semaphores can be used to control access to a given resource consisting of a finite number of instances. The semaphore is initialized to the number of resources available. Each process that wishes to use a resource performs a wait() operation on the semapore. When a process relases a resource it performs a signal() operation. 
+
+We can also use semaphores to solve various synchronization problems. Suppose we require that S2 be executed only after S1 has completed. We can implement this scheme readily by letting P1 and P2 share a common semaphore synch, initialized to 0.
+
+
+SEMAPHORE IMPLEMANTATION 
+To overcame the need for busy waiting we can modify the definition of the wait() and signal() operations as follows When a proceess executes the wait() operation and finds that the semaphore value is not positive it must wait. However rather than engaging in busy waiting the process can block itself. Thee block operation places a process into a waiting queue associated with the semaphore and the state of the process is sqithced to the waiting state. 
+
+
+A process that is blocked waiting on a semaphore S should be restarted when some other process execcutes a signal() operatins. The process is restarted by a wakeup() operations, which changes the process from the watiing to the ready state. th process is then placed in the ready queue.
+
+
+
+Each semaphore has an integer value and a list of processes list. When a process must wait on a semaphore it is added to the list of processes. A signal() operation removes one process from the list of waiting processes and awakends that process. 
+
+
+wait => has block() system calls which is blocks the process 
+signal => has wakeup() system calls which is wake up the process. 
+
+Note that in this implementation semaphore values may be negative whereas semaphore values are never negative under the classical difnition of semaphores with busy waiting. If a semaphore value is negative its magnitude is the number of processes waiting on that semaphore. 
+
+
+One way to add and remove processes from the list so as to ensure bounded waiting is to use a fifo queue where the semaphore contains both head and tail pointers to the queue. 
+
+We must guarantee that no to processes can execute wait() and signal() operations on the same semaphore at the same time. WE can solve it by simply inhibiting interrupts during the time the wait() and signal() operations are executing. 
+
+Because blocking interrupts in SMP is costly and not feasible SMP systems must provide alternative locking techniques to ensure wait and signal are performed atomically. 
+
+
+DEADLOCKS AND STARVATIONS
+The implementation of a semaphore with a waiting queue may result in a situation where two or more processes are waiting indefinitely for an event that can be caused only by one of the waiting processes. The event in question is the execution of a signal() operation. When such a state is reached, these processes are said to be deadlocked
+
+
+Another problem related to deadlocks is INDEFINITE BLOCKING or STARVATION a situation in which processes wait indefinitely within the semaphore. 
+
+PRIORITY INVERSION  
+L working H waiting however M comes and preemts L then H has to wait M. This problem is known as PRIORITY INVERSION. 
+
+One solutions is to have only two priorities.
+Typically these sistems solve the problem by implementing a PRIORITY-INHERITANCE PROTOCOL. According to this protocol all processes that are accessing resourcess neeeded by a higher-prirory process inherit the higher priority until they are finished with the resources in question. When they are finished their priorities revert to their original values. 
+
+=> priority inversion problemi priority inheritance protocol ile cozulur. 
+
+
+CLASSIC PROBLEMS OF SYNCHRONIZATION 
+
+THE Bounded Buffer problem and 
+The readers writers problem 
+Dining philosophers 
+
+
+
+THE BOUNDED BUFFER PROBLEM 
+
+
+THE READERS WRITERS PROBLEM 
+the simples one referred to as the first readers-writers problem requres that no reader be kept waiting unless a writer has already obtained permission to use shared object In other words no reader should wait for other readers to finish simply because a writer is waiting. 
+
+
+The second readers writers problem requires that once a wirter is ready that writer perform its write as soon as possible. In other words if a writer is waiting to access the object no new readers may start reading. 
+
+
+THE DINING PHILOSOPHERS PROBLEM 
+The dining-philosophers provlem is considered a classic synchronization problem neither because of its practical importance nor bacause computer scientists dislike philosophers but because it is an example of a large class of concurrency control problems. 
+
+One simple solution is to represent each chopstick with a semaphore. A philosopher tries to grab a chopstick by executing a wait() operation on that semaphore. She releases her chipsticks by executing the signal() operation on the appropriate semaphores. 
+
+
+MONITORS
+
+Although semaphores are convenient and effective mechanism for process synchroization, using 
+them incorrectly can result in timing errors that are difficut to detect, since these erros 
+happen only if particular execution sequences take place and these sequendce does not always accour. 
+
+
+=> suppose that a process interchanges the order in which the wait() and signal() operatins on the semaphore mutex are executed 
+
+=> suppose that a process replaces signal(mutex) with a wait(mutex) taht is it executes
+
+	wait(mutex);
+		...
+	critical section
+		...
+	wait(mutex);
+
+=> suppose that a process omits the wait(mutex), or the signal(mutex) or both. In this case either mutual exclusion is violated or a deadlock will occur. 
+
+
+To deal with those erros developers high level language constructs. The monitors 
+
+
+MONITOR USAGE
+A monitor type is an ADT(Abstract data type) that includes a set of programmer defined operations that are provided with mutual exclusion with the monitor. 
+
+Monitor also declares the variables whose values define the state of an instance of that type along with the bodies of functions that operate on those variables. 
+
+The functions in Monitor can be used by only Monitor variables and Variables in monitor can be used by the Monitor fuctions. 
+
+The monitor construct ensures that only one process at a time is active within the monitor
+
+x is a condition like a resource or any feature relaited about critical section 
+x.signal() => operation resumes exactly one suspended process 
+x.wait() => 
+
+When Q is running if a process P signaled for x condition there is 2 scenario 
+1-Signal and Wait 
+	P either waits until Q leaves the monitor or waits for another condition	 
+ 
+2-Signal and Continue
+	Q either waits until P leaves the monitor or waits for another condition 
+
+
+
+DINING-PHILOSOPHERS SOLUTIONS USING MONITORS
+This solution imposes the restriction that a philosopher may pick up her chopstick only if both of them are available.
+
+Each philosopher before staring to eat must invoke he operation pickup(). This act may result in the suspension of the philosopher process. After the successful completion of the operation the philosopher my eat. Following this the philospher ivokes the putdown() operation. 
+
+	DiningPhilosophers.pickup(i);
+		...
+		eat
+		...
+	DiningPhilosophers.putdown(i);
+
+
+
+
+IMPLEMENTING A MONITOR USING SEMAPHORES 
+We now consider a possible implementation of the monitor mechanism using semaphors. A process have to execute wait(mutex) before entering the monitor and must execute signal(mutex) after leaving the monitor. 
+
+Since a signaling process must wait until the resumed process either leaves or waits, an additional semaphore, next, is introduced, initialized to 0. The signaling processes can use next to suspend themselves. An integer variable next count is also provided to count the number of processes suspended on next.
+
+
+
+
+RESUMING PROCESS WITHIN A MONITOR 
+How do we terermine which of the suspended process should be resumed next? 
+
+First Come First Serve (FCFS) 
+In this way the process that has been waiting the longest is resumed first. 
+
+In many circcumstances however such a simple scheduling scheme is not adequate. For this purpose the CONDITIONAL-WAIT construct can be used. 	
+		
+			X.wait(c) 
+The value of c, which is called a priority number, is then stored with the name of the process that is suspended. When x.signal() is executed the process with the smallest priority number is resumed next. 
+
+Each process when requestion an allocation of this resource specifies the maximum time it plans to use the resource. The monitor allocates the resource to the process that has the shortest time-allocation request. 
+
+
+The Following problems can ACCOUR in Monitor
+=> A process might access a resource without first gaining access permission to the resource. 
+
+=> A process might never release a resource once it has been granted access to the resource 
+=> A process might request the same resouce twitce without first releaseng the resouce. 
+
+The same difficulties are encountered with the use of semaphores.
+
+
+HOW TO GUARANTEE NO TIME DEPENDENT ERRORS WILLL OCCUR 
+=> First user process must always make their calls on the monitor in a correct sequence 
+=> Second we must be sure that an uncooperative process does not simply ignore the mutual-exlusion gateway provided by the monitor and try to access the shared resource directly without using the access protocols. 
+
+
+SYNCHRONIZATION EXAMPLES
+
+SYNCHRONIZATION IN WINDOWS 
+When the Windows kernel access a global resource on a single-processor system it temporarily masks interrupts for all interrupt handlers that may ask access the global resource. 
+
+On a multiprocessor system windows protecsts access to global resources using spinlocks.
+
+For thread synchroization outside the kernel Windows provides dispatcher objects Using a dispatcher object threads synchronize according to several different mechanisms including mutext locks, semaphores, events and timers. 
+Dispatcher Object may be in either a signaled state or a nonssignaled state. An object in a SIGNALED STATE is availabel and a thread will not block when acquiring the object. 
+An object in a NONSIGNALED STATE is not available and a thread will block when attempting to acquire the object. 
+
+
+
+SYNCHRONIZATION IN LINUX 
+Prior version of linux was not preamptive but current versions are fully preamptive. 
+Linux provides different mechanisms for synchronization in the kernel. 
+The simplest synchronization technique within the Linux kernel is an atomic integer which is represented using the opaque data type atomic_t. 
+Atomic integers can not preempted while computing, which means atomic integers are particularly efficient in situations where an integer variable needs to be updated. Moreover Atomic integers do not require the overhead of locking mechanisms. 
+
+
+MUTEX LOCKS also available in LINUX 
+
+
+
+single processor 		multiple processors
+Disable kernel preemption.	Acquire spin lock.
+Enable kernel preemption.	Release spin lock.
+
+
+
+PTHREADS SYNCHRONIZATION 
+There are mutex locks,condition variavles and read-write locks for thread synchronization 
+The mutex is acquired and released with the pthread mutex lock()
+and pthread mutex unlock() functions. If the mutex lock is unavailable
+when pthread mutex lock() is invoked, the calling thread is blocked until
+the owner invokes pthread mutex unlock().
+
+
+
+Pthreads also provide semaphores, although semaphores are not part of teh Pthreads standard and instead belong to the POSIX SEM extension. 
+
+POSIX specifies two types of semaphores --named and unnamed. The fundamental distinction between the two is that a named semaphore has an actual name in the file system and can be shared by multiple unrelated process. Unnamed semaphores can be used only by threads belonging to the same process.
+
+
+
+ALTERNATIVE RACE CONDITION SOLUTIONS
+As the multiprocessor systems become widespread day by day we started to use the new techniques to solve the race condiditon problem in addition to the mutex locks, semaphores and monitors.
+
+SOL1 TRANSACTIONAL MEMORY 	
+
+Transactional memory a database problem solution provides a trategy for process synchronization. A memory transaction is a sequence of memory read-write operations that are atomic. If all operations in a transaction are completed the memory transaction is committed. Otherwise the operations must be aborted and rolled back.
+
+
+Transactional memory can be implemented in either sofware or hardware. Software Transactional Memory STM, implements transaction in software logic, Hardware Transaction MEmory HTM, uses harware cache hierarchies and cache coherency protocols to manage and resolve cconflicts.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

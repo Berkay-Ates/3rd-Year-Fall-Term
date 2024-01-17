@@ -1,0 +1,469 @@
+Virtual Memory- separation of user logical memory from physical mmeory 
+
+Benefits 
+- Only part of the program needs to be in memory for execution 
+	you can execute more programs concurrently 
+
+- Logical address space can therefore be much larger than physical address space 
+	you can execute programs lager than physical memory 
+
+- Allows address spaces to be shared by several processes 
+	library or memory segment can be shared 
+
+- Allows for more efficient process creation 
+
+
+SHARED LIBRARY USING VIRTUAL MEMORY 
+- We have one copy of a shared library in the main memory and we map this into other page tables address spaces. 
+
+IMPLEMENTING VIRTUAL MEMORY 
+Virtual memory can be implemented via 
+-DEMAND PAGING 
+=>Bring pages into memory when they are useda, allocate memory for pages when they are used 
+
+-DEMAND SEGMENTATION 
+=> bring segments into memory when they are used, allocate memory for segments wehn they are used 
+
+
+ 
+DEMAND PAGING 
+- Bring a page into memory only when it is needed 
+	less i/o needed 
+	less memory needed 
+	faster response
+	more users 
+
+- Page is needed => reference to it 
+	invalid reference => abort 
+	not in memory => bring to memor 
+
+LAZY SWAPPER - never swaps a page into memory unless page will be needed 
+	SWAPPER that deals with pages is a PAGER. 
+
+
+
+VALID-INVALID BIT 
+-With each page table entry a valid-invalid bit is associated y=> in-memory, i=> not in memory.
+-Initially valid-invalied bit is set to u on all entries 
+
+- During address translation if valid-invalid bit in page table entry is i then there is a fault called page Fault. 
+
+
+
+PAGE FAULT 
+-While CPU is executing an instruction or trying to fetch an instruction if there is a reference to a page first reference to that page will trap to operating system (since page will not be in memory) this is called PAGE FAULT. 
+
+-PAGE FAULT HANDLING STEPS BY OS: 
+1- Operating system looks at another table to decide:
+	- Invalid reference (page is in unused partion of address space) -> abort 
+	- Just not in memory (page is in used portion but not in ram)
+2- Get empty frame 
+	-we may need to remove a page if removed page is modified we need disk I/O 	to swap it out 
+3- Swap page into frame 
+	- we need disk I/O
+4- Reset tables (install mapping into page table)
+5- Set valid bit = v
+6- Restart the instruction taht caused the page fault
+
+
+=> If page fault occur when trying to fetch an instruction, fetch the instruction again after bringing the page in. 
+=> If page fault occurs while we are executing an instruction: REstart the instruction after bringing the page in 
+=> For most instructions restarting the instruction is no problem: Bur for some we need to be carefull. Example:
+	=> Block Move Instruction
+
+
+
+PERFORMANCE OF DEMAND PAGING 
+-> Page fault Rate 0 < p < 1.0
+	- if p=0 no page faults  
+	- if p=1 every reference is a faylt
+
+-> Effective Access Time to Memory (EAT)
+	EAT = (1-p)xMemory_Access + p(page fault overhead 
+					+ swap page out 
+					+ swap page in 
+			 		+ restart overhead
+					) 
+
+ORN 
+memory access time = 200 nanoseconds 
+average page-falut service time = 8 milliseconds 
+EAT = (1-p) x 200 + p(8milliseconds)
+    = (1-p) x 200 + p x 8.000.000
+    = 200 + px7.999.800
+
+=> if one access out of 1.000 causes a page fault p = 1/1000 then EAT=8.2 microsec
+This is a slowdown by a factor of 40
+	200ns/8.2 microsec = 1/ 40 
+
+PROCESS CREATION 
+- Virtual memory allows other benefits during process creation
+=> COPY ON WRITE 
+=> MEMORY MAPPED FILES 
+
+
+COPY-ON-WRITE 
+=> Copy-on-Write (COW) allows both parent and child processes to initially share the sam pages in memory 
+-> If either process modifies a shared page only then is the page copied
+-> COW allows more efficient process creation as only modified pages are copied. 
+
+
+What happens if there is no free frame?
+- PAGE REPLACEMENT - find some page in memory but not really in use swap it out 
+- Algorithm? Which page should be remove 
+- Performance - want an algorithm which will result in minimum number of page faults 
+- With page replacement same page may be brought into memory several times 
+
+
+PAGE REPLACEMENT 
+-Prevent over-allocation of memory by modifiying page-fault service routine to include page replacement
+
+-Use modify[dirty] bit to reduce overhead of page transfers only modified pages are written to disk while removing/replacing a page. 
+
+- Page replacement completes separation between logical memory and physical memory 
+- large virtual memory can be provided on a smaller physical memory. 
+
+
+Basic Page Replacement 
+=> steps performed by OS while replacing a page upon a page fault 
+1- Find the location of the desired page on disk 
+2- Find a free frame:
+	-if there is a free frame use it 
+	-if there is no frame use a page replacement algorith to select a VICTIM 	 frame if the victim page is modified write it back to disk 
+3- Bring the desired page into free frame update the page and frame tables 
+4- Restart the process 
+
+
+PAGE REPLACEMENT ALGORITHMS 
+- Want lowest page-fault rate 
+- Evaluate algorithm by running it on a particular string of memory references (reference string) and computing the number of page faults on that string 
+
+- In all our examples the reference string is 
+	1,2,3,4,1,2,5,1,2,3,4,5,
+
+Assume process makes the following memory references in a system with 100 bytes per page
+
+0100 0432 0101 0612 0102 0103 0104 0101 0611 0102 0103 0104 0101 0610 0102 0103 0104 0609 0102 0105
+
+Pages referenced with each memory reference 
+- 0, 4, 1, 6, 1, 1, 1, 1, 6, 1, 1, 1, 1, 6, 1, 1, 6, 1, 1
+
+
+Corresponding page reference string 
+-0, 4, 1, 6, 1, 6, 1, 6, 1, 6, 1
+
+
+			FIRST-IN-FIRST-OUT FIFO ALGORITHM 
+The page first brought into memory will removed first 
+Reference string 1,2,3,4,1,2,5,1,2,3,4,5
+
+	1->1  4
+	2->2  1		9 page faults 
+	3->3  2 
+
+
+	1->1  5 4 
+	2->2  1	5	10 page faults 
+	3->3  2 
+	4->4  3
+
+=> This is called as BELADY's Anomaly more frames mroe page faults
+
+
+
+			OPTIMAL ALGORITHM 
+Replace page that will not be used for longest period of time 
+
+=> we look to the future and decide which page would not be used for a long of time 
+=> OPTIMAL ALGORITHM is not such a practical scenario 
+
+
+			LEAST RECENTLY USED LRU (algorithm) 
+=> En uzak gecmiste kullanilmis olan page i silerek yerine yeni page i ekleriz 
+=> It is more practical than OPTIMAL ALGORITHM because it looks to the past not to future 
+
+LRU Algorithm Implementation 
+=> COUNTER IMPLEMENTATION 
+	- Every page entry has a counter, every time page is referenced through 	this entry, copy the clock into the counter 
+	- When a page needs to be replaced, look at the counters to determine 		which one to replace
+	= The one with the smallest counter value will be replaced 
+
+
+=> STACK IMPLEMENTATION 
+	- Page referenced 
+		move it to the top 
+		requires 6 pointers to be changed (with every mem refer costly)
+	- No search for replacement (replacement fast)
+			
+
+
+=> Not only for Counter or Stack implemantation we need to access to the memory which is decreasing the program speed. So there is some other approacher for LRU implemantations. 
+
+			LRU APPROXIMATION ALGORITHMS 
+=> Reference bit 
+	- with each page associate a bit initially =0 (not referenced)
+	- When page is referenced, bit set to 1
+	- Replace the only which is 0 if exists 
+	we do not know the order however (several pages may have 0 values) 
+	
+	- Reference bits are cleared periodically (with every clock interrupt) 
+
+
+=> Second Change 
+	- Fifo that is checking if page is referenced or not 
+	- Need reference bit 
+	- if page to be replaced, look to the FIFO list, remove the page close to 	head of the list and that has reference bit 0. 
+	- if there is a page you encounter that has reference bit 1, move it to the 	back after clearing the reference bit. Try to find another page taht has 0 	as reference bit.
+	- May require to change all 1s to 0s and then come back to the begining of 	the queue
+
+=> Second-Change (clock) Page-Replacement Algorithm 
+-Second chance can be implamented using a cirular list of pages. Then it is also called CLOCK ALGORITHM. 
+- Main difference is instead of removing nodes and adding them to the tail we just traverse on the list because it is circular. 
+
+
+				COUNTER ALGORITHMS  
+=> Keep a counter of the number of references that have been made to each page 
+LFU Algorithm: replaces page with smallest count
+MFU Algorithm: Based on the argument that the page with the smallest was probably just brought in and has yet to be used 
+
+
+
+ALLOCATION OF FRAMES 
+- Each process needs minimum number of pages 
+- Example: IBM370 -6 pages to hande SS MOVE instruction
+	- instruction is 8 bytes, might span 2 pages 
+	- 2 pages to handle from 
+	- 2 pages to handle to 
+- Two major allocation schemas 
+	- fixed allocation 
+	- priority allocation 
+
+FIXED ALLOCATION 
+-Equal allocation For example if there are 100 frames and 5 process, give each process 20 frames. 
+-Proportional allocation-> Allocate according to the size of process 
+
+
+si = size of process pi 
+S = sum(si)
+m = total number of frames 
+ai = allocation for pi = si/S x m
+
+
+PRIORITY ALLOCATION 
+- Use a proportional allocation scheme using priorities rather than size 
+ if process P generates a page fault 
+	- select for replacement on of its frames 
+	- select for replacement a frame from a process with lower priority number 
+
+
+GLOBAL VERSUS LOCAL ALLOCATION 
+Global Replacement 
+- Process selects a replacement frame from the set of all fremes one proces can take a frame from another 
+
+Local Replacement 
+- Each process selects from only its own set of allocated frames 
+
+
+				TRASHING 
+If a process does not have enough pages the page-fault rate is very high. 
+This leads to
+	- low cpu utilization 
+	-operating system thinks that it needs to increasse the degree of 	multiprogramming
+	-another process added to the system 
+
+Trashing = a process is busy swapping pages in and out 
+
+			DEMAND PAGING AND TRASHING 
+Why does demand paging work
+	Locality model 
+	-Process migrates from one locality to another 
+	-Localities may overlap 
+
+Why does threashing occur 
+	total size of locality > total memory size 
+
+locality = total pages the process need to run 
+
+locality of the process can be changed during process run
+
+TRASHING olayindan kacinmak icin processlere yeteri kadar page ayrimamiz gereklidir. Bunun icin gelistirilmis olan yontemler: 
+
+WORKING - SET MODEL 
+
+DELTA = working set window = a fixed number of page references 
+	exmp:10000 instruction 
+	or for example last 1000 frames 
+
+WSS(working set of process P)
+total number of pages needed by a process 
+
+ D=total WSS= total demand for frames 
+if D>m => Trashing (m number of frames in memory) 
+Policy if D>m, then suspend one of the processes 
+
+
+			KEEPING TRACK OF WORKING SET 
+Approximate with interval timer + a reference  bit
+Example DELTA = 10000 time units 
+Timer interrupts after every 5000 time units 
+Keep in memory 2 bits for each page 
+Whenever a timer interrupts copy and sets the values of all reference bits to 0 
+	IF ONE OF THE BITS IN MEMORY =1 => page in working set 
+
+Why is this not completely accurate 
+	Granularity is 5000 time_units (we dont know when exactly in it reference has occured) 
+improvement = 10 bits and interrupt every 1000 time units 
+
+
+			PAGE-FALUT FREQUENCY PFF SCHEME 
+Establish acceptable page-fault rate 
+	if actual rate too low process loses frame 
+	if actual rete too high process gains frame 
+
+
+-----------------------------------------------------------------------------------
+MEMORY MAPPED FILES 
+- MEMORY-MAPPED FILE I/O allows file i/o to be treated as routine meomry access by mapping a disk block to a page in memory 
+
+- A file is initially read using demand paging. A page size portion of the file is read from the file system into a physical page subsequent reads/writes to/from the file are treated as ordinary memory accesses. 
+
+- Simplifies file access by treating file i/O through memory rather than read() write() system calls
+
+- Also allows several processes to map the same file allowing the pages in memory to be shared 
+
+=> Dosyalarin memorye getirilerek surekli olrak diskten okunmasinin onune gecilmesi memory mapped dosya mantiginin temelidir 
+
+ 
+ALLOCATING KERNEL MEMORY 
+-Treated differently from user memory 
+-Often allocated from a free-memory pool 
+	- Kernel requests memory for structures (objects) of varying sizes 
+	- Process descriptors semaphores file objects 
+-Those structures have sizes much less than the page size 
+-Some kernel memory needs to be contiguous 
+
+-This is dynamic memory allocation problem 
+-But using first-fit like strategies (heap management strategies) cause external 
+fragmentation
+
+=> BUDDY SYSTEM 
+Allocates memory frm fixed size segment consisting of physically contiguous pages 
+
+Memory allocated using power-of-2 allocator 
+	- Statisfies requests in units sized as power of 2 
+	- Request rounded up to next highest power of 2 
+When smaller allocation needed than is available current chunk split into two buddies of next-lower power of 2 
+
+	continue until appropriate sized chunk available 
+
+
+=> SLAB ALLOCATOR
+Alternate strategy 
+Within kernel a considerable amount of memory is allocated for a finite set of objects such as process discriptors file descriptors and other common structures 
+
+idea	a contiguous physical memory (slab)	a contigious phy memory (slab) 
+	(a set of page freames) 		(a set of page frames) 
+
+
+
+=> Each type of objects intersting to its slab container so a slab contains same type of objects 
+
+
+- Slab is one or more physically contiguous pages 
+- Cache consists of one or more slabs 
+- Single cache for each unique kernel data structure 
+	each cache filled with objects instantious of the data structure 
+- when cache created filled with slots (objects) marked as free 
+- when structures stored objects marked as used 
+
+- if slab is full of used objects next object allocated from empty slab 
+	- if no empty slab new slab allocated 
+
+- Benefits include 
+	no fragmentation 
+	fast memory request satisfaction 
+
+
+- Set of slabs containing same type of objects called as CACHE 
+- We can have several caches for the different kind of objects container slabs 
+
+CACHE STRUCTURE 
+-A set of slabs that contain one type of object is considered as a cache 
+-Cache structure is a structure that keeps information about the cache and includes pointers to the slabs 
+
+
+SLAB ALLOCATER IN LINUX 
+
+=> cat /proc/slabinfo will give info about the current slabs and objects 
+	cache names one cache for each different object type 
+
+
+		
+				PREPAGING 
+-To reduce the large number of pages faults that occurs at process startup 
+-Prepage all or some of the pages a process will need beforee they are referenced 
+-But if prepaged pages are used I/O and memory was waasted 
+
+-Assume s pages are prepaged and alfa of the pages is used 
+-Is cost of s*alfa save gages faluts > or < than the cost of preapging s*(1-alfa) unnecessary pages? 
+-alpha near zero => prepaging loses 
+
+
+
+OTHER ISSUES - PAGE SIZE 
+Page size selection must take into consideration 
+- Fragmentation 
+	Small page size reduces fragmentation 
+- table size 
+	Large page size reduces page table size 
+- I/O overhead 
+	Large page size reduce I/O overhead (seek time , rotation time) 
+- Locality 
+	Locatioty is improved with smaller page size 
+
+
+				OTHER ISSUES - TLB REACH 
+- TLB Reach - The amount of meemory accessible from the TLB 
+- TLB Reach = TLB SIZE x Page Size 
+
+- Ideally the working set of each process is stored in the TLB 
+	- Otherwise there is a high degree of page faults 
+
+- Increase the Page Size 
+	This may lead to an increase in fragmentation as not all application 
+	require a large page size 
+
+- Provide Multiple Page Size 
+	This allows applications that require larger page sizes the apportunity 
+	to use them without an increase in fragmentation.
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

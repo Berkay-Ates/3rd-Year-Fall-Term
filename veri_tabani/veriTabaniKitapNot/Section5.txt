@@ -1,0 +1,529 @@
+ADVANCED SQL
+
+ACCESSING SQL FROM A PROGRAMMING LANGUAGE
+=> SQL PROOVIDES a powerful declarative query language. A database programmer must have access to a general-pupose programming language for at least two reasons 
+
+1- Not all queries can be expressed in SQ, since SQL does not provide the full expressive power of general-purpose language. 
+
+
+2- NonDeclarative actions such as printing a report interacting with a user or sending the results of a query to a graphical user interface cannot be done from within SQL. 
+
+
+=> There are two approaches to accessing SQL from a general purpose programming language
+
+DAYNAMIC SQL 
+Dynamic SQL allows the program to construct an SQL query as a characcter string at runtime, submit the query, and then retrieve the result into program variables a tuple at a time. 
+
+=> The dynamic SQL component of SQL allows programs to construct and submit SQL queries at runtime. JDB used for the java lang , ODBC used for c lang and then expanded to C++,c#
+
+EMBEDDED SQL 
+Like dynamic sql, embedded sql provides a means by which a program can interact with a database server. However under embedded SQL the SQL statements are identified at compile time using a preprocessor. The preprocessor submits the SQL statements to the database system for precompilation and optimization; then it replaces the SQL statements in the application program with appropriate code and function calls before invoking the programming-language compiler. 
+
+
+Programming languages normally operate on a variable at a time, and those variables correspond roughly to the value of an attribute in a tuple in a relation. Thus integrating these two types of languages SQL and PROGRAMMING LANG into a single application requires providing a mechanism to return the result of a query in a manner that the program can handle. 
+
+
+
+JDBC (JAVA DATABASE CONNECTIVITY)
+=> The JDBC standard defines an application program interface (API) that JAVA programs can use to connect to database servers.
+
+
+CONNECTING TO THE DATABASE 
+Only after opening a connection can a Java program execute SQL statements. 
+=> A connection is opened using the "getConection()" method of the DriverManager class. This methods takes three parameter:
+
+
+1th Parameter of getConnection()
+=> The first parameter is a string that specifies the URL, or machine name where the server runs such as "db.yale.edu", along with possibly some other information such as the protocol to be used to communicate with the database, the port number the database system uses for communication and the specific database on the server to be used. 		
+
+				URL,Protocol,Port,Database 
+
+2nd Parameter of getConnection()
+=> The second parameter to getConnection is a database user identifier which is a stirng.
+
+				db user identifier 
+
+3rd Parameter of getConnection()
+=> The third parameter is a password which is also a string 
+			
+				db user password as a string 
+
+
+
+Each database product that supports JDBC provides a JDBC driver that must be dynamically loaded in order to access the database from JAVA. In fact loading the driver must be done first before connecting to the database. 
+
+This is done by invoking Class.forName with one argumetn specifiying a conrete lass implementing the java.sql.Driver interface. The actual protocol used to exchange information with the database depends on the driver that is used, and is not defined by the JDBC standard.
+
+Some drivers support more than one protocol, and a suitable protocol must be chosen depending on what protocol the database that you are connecting to supports. 
+
+=> in our scenario when opening a connection with the database the string jdbc:oracle:thin: specifies a particular protocol supported by ORACLE. 
+
+
+
+SHIPPING SQL STATEMENTS TO THE DATABASE SYSTEM
+=> Once a database connection is open, the program can use it to send SQL statements to the database system for execution. This is done via an instace of the class Statements. 
+=> A STATEMENT object is not the SQL statement itself, but rather an object that allows the Java program to invoke methods that ship an SQL statement given as an argument for execution by the databasesystem. 
+
+
+=> To execute a statement we invoke either the "executeQuery" method or the "executeUpdate" method, depending on whether the SQL statement is a query or nonquery statements such as UPDATE,INSERT,DELETE,CREATE TABLE etc. 
+
+
+
+RETRIVING THE RESULT OF A QUERY 
+The example program executes a query by using "stmt.executeQuery". It retrieves the set of tuples in the result into a "ResultSet" object rset and fetches them one tuple at a time. 
+
+The next method on the result set tests whether or not there remains at least one unfetched tuple in the result set and if so fetches it. 
+
+The return value of the next method is a Boolean indicating whether it fetched a tuple. 
+
+Attributes from the fetched tuple are retrieved using various methods whose names begin with get. 
+
+Moreover the argument to the various get methods can either be an attribute name specified as a string, or an integer indicating the position of the desired attribute within tha tuple. 
+
+=> Tge statement and connection are both closed at the end of the Java program. Note that it is important to close the connection because there is a limit imposed on the nubmer of connections to the database unclodsed connections may cause that limit to be exceeded. If this happens the application cannot open any more connections to the database. 
+
+
+PREPARED STATEMENTS 
+We can create a prepared statement in which some values are replaced by "?" thereby specifying that actual values will be provided later. The DB compiles the query when it is prepared. 
+
+=> The prepareStatement method of the Connection class submits an SQL statement for compilation. It returns an object of class "PreparedStatement". At this point no SQL statemetns has been executed. The executeQuery and executeUpdate moethods of PreparedStatements class do that. But before they can be invoked we must use methods of class PreparedStatement that asign values for the "?" parameters.
+
+Parameter assignments remain unchanged until we specifically reassign them. 
+
+Prepared statements allow for more efficient execution in cases where the same query can be compiled once and then run multiple times with different parameter values. 
+
+==> Parametreli olarak degiskenleri atayarak PreparedStatementsleri kullanmak hem olusabilecek yazim hatalarini engeller hem de olusturulan querynin tekrar tekrar kullanilmasini sagler. Ornegin static olarak bir sorgu tanimlamaktansa dinamik olarak bir sorgu tanimlamak hem daha verimlidir hem de olabilecek hatalarin onune gecer. Icinde kullandigimiz setString gibi methodlar bizim icin parametreleri atar. 
+
+
+=> Parametreleri elle atadigimiz durumda 'SQL INJECTION' saldirilari ile veri tabanimiza zarar verilebilir ve verilerimiz calinabilir. 
+
+
+ORNEGIN 
+	"select * from instructor where name = ’" + name + "’"
+
+			X’ or ’Y’ = ’Y
+	
+	select * from instructor where name = ’X’ or ’Y’ = ’Y’ 
+In the reaulting query, the WHERE clause is always true and the entire instructor relation is returned.
+
+Because these statements run with the privileges of the owner of the Java program, devastating SQL statements such as DROP TABLE could be executed. Developers of SQL applications need to be wary of such potential security holes. 
+
+
+CALLABLE STATEMENTS 
+JDBC also provides a CallableStatement interface that allows invocation of SQL stored procedures and functions. These play the same role for functions and procedures as prepareStatement does for queries. 
+
+	CallableStatement cStmt1 = conn.prepareCall("{? = call some function(?)}");
+	CallableStatement cStmt2 = conn.prepareCall("{call some procedure(?,?)}");
+
+The data types of function return values and out parameters of procedures must
+be registered using the method registerOutParameter(),
+
+
+
+
+METADATA FEATURES 
+Java application program does not include declarations for data stored database. Those declarations are part of the SQL DDL statements. Therefore a java program that uses JDVC must either have assumptions about the database schema hard-coded into the program or determine that information directliy from the database system at runtime. 
+
+The interface ResultSet has a method "getMetaData()" that returns a "ResultSetMetaData" object that contains metadata about the result set. ResultSetMetaData in turn has methods to find metadata information such as the number of columns in the result, the name of a specified column or the type of a scpecified column.  
+
+The getColumnCount method returns the arity (number of attributes) of the result realation. That allows us to iterate through each attribute. 
+
+=> THe DtabaseMetaData interface provides a way to find metadata about the database. 
+=> The DATABASEMETADATA() interface in turn has a very large number of methods to get metadata about the database and the ddatabase sytem to which the application is connected. 
+
+The metadata interfaces can be used for a veriety of tasks. For example they can be used to write a database browser that allows a user to find the tables in a database exampine their schema exampine rows in a table apply selections to see desired rows.
+  
+OTHER FEATURES 
+JDBC provides a number of other features such as UPDATABLE RESULT SETS. It can create an updatable result set from a query that performs a selection and a projection on a databse relation. An update to a tuple in the result set then results in an update to the correspoinding tuple of the database relation. 
+
+By default each SQL statements are treated as a separate transaction that is commited automatically. The method SETAUTOCOMMIT() in the JDBC connection interface allows this behaviour to be runed on or off. 
+
+=> if autocommit is turned off then Transactions must be committed or rolled back explicitly using their either conn.commit() or conn.rollback() methods. 
+
+=> JDBC SQL also provides getBlob and getClob methods for treating the large objects. By those methods returns the type of the objects and their locators instead of the hole large objects. 
+
+=> However when prepared statement is executed for writing data to the database data are read from the input stream and written to the blob in the database. 
+
+
+
+
+ODBC (OPEN DATABASE CONNECTIVITY)
+=> ODBC standard defines an API that applications can use to open connection with a database send queries and updates and get back results. 
+
+ ODBC defines the types HENV, HDBC, and RETCODE. The program then opens the database connection by using SQLConnect. This call takes several parameters, including the connection handle, the server to which to connect, the user identifier, and the password for the database. 
+
+=> Once the connection is set up, the program can send SQL commands to the database by using SQLExecDirec. C language variables can be bound to attributes of the query result, so that when a result tuple is fetched using SQLFetch its attribute values are stored corresponding C variables. The SQLBINDCol function does this task. 
+
+=> A negative value returned for the actual length field indicates that the value is null. 
+=> The SQLFETCH statement is in a WHILE loop that is executed until SQLFetch return a value other thatn SQL_SUCCESS. On each fetch the program sores the values in C variables as specified by the calls on SQLBINDCOL and prints out these values. 
+
+=> At the end of the session, the program frees the statement handle, disconnects from the database, and frees up the connection and SQL environment handles.
+
+=> It is possiblee to create an SQL statement with parameters. The question marks are placeholders for values which will be supplied later. 
+
+=> ODBC defines functions for a variety of tasks such as finding all the relations in the database and finding the names and types of columns of q query result or a relation in the dataabase. 
+
+=> By default, each SQL statement is treated as a separate transaction that is committed automatically. The SQLSetConnectOption(conn, SQL AUTOCOMMIT, 0) turns off automatic commit on connection conn, and transactions must then be committed explicitly by SQLTransact(conn, SQL COMMIT) or rolled back by SQLTransact(conn, SQL ROLLBACK).
+
+
+
+
+EMBEDDED SQL 
+A language in which SQL queries are embedded is referred to as a host language, and the SQL structures permitted in the host language constitute embedded SQL. 
+
+=> AN embedded SQL program must be processed by a special preprocessor prior to compilation. The preprocessor replaces embedded SQL requests with host-language declarations and procedure calls that allow runtime execution of the database accesses. Then the resulting program is compiled by the host-language compiler. This is the main distinction between embedded SQL and JDBC or ODBC. 
+
+=> In JDBC, SQL statements are interpreted at runtime (even if they are prepared
+first using the prepared statement feature). When embedded SQL is used some SQL-related erros may be caught at compile time. 
+To identify embedded SQL requests to the preprocessor we use the ECEC SQL. 
+
+		EXEC SQL <embedded SQL statement>;
+
+Before executing any SQL statements, the program must first connect to the database. This is done using:
+	EXEC SQL connect to server user user-name using password;
+
+=> Embedded SQL statements are similar in form to regular SQL statements. However there are some minor diffrences 
+
+=> To write a relational query, we use the declare cursor statement. The result of
+the query is not yet computed. Rather, the program must use the open and fetch commands (discussed later in this section) to obtain the result tuples.
+
+
+	EXEC SQL
+		declare c cursor for
+		select ID, name
+		from student
+		where tot cred > :credit amount;
+
+
+The variable c in the preceding expression is called a cursor for the query. We use this variable to identify the query. We then use the open statement whic causes the query to be evaluated. 
+
+
+		EXEC SQL open c;
+
+Te above statement causes the database system to execute the query and to save the resluts within a temporary relation. The query uses the value of the host-language variable at the time the open statement is executed. 
+
+
+We then use a series offetch statements, each of which causes the values of one tuple to be placed in host-language variables. The fetch statement requires one host-language variable for each attribute of the result relation.
+
+
+		EXEC SQL fetch c into :si, :sn;
+
+The program can then manipulate the variables si and sn by using the features of the host programming language. 
+
+
+=> A single FETCH request returns only one tuple. When the program executes an OPEN statement on a cursor the cursor is set to point to the first tuple of the result. Each time it executes a FETCH statement the cursor is updated to point to the next tuple of the result. 
+
+=> We must use the CLOSE statement to tell the database system to delete the temporary relation that held the result of the query. 
+		
+		EXEC SQL Close c; 
+
+=> Embedded SQL expressions for database modification (update, insert and delete) do not return a result. A database-modification request takes the form 
+		
+		EXEC SQL < any valid update, insert, or delete>;
+
+=> Database relations can aslo be updated through curors. For example if we want to add 100 to the salary attribute of every instructor in the Music department we could declare a cursor as follows. 
+	
+
+		EXEC SQL
+			declare c cursor for
+			select *
+			from instructor
+			where dept name= ‘Music’
+			for update;
+
+=> We then iterate through the tuples by performing FETCH opeations on the cursor and after fetching each tuple we execute following code 
+
+		EXEC SQL
+			update instructor
+			set salary = salary + 100
+			where current of c;
+
+=> Transactions can be committed using EXEC SQL COMMIT, or rolled back using EXEC SQL ROLLBACK.
+
+Queries in embedded SQL are normally defined when the program is written. There are rare situations where a query needs to be defined at runtime. For example for a WHERE statements the condition could be created at runtime In such cases a query stirng can be constructed and prepared at runtime using a statement of the form EXEC SQL PREPARE <query-name FROM :<variable>, and a cursor can be opened on the query name.
+
+
+
+
+
+===> FUNCTIONS AND PROCEDURES 
+Procedures and functions allow "business logic" to be stored in the daatabase and executed from SQL statements. While such business logic can be encoeded as programming-language procedures in the database has several advantage. 
+For example it allows multiple applications to access the procedures without changing other parts of the application. 
+
+=> SQL allows the definition of functions, procedures and methods. THese can be defined either by the procedural component of SQL, or by an external programming languages such as java,c or c++. 
+
+	create function dept count(dept name varchar(20))
+	returns integer
+	begin
+	declare d count integer;
+		select count(*) into d count
+		from instructor
+		where instructor.dept name= dept name
+	return d count;
+	end
+
+
+DECLARING AND INVOLVING SQL FUNCTIONS AND PROCEDURES 
+Suppose we want a function that given the name of a department returns the count of the number of instructors in that department. 
+	
+	select dep_name,budget 
+	from instructor 
+	where dept_count(dep_name)>12; 
+
+The SQL standard supports functions that can return tables as results, such functions are called TABLE FUNCTIONS. Consider the function returns a table containing all the instructors of a particular department. 
+
+		select * 
+		from table(instructor_of('Finance'))
+
+A table function is something like following 
+
+	create function instructors of (dept name varchar(20))
+		returns table (
+			ID varchar (5),
+			name varchar (20),
+			dept name varchar (20),
+			salary numeric (8,2))
+		return table
+			(select ID, name, dept name, salary
+			from instructor
+			where instructor.dept name = instructor of.dept name);
+
+In general table values functions can be thought of as PARAMETERIZED VIEWS that generalize the regular notion of views by allowing parameters. 
+
+The keywords in and out indicate, respectively, parameters that are expected to have values assigned to them and parameters whose values are set in the procedure in order to return results.
+
+SQL Also support procedures. 
+
+	create procedure dept count proc(in dept name varchar(20),
+							out d count integer)
+		begin
+			select count(*) into d count
+			from instructor
+			where instructor.dept name= dept count proc.dept name
+		end
+
+
+
+=> Procedures can be invoked either from an SQL procedure or from embedded SQL by the CALL STATEMENT.
+
+		declare d count integer;
+		call dept count proc(’Physics’, d count);
+
+
+Prosedürler (Procedures):
+Prosedürler genellikle bir işlemi gerçekleştirmek için kullanılır.
+Değer döndürmez veya bir değeri döndüremez.
+SELECT ifadesinde kullanılamaz (ancak içinde SELECT kullanabilir).
+Genellikle veritabanında bir dizi işlemi sırasıyla gerçekleştirmek için kullanılır.
+Prosedürler içinde TRANSACTION veya COMMIT işlemleri yapılabilir.
+COK ISTERSEK PROCEDURLERDEN VERI DONDUREBILIRIZ AMA BU COK DA BEST PRACTICE DEGILDIR PROCEDURLER GENELLIKLE VT  DE BIR ISLEMI YAPMAK CLCULATION VS GIBI ISLEMLER ICIN TASARLANMISTIR
+
+Fonksiyonlar (Functions):
+Fonksiyonlar genellikle bir değeri döndürmek için kullanılır.
+Bir değer alabilir ve bir değer döndürebilir.
+SELECT ifadesinde kullanılabilir.
+Bir hesaplama yapabilir ve sonucu döndürebilir.
+Fonksiyonlar içinde TRANSACTION veya COMMIT işlemleri yapılamaz.
+Genellikle matematiksel hesaplamalarda veya veritabanındaki verileri işleyip sonucu döndürmede kullanılır.
+
+SQL permits more than one procedure of the same name, so long as the number of arguments of the procedures with the same name is different. Or functions have the same number of arguments but type of argumets differ. 
+
+
+
+==> LANGUAGE CONSTRUCTS FOR PROCEDURES AND FUNCTIONS 
+SQL suuports construct that give it almost all the power of a general-pupose programming language. The part of the SQL standard that deals with these constructs is called the PERSISTENT STORAGE MODULE (PSM). 
+
+declare => declaring variable 
+set => setting variable value 
+a compoound statement is of the form begin .... end 
+
+=> A compound statement of the form   	begin atomic ... end 
+ensures that all the statements contained within it are executed as a single transaction.
+
+
+	while statements and the repeat statements by the following syntax:
+
+			while boolean expression do
+				sequence of statements;
+			end while
+			
+			repeat
+				sequence of statements;
+			until boolean expression
+			end repeat
+
+
+There is also a for loop that permits iteration over all results of a query: 
+			
+		declare n integer default 0;
+		for r as
+			select budget from department
+			where dept name = ‘Music‘
+		do
+			set n = n− r.budget
+		end for
+
+The program fetches the query results one row at a time into the for loop variable (r, in the above example). The statement leave can be used to exit the loop, while iterate starts on the next tuple, from the beginning of the loop, skipping the remaining statements.
+
+
+
+The conditional statements supported by SQL include if-then-else statements by using this syntax:
+			
+		if boolean expression
+			then statement or compound statement
+		elseif boolean expression
+			then statement or compound statement
+		else statement or compound statement
+		end if
+	
+
+The SQL procedural language also supports the signaling of exception conditions, and declaring of handlers that can handle the exception, as in this code:
+
+		declare out of classroom seats condition
+		declare exit handler for out of classroom seats
+		begin
+		sequence of statements
+		end
+
+
+The statements between the BEGIN and the END can raise an exception by executing SIGNAL  out_of_classroom_seats. The handleer says that if the conditions arises the action to be taken is to exit the enclosing being end statement. 
+
+
+EXTERNAL LANGUAGE ROUTINES 
+=> Although the procedural extensions to SQL can be very uselful they are unfortunately not supported in a standard way across databases There could be multiple ways depending on which database you are using.  
+
+=> SQL allows us to define functions in a programming language such as java C. Functions defined in this fashion can be more efficient thant functions defined in SQL, and computations that cannot be caried out in SQL can be ececuted by these functions. 
+
+		create procedure dept count proc( in dept name varchar(20),
+								out count integer)
+		language C
+		external name ’/usr/avi/bin/dept count proc’
+		
+		create function dept count (dept name varchar(20))
+		returns integer
+		language C
+		external name ’/usr/avi/bin/dept count’
+
+
+
+==>TRIGGERS 
+A TRIGGER is a statement that the system executes automatically as a side effect of a modification to the database. To design a trigger mechanism we must meet two requirements 
+
+1- Specify when a trigger is to be executed. This is broken up into an event that causes the trigger to be checked and a condition that must be satisfied for trigger execution to proceed.
+
+2- Specify the actions to be taken when the trigger executes.
+
+Once we enter a trigger into the database the database system takes on the responsibility of executing it whenever the specified event occurs and the corresponding condition is satisfied. 
+
+
+NEED FOR TRIGGERS 
+=>Triggers can be used to implement ceratin integrity constraints that cannot ve specified using the constraint mechanism of SQL. 
+=> Note that tirgger systems cannot usually perform updates outside the database and hence in the inventory replenishment example we cannot use a trigger to place an order in the external world. Instead we add an order to a relation holding reorders. 
+
+
+TRIGGERS IN SQL 
+An SQL insert statement could insert multiple tuples of the relation and the for each row clause in the trigger code would then explicitly iterate over each inserted row. 
+
+
+The when statement specifies a condition. The system executes the rest of the trigger body only for tuples that satisfy the condition. The 
+
+begin atomic ... end 
+
+clause can serve to collect multiple SQL statements into a single compound statement. In our example, though, there is only one statement, which rolls back the transaction that caused the trigger to get executed. Thus any transaction that violates the referential integrity constraint gets rolled back, ensuring the data in the database satisfies the constraint.
+
+=> It is not sufficient to check referential integrity on insert alone, we also need to consider updates of section as well as deletes and updates to the referenced table time_slot. 
+
+
+	create trigger timeslot check1 after insert on section
+	referencing new row as nrow
+	for each row
+	when (nrow.time slot id not in (
+		select time slot id
+		from time slot)) /* time slot id not present in time slot */
+	begin
+	rollback
+	end;
+
+
+	create trigger timeslot check2 after delete on timeslot
+	referencing old row as orow
+	for each row
+	when (orow.time slot id not in (
+		select time slot id
+		from time slot) /* last tuple for time slot id deleted from time slot */
+	   and orow.time slot id in (
+		select time slot id
+		from section)) /* and time slot id still referenced from section*/
+	begin
+	   ollback
+	end;
+
+
+For updates, the trigger can specify attributes whose update causes the trigger to execute; updates to other attributes would not cause it to be executed. For example, to specify that a trigger executes after an update to the grade attribute
+of the takes relation, we write:
+		
+		after update of takes on grade
+
+
+=> Instead of letting the invalid action proceed and cause an error, the trigger might take action to correct the problem so that the update, insert, or delete becomes valid. For example, if we attempt to insert an instructor into a department whose name does not appear in the department relation, the trigger could insert a tuple into the department relation
+for that department name before the insertion generates a foreign-key violation.
+
+
+Instead of carrying out an action for each affected row, we can carry out a single action for the entire SQL statement that caused the insert, delete, or update. To do so, we use the for each statement clause instead of the for each row clause. The clauses referencing old table as or referencing new table as can then be used to refer to temporary tables (called transition tables) containing all the affected rows. Transition tables cannot be used with before triggers, but can be used with after triggers, regardless of whether they are statement triggers or row triggers. A single SQL statement can then be used to carry out multiple actions on the basis of the transition tables
+
+
+	create trigger setnull before update on takes
+	referencing new row as nrow
+	for each row
+	when (nrow.grade = ’ ’)
+	begin atomic
+		set nrow.grade = null;
+	end;
+
+
+
+=> Triggers can be disabled or enabled: by default theyare enabled when they are created but can be disabled by using 
+	alter trigger trigger_name disable. 
+
+=> A trigger taht has been diabled can be enagled again. A trigger can instead be dropped which removes it permanently by using teh command 
+	drop tirgger trigger_name. 
+
+
+
+WHEN NOT TO USE TRIGGERS 
+For example we could implement the ON DELETE CASCADE feature of a foreign-key constraint by using a trigger instead of using the cascade feature. Not only would this be more work to input but also it would be much harder for a database user to understand the set of constraints implemented in the database. 
+
+
+Many database systems now support materialized views, which are automatically maintained by the database system. As a result there is no need to write trigger code for maintaining such materiralized views. 
+
+
+Another problem with triggers lies in unintended execution of the triggered action when data are loaded from a backup copy,6 or when database updates at a site are replicated on a backup site. As an alternative, some database systems allow triggers to be specified as not for replication, which ensures that they are not executed on the backup site during database replication.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

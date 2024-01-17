@@ -1,0 +1,216 @@
+				8254
+8254 programlanabilir aralik sayaci olrarak isimlendirilen uc adet programlanabilir 16 bitlik geriye dogru sayici barindiran sayicilari alti farkli sayma zamanlama kipi destekleyen 8 bit veri genisligine sahip TTL uyumlu bir programlanabilir arayuz tum devresidir. 
+
+Genel olarak kullanildigi durumlar asagida listelenmistir:
+-yazilim kontrollu kesin ve dogru zaman gecikmeleri olusturmak 
+-olay sayici 
+-gercek zamanli saat 
+-kare dalga ureteci
+-karmasik dalga ureteci 
+-tetikleme sinyali uretimi 
+
+				8254 Uc Tanimlari 
+8 adet data (D7-D0)
+2 adet addres (A1A0)
+_RD
+_WR
+_CS
+CLOK0 - CLK1 - CLK2 (her bir sayici icin saat daresi girisi)
+GATE0 - GATE1 - GATE2 (kontrol)
+OUT0 - OUT1 - OUT2 (Cikis)
+
+
+ 	A1	A0	yazmac
+ 	0	0	Sayici 0 
+ 	0	1	Sayici 1
+ 	1	0	Sayici 2
+ 	1	1	Kontrol Yazmaci 
+
+
+8254 Ic Yapisi 
+82545 ic yapisi incelendiginde 3 adet sayiciya iliskin kontrol isaretleri ve deger yuklemelerine iliskin veri akisini saglayan yollar gorulebilmektedir. Ayrica veri yolu tamponu ve okuma yazma kontrolu mikroislemci tarafi ile haberlesme kontrol edilmektedir. 
+
+
+			8254 KONTROL YAZMACI 
+Kontrol kelimesine yazilan degerler ile temelde sayicilarin kipleri ve sayma formatlari ayarlanabilir. Bununla birlikte ozel iki komut (GERI OKUMA komutu ve SAYICI TUTUCU komutu) da kontrol yazmaci ile verilebilmektedir.
+Sayici kipi ve sayma formati ayarlayabilmek icin en yuksek anlamli bit (SC1, SC0) ile sayici secilir, Sayma degerine iliskin format belirlenir (RW1,RW0), kip secilir (M2-M0) ve sayma formati (binary,BCD) belirlenir. 
+
+Eger sayma degeri icin 0-255 arasinda bir deger yeterli ise 16 bitlik sayici icin sadece LCS yazmak yeterlidir.
+Eger sayici icin 256-65280 arasinda 256'nin kati bir deger yuklenecekse sadece MSB yazmak yeterlidir  
+Eger sayici icin 0-65535 arasinda bir deger gonderilecekse once LSB sonra MSB degerleri ile 16 bitlik sayma deger olusturulabilir. 
+
+16 bitlik sayma degerinin iki adimda gonderilebilmesinin sabebi ise 8254un veri yolunun 8 bitlik olmasidir. Kontrol yazmaci ile KIP ve FORMAT yazildiktan sonra sayma degeri sayici adresine yapilan yazma ile gonderilir. 
+
+Sayici ikili formatta saymaya ayarlanmissa ve ilk deger olarak 0010H yuklenmisse sayici sirasiyla 0010H, 000FH, ... 0000H degerlerini alir. bunula birlikte sayici BCD formatta ayarlanmissa ve ilk deger olarak 0010H yuklenmisse sayici sirarisyla 0010H, 0009H, 0008H ... 000H degerlerini alir. 
+
+
+8254 KONTROL YAZMACI FORMATI 
+D7	D6	D5	D4	D3	D2	D1	D0
+SC1	SC0	RW1	RW0	M2	M1	M0	BCD
+
+
+SC1	SC0	SC-Sayici Secim
+0	0	Sayici0
+0	1	Sayici1
+1	0	Sayici2
+1	1	Geri Okuma Komutu 
+
+
+M2	M1	M0	M-Kip
+0	0	0	kip0
+0	0	1	kip1
+x	1	0	kip2
+x	1	1 	kip3
+1	0	0 	kip4
+1	0	1	kip5 
+
+
+RW1	RW0	RW-Okuma/Yazma
+0	0	Sayici Tutucu Komutu
+0	1	LSB
+1	0	MSB
+1	1	Once LSB, sonra MSB
+
+
+BCD	SAYMA
+0	ikili
+1 	iki kodlu ondalic (BCD)
+
+
+				8254 KIPLERI 
+8254 ALTI farkli kipte kullanilabilir. Bu kipler tek seferlik, tekrarli veya disaridan tetiklenebilen yapilardir. 
+
+
+			KIP0 (INTERRUPT ON TERMINAL COUNT)
+Kontrol degerinin kontrol yazmacina yazilmasi ile OUT ucu lojik 0 olur. OUT ucu sayma degeri kadar saat darbesi suresince lojik 0 da kalir, sayma bitince lojik 1 e cikar. Ilgili sayiciya yeni sayma degri yuklenirse yeni sayma degeri ile islem tekrarlanir. GATE ucu lojik 0 yapilirsa sayma duraklar. 
+	
+
+			KIP1 (HARDWARE RETRIGGERABLE ONE SHOT)
+Kontrol degeri ve sayma degeri yuklendikten sonra OUT ucu lojik 1 yapilir. GATE ucunda lojik 0->1 gecisi goruldugunde OUT ucu lojik 0 yapilir. Sayma boyunca OUT lojik 0 da kalir. Sayma isleminin bitmesiyle OUT ucu lojik 1 e cekilir. GATE ucunda tekrar lojik 0->1 gecisi gorulmesiyle islem tekrarlanir. 
+
+
+			KIP2 (RATE GENERATOR)
+Tekrarli darbe(pulse) ureten bir kiptir. OUT ucu basla lojik 1 dedir. Sayma degeri 1 oluncaya kadar OUT ucu lojik 1 de kalir. Sayma degeri 1 oldugunda OUT ucu lojik 0'a duser, 1 saat darbesi sonra OUT ucu tekrar lojik 1'e cikar. Islem periyodik olarak tekrarlanir. GATE=0 olursa islem duraklar. 
+
+                                   
+ORN:
+CLK0 ucunda 2MHz frekansinda saat darbesi bagli olan, CNTR0 kullanarak 50 qs periyotlu bir pulse isareti uretiniz. 
+
+50qs'de 1 sinyal ureten kaynak 1 sn de 20000 tane sinyal uretir 
+kaynak tarafinda 2000000 tane sinyal uretildigi icin bunu 100x yavaslatmamiz lazim yani 64h yada 100d kadar
+
+
+Bu  durumda 8 bitlik sayma degerinin yeterli oldugu gorulur. Buna gore kontrol kelimesi asagidaki gibi olur 
+
+	sayici_secimi	 okuma_secimi	 kip	 sayma	  onaltilik_deger
+	0	0	 0	1	 010	   0		14h
+	say. 0 secildi	 Sadece LSB	 kip2    binary	
+
+
+MOV AL,14H
+out control_address,AL
+MOV AL,64H
+OUt contr0_address, Al
+
+
+			KIP3 (SQUARE WAVE GENERATOR)
+Sayma degerinin yarisi suresinde OUT ucu lojik1, diger yarisinda ise lojik 0 olur. Periyodik olarak tekrarlanir. Mod 2 den duty degerinin 0 olmasi ile ayrilir. GATE=0 olursa entegre duraklar. 
+
+ORN:
+CLK1 ucunda 2MHz frekansinda saat darbesi bagli olan, CNTR1 kullanarak 1KHz frekansinda kare dalga uretiniz. Sayma degeri hesaplayabilmek icin CLK1 ucundaki saat darbesi frekansini uretilecek isaretin frekanisna bolmek yeterlidir. 
+
+2MHZ / 1KHz = 2000
+	sayici_secimi	 okuma_secimi	 kip	 sayma	  onaltilik_deger
+	0	0	 0	1	 011	   1		77h
+	say. 0 secildi	 Sadece LSB	 kip2    binary	
+
+MOV AL,77H
+out control_address,AL
+MOV AL,00H
+OUT contr1_address, Al
+MOV AL,20H
+OUT contr1_address, Al
+
+
+			KIP4 (SOFTWARE TRIGGERED STROBE)
+OUT ucu basta lojik 1'dedir. Sayma degeri 1 olunca OUT ucu lojik 0 yapilir. 1 saat darbesi sure sonra OUT ucu lojik 1 yapilir. YEni bir sayma degeri yuklendiginde islem bu sayma degeri icin tekrarlanir. GATE=0 ise sayma duraklar 
+
+			KIP5 (HARDWARE TRIGGERED STROBE)
+OUT ucu basta lojik 1 dedir. GATE ucunda lojik 0->1 gecisi gorulmesiyle sayma baslar. Sayma degeri 1 olunca OUT ucu lojik 0 yapilir. 1 saat darbesi sure sonra OUt ucu lojik 1 yapilir. GATE ucunda yeni lojik 0->1 gecisi gorulmesiyle islem tekrarlanir. 
+
+
+				SAYICI TUTMA KOMUTU 
+8254 baslatildiktan sonra herhangi bir sayicinin sayma degerini almak icin tutma komutu kullanilabilir. Tutma komutu yurutuldukten =sonra= sayici adresinden yapilan okuma ile tutulan sayma degerine erisilebilir. Tutma fonksiyonu ile bir seferde sadece 1 sayiciya iliskin sayma degeri tutulabilir. 
+
+Sayicinin (Counter element, CE) o anki degerini gecici bir ic yazmaca (OL) kopyalar
+LATCH'lemeden sayma devam ederken CE okumaya calismak hatali 
+OL'ye kopyalanan deger CPU tarafindan okunana kadar saklanir. 
+	
+	D7	D6	D5	D4	D3	D2	D1	D0
+	sc1	sc0	0	0	x	x	x	x
+
+
+	SC1	SC0	SC-Sayici Secimi
+	0	0	Sayici0
+	0	1	Sayici1
+	1	0	Sayici2
+
+
+				GERI OKUMA KOMUTU              
+8254 baslatildikta sonra herhangi bir sayicinin SAYMA DEGERINI ve/veya SAYICININ DURUMUNU almak icin geri okuma kullanilabilir. 
+Geri okuma komutuyla hehangi bir sayiciya iliskin DURUM TUTABILMEK icin _STATUS kontrol bit'ine lojik 0 yazilmali ve CNT0, CNT1, CNT2 sayicilarindan hangileri tutulmak isteniyorsa lojik 1 olarak isaretlenmelidir. 
+
+Geri okuma komutuyla herhangi bir sayiciya iliskin SAYMA DEGERINI TUTABILMEK icin _COUNT kontrol bitine lojik 0 yazilmali ve CNT0, CNT1, CNT2 sayicilarindan hangileri tutulmak isteniyorsa lojik 1 olarak isaretlenmelidir. 
+
+Geri okuma komutuyla istenirse tum sayicilar icin hem durum hem de sayma degeri tutulabilir. DURUM ve SAYMA degerlerine sayicinin addresinden yapilan okumalar ile erisilebilir. Durum ve sayma degeri okuma ile ilgili olarak su noktaya dikkat edilmelidir: Sayiciya iliskin herhangi bir okuma yapilmadan sirasina bakilmaksizin DURUM ve SAYMA degeri tutulmussa sayici addresinden yapilan ILK OKUMA DURUMU SONRAKI BIR VEYA IKI OKUMA (sayicinin ayarlandigi mode gore 8 bit veya 16 bit sayma degerine gore) ise SAYMA degerini verir. 
+
+Bir baska dikkat edilmesi gereken nokta ise daha onceden yapilan tutma islem sonuclari okunmadan yeni geri okuma komutuyla yapilan tutma islemleri gecersizdir. 
+
+			8254 GERI OKUMA KOMUT FORMATI 
+	D7	D6	D5		D4	D3	D2	D1	D0
+	1	1	_count	     _status	CNT2	CNT1    CNT0	0
+
+	
+	_COUNT=0 :sayma degeri tut
+	_STATUS=0 :Durum tut
+	CNT2=1	: Sayici 2 icin tut 
+	CNT1=1	: Sayici 1 icin tut
+	CNT0=1	: Sayici 0 icin tut 
+
+
+				8254 DURUM YAZMACI
+8254 icin durum yazmaci sayicinin hangi kipte ayarlanmis oldgunu geri okumak icin kullanilabilir. Bunun disinda sayicinin ayarlanma asamasinda olup aktif olmadigini gosteren NULL_COUNT durum bit'ini ve sayiciya iliskin OUTPUT ucunun durumunu da sunmaktadir. 
+
+	D7	D6	D5	D4	D3	D2	D1	D0
+      OUTPUT   NUL_COU  RW1    RW0      M2	M1	M0	BCD
+
+			
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

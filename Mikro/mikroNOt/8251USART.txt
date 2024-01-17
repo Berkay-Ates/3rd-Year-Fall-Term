@@ -1,0 +1,264 @@
+	     8251 USART (UNIVERSAL SYNCHRONOUS/ASYNCHRONOUS RECEIVER/TRANSMITTER)
+
+8251 8 bit veri genisligine sahip, TTL uyumlu G/C birimleri ile seri haberlesme icin kullanilan bir programlabilir arayuz tum devresidir. 
+
+GENEL KULLANIM AMACI:
+	=> Asenkron Seri Haberlesme (ANUYUMSUZ)
+	=> Senkron Seri Haberlesme (ANUYUMLU)
+
+
+	   			8251 UC TANIMLARI 
+
+=> 8 adet veri (D7-D0)
+=> Bir adet adres (C/_D)
+=> Okuma kontrol (_RD)
+=> Yazma Kontrol (_WR)
+=> Yetkilendirme (_CS)
+=> Saat Darbesi Girisi (CLK)
+=> Modem Kontrolu (_DTR,_DSR,_RTS,_CTS)
+=> Veri gonderme (TxD)
+=> Veri alma (RxD)
+=> Veri gonderme Saat girisi (_TxC)
+=> Veri alma saat girisi (_RxC)
+=> Veri gonderme Tamponu bos (TxRDY)
+=> Veri Alma Tamponu Dolu (RxRDY)
+
+
+			8251 IC YAPISI 
+8251 ic yapisi incelendiginde 
+veri alma tampon ve kontrolu 
+veri gonderme tampon ve kontrolu ile 
+veri okuma tamponu ve 
+modem kontrolu bloklari gorunmektedir. 
+Bu  bloklar bir ic veri yolu uzerinden iletisim halindedir. 
+
+
+8251 YAZMAC VE GOREVLERI 
+C/_D, _RD, _WR ve _CS uclarinda olusturulan degerlere gore 8251 yazmaclarinin erisimi saglanabilmektedir. C/_D ucunda lojik 0 degeri olusturuldugunda veri yazmaclarinda lojik 1 degeri olusturuldugunda ise kontrol yazmaclarina erisim saglanabilmektedir. 
+
+Veri yazmaclari giris ve cikis yonlu olmak uzere iki ayri yazmactan olusur. Veri yazmaclari okuma yonlu adreslendiginde veri giris yazmacina erisilirken yazma yonlu adreslendiginde ise veri cikis yazmacina erisilir. 
+
+8251 de yazma yonlu erisilebilen kontrol yazmaclari kip, kontrol, synchronous-1, synchronous-2 yazmaclaridir.
+
+8251 de okuma yonlu erisilebilen kontrol yazmaci ise durum yazmacidir. 
+
+
+
+	_CS	C/_D	_RD	_WR		yazmac erisimi 
+	1	x	x	x	   Veri yolu yuksek empedans gosterir
+	0	x	1	1	   Veri yolu yuksek empedans gosterir 
+	0	1	0	1	   Durum yazmaci okunur 
+	0	1	1	0	 kip,kontrol, senkron1, senkron2 yazmaclari okunur
+	0	0	0	1	   8251 veri yazmaci okunur
+	0	0	1	0	   8251 veri yazmacina yazilir
+
+
+8251 haberlesme acisindan anuyunlu veya anuyumsuz kipte ayarlanabilir.
+Anuyumlu haberlesmede iki terminal arasinda veri alma, veri gonderme, ortak saat darbesi ve gerilim referans ucu olmak uzere dort uc uzerinden baglanti saglanir. 
+
+Anuyumsuz haberlesmede ise veri alma veri gonderme ve gerilim referans ucu olmak uzere uc adet uc uzerinden baglanti saglanir. 
+
+Seri haberlesme acisindan terminaller arasinda ortak bir saat darbesi bulunmasi uzun bit serileri halinde veri aktarimina imkan saglar. Anuyumlu haberlesmede veri transferinin baslangic ve bitisleri de anuyumluluk yazmaclari ile iliskili ozel bit dizileri olarak tanimlanabilir.
+
+Anuyumsuz haberlesme de ise terminaller kendi ic saatlerini kullanarak veri aktarim uclarini ornekleyerek pes pese bit'leri okur. Ic saatler arasinda olusabilecek frekans farki anuyumsuz haberlesmenin kisa bit dizileri olarak kisitlanmasina sebep olur.
+
+Anuyumlu veya anuyumsuz haberlesme 8251 KIP YAZMACI ile saglanmaktadir. 8251 anuyumlu kipte kullanilmak istenirse kip yazmacinin en dusuk anlamli bitleri 00 olarak ayarlanmalidir. 
+
+8251 kip yazmaci (anuyumlu)
+	D7	D6	D5	D4	D3	D2	D1	D0
+       SCS     ESD	EP	PEN	L2	L1	0	0
+	scx:Sync Karakter sayisi 0:2 sync, 1:1 sync
+	ESD:External sync detect. 0:SYNDET output, 1:SYNDET input
+
+
+Anuyumsuz haberlesmede once baslangic biti sonrasinda veri bitleri kullaniliyorsa esik biti ve son olarak durma bitleri aktarilir. Anuyumsuz kipte 1 1.5 veya 2 durma biti kullanilabilir. Veri kontrolunde esik kontrolu cift veya tek esik kontrolu olarak kullanilabilir. Veri 5, 6, 7 veya 8 bit uzerinden aktarilabilir. 8251 veri alma saat girisi ve veri gonderme saat girisine bagli frekans degerinin hangi oranda bolunerek hangi baud oraninin olusturulacagi ise baud oran carpan bitleri ile saglanir. 
+
+8251 KIP YAZMACI (anuyumsuz)
+	D7	D6	D5	D4	D3	D2	D1	D0
+        S2      S1	EP	PEN	L2	L1	B2	B1
+	
+
+EP (ESIK Parity)
+0	Tek eslik (odd parity)
+1       Cift eslik (even parity)
+
+
+S2	S1	Durma Bit Sayisi
+0	0	Gecersiz
+0	1	1 durma biti 
+1	0 	1.5 durma biti
+1	1	2 durma biti
+
+
+PEN 		Eslik etkinlestirme
+0		eslik yok
+1		eslik var 
+
+
+B2	B1	Baud oran carpani
+0	0	Anuyumlu kip
+0	1	1
+1	0 	16
+1	1	64
+
+
+L2	L1	Veri Bit Sayisi
+0	0	5
+0	1	6
+1	0 	7
+1	1	8
+
+
+8251 de kip yazmacini ayarladiktan sonra KONTROL YAZMACININ da uygun sekilde ayarlanmasi gerekmektedir. Kontrol yazmaci ile veri gonderme ve alma aktiflestirilebilir veya kapatilabilir. Yazilimsal olarak 8251 ilk durumuna dondurulebilir(reset). Son olarak daha onceki veri transferlerinde kalan hata bitleri temizlenebilir. 
+
+			8251 Kontrol Yazmaci
+	D7	D6	D5	D4	D3	D2	D1	D0
+	EH	IR	RTS	ER	SBRK	RxE	DTR	TxE
+
+
+IR: Yazilimsal Reset
+ER: Hata bitlerini temizle 
+SBRK: Veri gondermeyi durdur (TxD=0)
+RxE: Veri almayi etkinlestir
+TxE: Veri gondermeyi etkinlestir
+
+===========================================================================================
+=> kip yazmaci -> anuyumlu veya anuyumsuz haberlesme kip yazmaci ile saglanmaktadir 
+=> kontrol yazmaci -> veri gonderme ve alma aktiflestirmeleri yapilabilir
+=> durum yazmaci -> kontrollu veri akisinda veri dongerme ve alma tamponlarinin hazir olup 		    olmadiklarina iliskin kontrol bitlerine sahiptir. 
+===========================================================================================
+
+DURUM YAZMACI program kontrollu veri akisinda veri gonderme ve alma tamponlarinin hazir olup olmadiklarina iliskin kontrol bitlerine sahiptir. Ayrica cerceve, ezme ve eslik hata bitleri de durum yazmacinda sunulmaktadir. 8251in yeni bir veriyi dis dunyaya gonderebilmesi icin bir onceki veri gonderme adiminda yazilan verinin son bitinin de gonderilmis olarak veri gonderme tamponunun bos hale gelmesidir. 8251 vasitasiyla dis dunyadan gelen yeni bir verinin okunabilmesi icin bit dizisinin son bitlinin de okunarak veri alma tamponunun dolu hale gelmesidir. 
+
+			8251 Status  Yazmaci 
+	D7	D6	D5	D4	D3	D2	D1	D0
+	DSR    SYNDET   FE      OE	PE      TxE	RxRDY   RxRDY
+	
+	FE: CERCEVE HATASU 
+	OE : EZMEE HATASI 
+	PE: ESLIK HATASI 
+	RxRDY: veri alma tamponu dolu 
+	TxRDY: veri gonderme tamponu bos 
+
+
+Anuyumsuz haberlesme acisindan incelendiginde donanimsal veya yazilimsal reset isleminden sonra kontrol grubu yazmaclarina yapilan ilk yazma islemi ile kip yazmacina, ikinci yazma islemi ile kontrol yazmacina erisilir. 
+
+
+kip => kontrol => (veri aktarma devam ederken) durum yazmaci 
+
+
+				TRANSMISSION RATE 
+=> Rate at which bits are transmitted (BAUD)
+=> Number of signal changes per second
+=> Bit time: how long the Bit stay ON or OFF
+=> 1200Baud means: Bit stay for 1/1200 = 0.83 ms 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

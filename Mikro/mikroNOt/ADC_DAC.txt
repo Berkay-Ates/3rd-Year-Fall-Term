@@ -1,0 +1,42 @@
+				ADC0804 ve DAC0830
+Fiziki dunya analog bir ortamdir. Fiziki dunyadaki sicaklik basinc gerilim akim hiz isik siddeti gibi parametreler analog degerlere sahiptir. Mikroislemciler ise sayisal (digital) hatta ikili degerlerle calisir. Mikroislemci ile fiziki dunya arasinda etkilesim saglayabilmek icin anolog degerleri sayisal degerlere ve sayisal degerleri analog degerlere ceviren donusturuculere ihtiyac vardir. 
+
+Fonksiyonlar tanim kumerlerinin surekli veya ayrik olmalarina gore zamanda surekli veya zamanda ayrik isaretler olarak ikiye ayrilmaktadir. Benzer sekilde fonksiyonlarin goruntu kumesinde surekli veya ayrik degerler almalari ile genligi surekli veya genligi ayrik isaretler olarak ikiye ayrilmaktadir. 
+
+Zamanda(tanim kumesinde) ve genlikte(goruntu kumesinde) surekli olan isareler ANALOG ISARET olarak adlandirilir. Zamanda(tanim kumesinde) ve genlikte(goruntu kumesinde) ayrik olan isaretler ise sayisal isaret olarak adlandirilir. 
+
+Analog degerlerin sayisal degerlere cevrilmesi analog-sayisal ceviriciler (ANALOG-DIGITAL CONVERTER ADC) ile saglanmaktadir. Sayisal degerlerin analog degerlere cevrilmesi ise sayisal-analog ceviriciler (DIGITAL-ANALOG CONVERTER DAC) ile saglanmaktadir. 
+
+Mikroislemcilis sistemlerde ADC modulunun girdi olarak elektriksel bir isaret olan analog gerilim degeri aldigi ve donusturme cozunurlugune gore bir bit dizisi urettigi soylenebilir. DAC'nin ise cozunurluge gore bir bit dizidini girdi olarak alarak ciktirda ise elektriksel anaog bir deger urettigi soylenebilir.
+
+Fiziki dunya ile mikroislemcili sistemin etkilesim saglanabilmesi mikroislemcili sistem ile fiziki dunmyadaki bazi parametrelerin okunabilmesi icin cesitli enerji tiplerini elektrik enerjisine ceviren donusturucu modellerine de ihtiyac oldugu gorulmektedir. Yine mikroislemcili sistemin urettigi elektriksel analog ciktilar vasitasiyla fiziki dunyada kontrol yurutebilmesi icin eletrik enerjisini diger enerji tiplerinedonusturen ikinci bir donusturucuye daha ihtiyac vardir. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

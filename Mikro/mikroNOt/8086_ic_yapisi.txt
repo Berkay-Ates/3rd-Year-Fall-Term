@@ -1,0 +1,208 @@
+8086 IC YAPISI 
+    => 8086 iki temel alt bilesenden olusmaktadir bunlar     
+    1- yol arayuz birimi (bus interface unit BIU)
+    2- yurutme birimi (execution unit EU) olarak isimlendirilir 
+
+    BIU bellek ve G/C birimlerinden veri okuma ve yazma gorevlerini yerine 
+    getirir. Program komutlarini bellekten getirir. Bu ozellikleri ile BIU,
+    8086 mikroislemcisinin yollarindaki address ve veri degerlerinin olusturulmasi 
+    ile gorevlidir. EU ise BIU tarafindan getirilen komutlarin cozumlenmesi 
+    ve yurutulmesinden sorumludur. 
+
+
+8086 UC TANIMLARI 
+    8086 icerisinde fonksiyonel olarak 20 adet adress ucuna,16 adet veri yoluna 
+    cesitli kontrol uclarina ve besleme uclarina ihtiyac duyulmaktadir. 
+
+    Fiziki olarak toplamda 40 adet uc bulunmaktadir bu uclardan bazilari 
+    zaman cogullamali (time multiplexing) mantiginda calismaktadir. 
+    Ornegin A/D (Address/Data) olarak tanimlanan uclar zaman cogullamali 
+    olarak farkli farkli zamanlarda address veya data ucu olarak kullanilabilmektedir 
+
+    x ve /x uc degerleri lojik durumlara gore farkli durumlar sergilemektedir 
+        => x lojik 1 degeri aldiginda gerceklestirilen fonksiyonu 
+        => /x ise lojik 0 degeri aldiginda gerceklestirilen fonk. ifade eder 
+
+
+  MN-/MX UCU 
+        0 => Mikroislemciyi Maksimum kipte 
+        1 => Minimum kipte Mikroislemcinin calismasini saglar 
+
+    MAKSIMUM KIP 
+
+        => Maksimum kip mikroislemcinin yardimci islemcilerle beraber calismasini 
+        desteklemektedir. Bu durumda kontrol isaretlerinin bir kisminin uretilebilmesi 
+        icin yardimci bir tumdevre olan yol kontrolcusu 8288 ile birlikte kullanim 
+        gerekmektedir. 
+
+        => Minimum kipte bellek ve G/C birimleri kontrolu icin gerekli tum sinyaller 
+        8086 tarafindan uretilmektedir. 
+
+
+ MINIMUM DURUM ICIN 8086 UC TANIMLARI 
+
+    I -> Giris, O -> cikis, 3 -> tri state buffer 
+
+    _BHE/s7  O-3
+        => Bus high Enable ucu veri yolunun yuksek anlamli bytini D15-D8 aktif eden 
+        kontrol ucudur. S7 ucu her zaman 1 degerine sahiptir. 
+
+
+    _DEN  O-3
+        => Data-Enable kontrol ucu. Mikroislemci ile veri yolu arasinda veri aktariminda 
+        kullanilan cift yonlu mandallarin aktif edilmesi icin kullanilir.
+
+
+    _INTA O-3
+        =>Interrupt-Acknowledge ucu. INTR ucundan iletilen kesme istegine karsilik olarak 
+        mikroislemci tarafinda kesme vektor addresinin veri yoluna cikartilmasini 
+        tetiklemek icin kullanilir. 
+
+    _RD O-3 
+        => READ kontrol ucu. Bu uctaki sifir degeri G/C veya bellek birimlerinden 
+        veri yoluna veri aktarilmasini saglar 
+
+
+    _TEST O-3 
+        => Wait komutu yurutulurken kontrol edilen bir giris ucudur. WAIT komutu 
+        yurutulurken _TEST ucundan lojik 0 degeri okunuyorsa NOP komutu yurutulur. 
+        Wait komutu yurutulurken _TEST ucunda lojik 1 degeri okunursa uc her cevrimde 
+        tekrar okunarak deger lojik 0 a dusene kadar beklenir. 
+
+
+    _WR O-3
+        => YAZMA KONTROL UCU. Bu uctaki lojik 0 degeri veri yolundan bellek ve G/C 
+        birimlerine veri aktarilmasini saglar. 
+
+
+    A19/S6 - A16/S3 O-3 
+        => Cogullamali address durum uclari ALE UCU lojik 1 seviyesindeyken bellek 
+        addresinin A19-A16 bitlerini icerir.
+        
+        Ale ucu lojik 0 degerindeyken S6-S3 durum bitlerini icerir. 
+            S6 biti her zaman lojik 0 degerindedir. 
+            S5 biti her zaman IF bayraginin durumunu gosterir
+            s4-s3 erisilen kesime iliskin bilgi iceriri 
+            S4-S3 bitleri yuksek anlamli address bitleri olarak degerlendirilerek 
+                4 farkli 1MB kapasitesinde bellek alani addreslenebilir 
+
+    
+    AD7-AD0 I/O-3
+        Cogullamali address veri yolunun dusuk anlamli 8 bitlik kismi. ALE ucu 
+        lojik 1 seviyesindeyken bellek addresinin veya G/C port numarasinin dusuk 
+        anlamli 8 bitini icerir. ALE ucu lojik 0 degerindeyken verinin dusuk anlamli 
+        8 bitlik kismini gosterir. 
+
+
+    AD15-AD8 I/O-3
+        cogullamali address veri yolunun yuksek anlamli 8 bitlik kismi. Ale ucu 
+        lojik 1 seviyesindeyken bellek addresinin veya G/C port numarasinin dusuk 
+        anlamli 8 bitini icerir. ALE ucu lojik 0 degerindeyken verinin yuksek anlamli 
+        8 bitlik kismini icerir.
+
+
+    ALE O
+        => Address Latch Enable. AD uclarinda address oldugunu belirtir. Address
+        mandallarini (latch) aktif etmek icin kullanilir.
+
+
+    CLK 
+        => Mikroislemci icin saat darbesi giris ucu 
+
+    
+    DT/_R O-3 
+        => Data transmit receive kontrol ucu. 1 oldugu durumda mikro islemcinin 
+        veri yoluna veri yolladigi durumu ifade eder. 0 oldugu durumda ise mikro 
+        islemcinin veri yolundan okuma yaptigini ifade eder. Mikroislemci ile 
+        veri yolu arasinda veri aktariminda kullanilan cift yonlu latchlarin 
+        aktarim yonunu belirlemek icin kullanilir. 
+
+
+    GND 
+        => Topraklama pini 
+
+    HOLDA  o 
+        => Hold acknowledge mikroislemcinin hold durumuna gectigini bildirir. 
+
+
+    HLD O 
+        => DMA (Direct memory access) kontrol ucu. Hold ucunda lojik 1 degeri 
+        olusturulursa mikro islemci address, veri ve kontrol uclarinda yuksek 
+        empedans olusturarak veri akisini DMA kontrolcusune devreder. 
+
+    INTR I 
+        => Interrupt Request ucu. Donanim kaynakli kesme isteklerinin mikroislemciye 
+        aktarilmasini saglar. IF=1 olarak ayarlanmissa INTR ucunda olusturulan 
+        lojik 1 degeri, yurutulmekte olan komutun bitirilmesinden sonra mikroislemcide 
+        kesme isteginin karsilanmasi surecini baslatir. 
+
+    M/_IO O-3 
+        => Memory/Input-Output secim ucu. Mikroislemci bellek islemleri yuruturken 
+        ucta lojik 1, G/C islemleri yuruturken ucta lojik 0 degeri olusturulur. 
+
+
+    MN/_MX I
+
+        Minimum-Maksimum kip secim ucu. 1 minimum , 0 maxsimum kip secimini saglar 
+
+    
+    NMI I 
+        => Non maskable interrup. Bu ucta olusturulan lojik 1 degeri kesme bayraginin 
+        durumuna bakilmaksizin INT 20H kesmesini tetikler. 
+
+    
+    READY I 
+        => Uctaki 0 degeri mikro islemciyi bekleme durumuna sokar. 
+
+
+    RESET I 
+
+        => 4 saat cevrimi boyunca RESET ucunda olusturulacak 1 degeri mikroislemciyi 
+        reset resetler. 8086 reset degerinde 
+            CS=ffffh
+            IP=0000h
+            IF=0 degerleri ile ilklendirilir. 
+
+
+    VCC 
+        Besleme gerilimi saglamaktadir (5v +-%10 tolerans) 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

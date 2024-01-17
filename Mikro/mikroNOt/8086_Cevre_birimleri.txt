@@ -1,0 +1,169 @@
+
+Bir cevresel arayuz PD(peripheral devices), 8086 G/C hafiza uzayinda belirli bir 
+address setine yerlestirilir. 
+
+
+
+CEVRE BIRIMI 
+    => Cevre birimi CEVRESEL ARAYUZ ve GIRIS-CIKIS birimlerinden olusmaktadir. 
+    => Mikroislemci CEVRE BIRIMINE ortamda bulunan bir CEVRESEL ARAYUZ sayesinde baglanir 
+    CEVRESELL ARAYUZ mikroislemic ile cevre birimi arasinda gerek elektriksel duzeyde
+    gerekse protokol duzeyinde bir uyumlastirma saglar. 
+
+
+
+ADDRESS COZUMLEME DEVRELERI 
+    => Mikroislemci ile beraber kullanilacak olan bellek birimlerinin ve cevre birimlerinin 
+    onceden belirli ve cakismayan address araliklarina yerlestirilmesi gerekmektedir. 
+    
+    => Birimlerin address araliklarina yerlestirilmesi ADDRESS COZUMLEME DEVRELERI 
+    ile saglanir. 
+
+
+
+    => ADDRESS COZUMLEME devresi yurutulen komutun cinsine ve komutun yurutulecegi 
+    addrese gore hangi bellek veya cevre biriminin aktif edilecegini belirler. Tum 
+    bellek ve cevre birimleri MP ait address,veri ve kontrol uclarini ortak olarak 
+    kullandigi icin her seferinde bu yollar uzerinden tek bir birimin MP ile iletisimde 
+    olmasi gerekir. ADDRESS COZUMLEME devresinin secmis oldugu birimin veri uclari 
+    veri yoluna deger gonderip veri yolundan deger okuyabilmektedir. Secilmeyen elemanlarin 
+    veri uclari ise yuksek empedans gosterecek sekilde bloklanir. 
+
+
+
+GIRIS CIKIS ASSEMBLY KOMUTLARI 
+
+    => Giris cikis islemleri ile ilgili olarak 8086 da IN ve OUT olmak uzere 2 
+    farkli komut vardir. 
+
+    IN => Cevre biriminden veri okumak icin kullanirlir 
+    OUT => Cevre birimine veri yazmak icin kullanilir 
+
+
+    => IN ve OUT komutlari veriyi AL ve AX uzerinde kullanir 
+    => Port addresi 8 bit ile ifade edilebiliryorsa sabit degerle, 16 bit ile 
+        ifade edilebiliyorsa DX yazmaci uzerinden komut aktarilir. 
+
+
+    
+G/C HARITALAMA YONTEMLERI 
+
+    => Cevre birimlerine iliskin address cozumlemede M/_IO ucunun kullanilip kullanilmamasi 
+    farkli memory haritalama yontemlerine sebebiyet vermektedir. 
+
+    => IN/OUT komutu yurutuldugunde M/_IO ucunda 0 degeri olusur 
+    => MOV komutu calistiginda ise M/_IO ucunda 1 degeri olusur 
+
+
+
+MEMORY MAPPED I/O 
+    Address cozumlemede M/_IO ucu dikkate alinmazsa BELLEK ve CEVRE BIRIMLERI tek ve 
+    ortak bir address uzayini paylasirlar. Bu haritalama yontemi BELLEK HARITALI  I/O 
+    veya MEMORY MAPPED I/O olarak isimlendirilir. 
+
+    => MOV komutlari ile I/O address gozlerine erisilebilmektedir 
+    => Bellek ve I/O uslemlerini ayiran fiziki uclara gerek kalmamaktadir 
+
+
+ISOLATED I/O MAPPIMG 
+    Address cozumlemede M/_IO ucu dikkatae alinirsa bellek ve cevre birimleri icin ayri 
+    ayri iki farkli adress uzayi tanimlanmis olur. Bu haritalama yontemi ise ISOLATED 
+    I/O MAPPIMG olarak isimlendirilir. 
+
+    => Bellek uzayinin tamami I/O birimleri tarafindan kullanilabilir. 
+    => IN OUT gibi ozellesmis komutlar kullanilabilir 
+    => I/O icin daha basit address cozumleme devreleri kullanilabilir 
+
+
+=> En genis addresleme yolu DX uzerinden 16 bit olabilecegi icin I/O uzayi kapasitesi 
+   maksimum 16 bit olarak elde edilir. 
+
+   => MEMORY MAPPED yontemde dusuk anlamli 64k I/O hafiza uzayi iken diger bos alanlar 
+      memory alani olarak kullanilabilr. 
+
+
+   => ISOLATED I/O MAPPIMG yonteminde ise 1MB lik address uzayi ile 64k lik I/O 
+      uzayi ayri ayri kullanilabilmektedir. 
+
+
+
+ADDRESS COZUMLEME DEVRESI 
+
+    Address cozumleme devresi ile bellek ve cevre birimlerinden sadece bir tanesi 
+    aktif edilerek bir seferde sadece mikroislemci ile bir tane birimin veri yolunu 
+    kullanmasi saglanir. 
+
+
+    Address cozumleme devresi girdi olarak address  degerini ve M/_IO,_WR, _RD,_BHE 
+    degerlerini girdi olarak alir. 
+
+
+    BELLEK ICIN ADDRESLEME 
+        => A0 - A19 a kadar olan kisimlar bellek hafizasi icin kullanilir 
+
+    CEVRE BIRIMLERI ICIN ADDRESLEME
+
+        => Dolayli adresleme 
+            A0 - A15 e kadar olan uclar kullanilir 
+
+        => Sabit addresleme 
+            A0-A8 e kadar olan kisim kullanilir 
+
+    
+
+
+TEMEL CEVRE BIRIMLERINE ILISKIN OZEL DURUMLAR 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

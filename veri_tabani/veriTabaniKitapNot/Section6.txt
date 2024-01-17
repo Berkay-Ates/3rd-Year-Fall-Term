@@ -1,0 +1,466 @@
+			FORMAL RELATIONAL QUERY LANGUAGES 
+
+We cover three formal languages. We start by presenting relational algebra, which forms the basis of the widely used SQL query language. WE then cover the tuple relational calculus and the domain relational calculus, which are declarative query languages based on mathematical logic. 
+
+				THE RELATIONAL ALGEBA
+
+The relational algebra is a procedural query language. It consists of a set of opeartions that take one ore two relations as input and produe a new relation as their result. The fundamental operations in the relational algebra are 
+select 
+project
+union 
+set difference
+cartesian product 
+rename. 
+				
+				THE SELECT OPERATIONS 
+The select operation selects tuples that satisfy a given predicate. We use the lowercase Greek letter sigma () to denote selection.
+
+=> look up to book for the examples or look to slides 
+
+SQL VERSUS RELATIONAL ALGEBRA
+=> The term SELECT in releational algebra has a different meaning than the one used in SQL, which is an unfortunate historical fact. In relation algebra the term select corresponds to what we refer to in SQL as WHERE. We emphasize the different interpretations here to minimizepotential confusion 
+
+
+
+				THE PROJECT OPERATION
+Suppose we want to list all instructor's ID, NAME, and SALARY but do not car about the DEPARTNANT. The project operation allows us to produce this relation. The project operation is a unary operation that return its argument realtion wiht certain attributes left out. 
+
+			
+			COMPOSITION OF RELATIONAL OPERATIONS 
+In general, since the result of a relational-algebra operation is of the same type (relation) as its inputs, relational-algebra operations can be composed together into a relational-algebra expression. Composing relational-algebra operations into relational-algebra expressions is just like composing arithmetic operations (such as +, −, ∗, and ÷) into arithmetic expressions.
+
+				
+				THE UNION OPERATIONS
+In general we must ensure that unıons are taken betweeen compatible relations. For example it would ben nonsense to take the two different relations into one  relations the relations because relations has completely different attributes. 
+
+=> We requre two conditions hold: 
+1- The relations R and S must be the same arity. That is, they must have the same number of attributes. 
+
+2- The domains of the ith attribute of R and the ith attribute of S must be the same for all i. 
+
+Note that R and S can be either database relations or temporary relations that are the result of relational-algebra expressions. 
+
+
+			   THE SET-DIFFERENCE OPERATION
+The set-difference operation allows us to find tuples that are in one relation but not in another. The expression r-s produces a relation containing those ruples in R but not in S. 
+
+As with the union operation, we must ensure that set differences are taken between compatible relations. Therefore, for a set-difference operation r − s to be valid, we require that the relations r and s be of the same arity, and that the domains of the ith attribute of r and the ith attribute of s be the same, for all i.
+
+			
+			THE CARTESIAN-PRODUCT OPERATION 
+The CARTESIAN-PRODUCT operation denoted by a cross(x) allows us to combine information forn any two relations. We write the Cartesian product of relations r1 and r2 as r1xr2. 
+
+From that definition we shoudl already have an intuition about the definition of the cartesioan product operation. However since the same attribute name may appear in bot r1 andd r2, we need to devise a naming schema to distinguish between these attributes 
+
+To distinguish the same attributes from each other in the cartesian product result relation we can do something like following. Naming the same attributes with their table as prefix
+(instructor.ID, name, dept name, salary teaches.ID, course id, sec id, semester, year)
+
+Kartezyen carpim relationlarin tum elemanlarini birbirleriyle eslestirir. Biz isimize gelen yani istedigimiz elemanlari bu relationlar icinden secerek aliriz id leri ayni olanlari gibi. Zatan bu islemin adi da join islemidir. Yani natural join. 
+
+
+
+				The Rename Operation 
+Unlike relations in the database, the results of relational-algebra expressions do not have a name that we can use to refer to them. It is useful to be able to give them names; the rename operator
+
+
+
+
+			FORMAL DEFINITION OF THE RELATIONAL ALGEBRA
+A basic expression in the relational algebra consists of either one of the following 
+=> A relation in the database 
+=> A constant relation 
+
+Addittional Relational-Algebre Operations 
+The fundamental operations of the relational algebra are sufficient to express any relational-algebra query. However if we restrict ourselves to just teh fundamental operations cerain common queries are length to express. Therefore we define addtional operations that do not add any power to the algebre but simpplify common queries for each new operation we give an equivalent expression that uses only the fundamental operations. 
+
+Those are the following operations 
+1- THE SET-INTERSECTION OPERATION 
+it basically make brief and brief the queries. 
+
+2- THE NATURAL-JOIN OPERATION 
+The natural-join operation forms a Cartesian product of its two arguments, performs a selection forcing equality on those attributesthat appear in both relations schemas and finally removes duplicate attributes. 
+
+Although the definition of natural join is complicated, teh operation is easy to apply. As an illustration consider agan the example. " find the names of all instructors together with the couse_id of all courses they thougt" we express this query by an natural join expression. 
+
+Since the schemas for instructor and teaches have the attribute ID in common, the natural-join operation considers only pairs of tuples that have the same value on ID. It combines each such pair of tuples into a single tuple on the union of two schemas. 
+
+ 
+
+			THE ASSIGNMENT OPERATION
+It is convenient at times to write a relational algebre expresson by assigning parts of it to temporary relation variables. The assignment operation, denoted by <-, works like assignment in a programming language.
+			
+temp1 ← R × S
+
+			OUTER JOIN OPERATIONS 
+The outer-join operation is an extension of the join operation to deal with missing information. The outer join operation works in a manner similar to the natural join operation but preservers those tuples would be lost in an join by creating tuples in the result containing null values. We can user the outer-join operation to avoid this loss of information. There are actually three forms of the operation: LEFT OUTER JOIN, RIGHT OUTER JOIN and FULL OUTER JOIN. All three forms of outer join compute the join and add extra tuples to the result of the join. 
+
+LEFT OUTER JOIN 
+The left outer join takes all tuples in the left relation that did not match with any tuples in the right relation,pads the tuples with null values for all other attributes from the right relation and adds them to the result of the natural join. 
+
+RIGHT OUTER JOIN 
+It pads tuples from the right relation that did not match any from the left relation with nulls and adds them to the result of the natural join. 
+
+FULL OUTER JOIN 
+The full outer join does both the left and right outer join operations padding tuples from the left relation that did not match any from the right relation, as well as tuples from the right relation that did not match any from the left relation, and adding them to the result of the join. 	
+
+
+			EXTENDED RELATIONAL-ALGEBRA OPERATIONS
+We now describe relational-algebra operations that provide the ability to write queries that cannot be expressed using the basic relational-algebra operations. These operations are called extended relational-algebra operations.
+
+
+
+AGGREGATION 
+Aggregate functions take a collection of values and return a single value as a result. For example the aggregate function SUM takes a collection of values and returns the sum of the values.
+
+The aggregate fundtion avg returns the avereage of the values. 
+The aggreaget fonction count returns the number of the elements in the collection
+Other common aggreate functions are min and max
+
+There are cases where we must eliminate multiple occurences of a values before computing an aggregate function. If we do want to eliminate duplicates we use the same function names as before, weith the additional of the hyphenated string 'distinct' ppended to the end of the function name. For example count-distinct(*).
+
+The aggregat function count-distinct ensures that even if an instructor teaches more than one course she is counted only once in the result. 
+
+There are circumstances where we would like to apply the aggregate function not to a single set of tuples but instead to a group of sets of tuples. As an illustration consider the query find the average salary in each department.
+
+=> All tuples in a group have the same values for G1,G2, ... Gn. 
+=> Tuples in different groups have different values for G1, G2, ... Gn 
+
+Thus the groups can be identified by the values of attributes G1..Gn. for each group the result has a tuple (g1..gn,a1...an) where for each i, ai is the result of applying the aggregate function Fi on the multiset of values for attribute Ai in the group. 
+As a special case of the aggregate operation the list of attributes G1..Gn can be empty, in which case there is a single group containing all tuples in the relation. This corresponds aggregation without grouping. 
+
+				select A1, A2, sum(A3)
+				from r1, r2,...,rm
+				where P
+				group by A1, A2
+===========================================================================================
+		
+			THE TUPLE RELATIONAL CALCULUS 
+
+			DOMAIN RELATIONAL CALCULUS
+
+			SAFETY OF EXPRESSIONS
+
+			EXPRESSIVE POWER OF LANGUAGES
+===========================================================================================
+
+
+			D A T A B A S E	    D E S I G N 
+The design of a complete database application environment that meets the needs of the etreprise being modeled requires attention to a broad set of issues. These additional aspectes of the expected use of the database influence a variey of design choices at the PHYSICAL LOGICAL and VIEW levels. 
+
+
+		DESIGN PHASES 
+
+=> The initial phase of database design is to characterize fully the data needs of the prospective database users.
+
+=> Next the designer chooses a data model and by applying the concepts of the chosen data model translates these requirements into a  of the database.CONCEPTUAL SCHEMA The schema developed at this conceptual-design phase provides a detailed overview of the enterprise. 
+The entity-relationship model, which we study in the rest of this chapter, is typically used to represent the conceptual design.
+
+Stated in terms of the entity-relationship model, the conceptual schema specifies the entities that are represented in the database, the attributes of the entities, the relationships among the entities, and constraints on the entities and relationships.
+
+The process of moving from an abstract data model to the implementation of the database proceeds in two final design phases. 
+
+=> LOGICAL DESIGN PHASE
+◦ In the logical-design phase, the designer maps the high-level conceptual schema onto the implementation data model of the database system that will be used. The implementation data model is typically the relational data model, and this step typically consists of mapping the conceptual schema defined using the entity-relationship model into a relation schema
+
+=> PHYSICAL DESIGN PHASE
+ ◦Finally, the designer uses the resulting system-specific database schema in the subsequent physical-design phase, in which the physical features of the database are specified.
+
+The physical schema of a database can be changed relatively easily after an application has been built. However, changes to the logical schema are usually harder to carry out, since they may affect a number of queries and updates scattered across application code. It is therefore important to carry out the database design phase with care, before building the rest of the database application.
+
+
+DESIGN ALTERNATIVES 
+A major part of the database design process is deciding how to represent in the design the various types of 'things' such as people, places, products and the like. We use the term ENTITY to refer to any such distinctly identifiable item.
+
+=> In designing a database schema we must ensure that we avoiid two major pitfalls:
+REDUNDANCY 
+	A bad design may repeat information. The biggest problem with such redundant representation of information is that the copies of a piece of information can become inconsitent if the information is updated without taking precautions to update all copies of the information. 
+
+INCOMPLETENCESS 
+	A bad design may make certain aspects of the enterprise difficult or impossible to model. 
+
+			   THE ENTITY-RELATIONSHIP MODEL
+
+The entity relationship ER data model was developed to facilitate database design by allowing specification of an enterprise schema that represents the overal logical structure of a database. 
+The ER model is very usefull in mapping the meanings and interactions of real-world enterprises onto a conceptual schema. Because of this usefulness The ER data model employs  three basic concepts: ENTITY SETS, RELATIONSHIP SETS, and ATTRIBUTES.
+
+1- ENTITY SETS 
+An entity is a 'thing' or 'object' in the real world that is distinguishable from all other objects. For example each person in a university is an entity. An entity has a set of properties and the values for some set of properties may uniquely indentify an entity. 
+
+An ENTITY SET is a set of entities of the same type that share the same properties or attributes. The set of all people who are instructors at a given university for example can be defined as the entity set instructor.
+
+An entity is represented by a set of attributes. Attributes are descriptive properties possessed by each member of an entity set. Additionally each entity has a value for each of its attributes. A database thus includes a collection of entity sets, each of which contains any number of entities of the same type.  
+
+
+
+2- RELATIONSHIP SETS 
+A relationship is an association among several entities. For example we can define a relationship advisor that associates instrutor katz with student shankar. this relationship specifies that katz is an advisor to student Shankar. 
+
+A relationship set is a set of relationship of the same type. Formally it is a mathematical relation on n>2 entity set. 
+
+Consider a two entity set instructor and student. We define the relationship set advisor to denote the association between instructors and students. 
+The association between entity sets is referred to as participation that is the entity sets E1,E2,...E3 participate in relationship set R. A relationship instance in an ER schema represents an association between the named entities in the real-world enterprise that is being modeled. 
+
+The function that an entity plays in a relationship is called that entity's role. Since entity sets participating in a relationship set are generally distinct, roles are implicit and are not usually specified. However they are usefull when the meaning of a relationship needs clarification. Such is the case when the entity sets of a relationhip needs clarification. . Such is the case when the entity sets of a relationship set are not distinct; that is, the same entity set participates in a relationship set more than once, in different roles. In this type of relationship set, sometimes called a recursive relationship set, explicit role names are necessary to specify how an entity participates in a relationship instance.
+
+
+A relationship may also have attributes called DESCRIPTIVE ATTRIBUTES. Consider a relationship set advisor with entity sets instructor and student. We could associate the attribute datae with that relationship to specify the date when an instructor become the advisor of a student. 
+
+A relationship instance in a given relationship set must be uniquely identifiable from its participating entities, without using the descriptive attributes. To understand this point, suppose we want to model all the dates when an instructor became an advisor of a particular student. The single-valued attrubute date can store a single date onlyu. We cannot represent multiple dates by multiple relationship instances betweeeen same instructor and a student. Science the relationship instances would not be uniwuely indetifiable using only the participating entities. The right way to handle this case is to create a multivalued attribute date, which can stoe all the data. 
+
+Binary relationship set is one that involves two entity set. Most of the relationship sets in a database system are binary. Occasionally however relationship sets involve more than two entity sets. 
+
+The number of entity sets that are participate in a relationship set is the degree of the relationship set. A binary relationship set is of degree2, a ternary relationship set is of degree 3. 
+
+
+
+3- ATTRIBUTES 
+For each attribute there is a set of permitted values, called the domain or value set, of that attribute. The domain of attribute course_id might be the set of all text strings ofa certain length.
+Formally an attribute of an entity set is a function that maps from the entiry set into a domain. Since an entity set may have several attributes each entity can be described by a set of paris, one pair for each attribute of the entity set. 
+
+An attribute as used in the ER model can be characterized by the following attribute types: 
+
+SIMPLE and COMPOSITE ATTRIBUTES
+Composite attributes can be divided into subparts. Fpr example an attribute name could be structured as a composite attribute consisting of first_name, middle_name and last_name. Moreover composite attributes could be composite.Simple values are simple they just contain one value. 
+
+
+SINGLE-VALUED AND MULTIVALUED ATTRIBUTES 
+The attributes in our examples all have a single value for a particular entity.  For instance, the student ID attribute for a specific student entity refers to only one student ID. Such attributes are said to be single valued. There may be instances where an attribute has a set of values for a specific entity.  Suppose we add to the instructor entity set a phone number attribute. An instructor may have zero, one, or several phone numbers, and different instructors may have different numbers of phones. This type of attribute is said to be multivalued.
+
+=> Composite kendi icinde farkli alanlara ayriliyor. Multivalued is farkli farkli degerleri ayni anda kendi icinde tutabilir. 
+
+Appropriate upper and lower bounds may be placed on the number of values in a multivalued attribute. For example a universtiy may limit the number of phone number s recorded for a singel instrucot to two. 
+
+				DERIVED ATTRIBUTES
+The values for this type of attribute can be derived from the values of other related attributes or entities. For instance let us say that the instructor entity set has an attribute studdent_advised which represent how many students an instrutor advises. WE can derive the values for this attribute by counting the number of student entites assoiated with that instructor. 
+
+				NULL VALUES
+An attribute takes a null value when an entity does not have a value for it. The null value may indicate “not applicable”— that is, that the value does not exist for the entity. For example, one may have no middle name. Null can also designate that an attribute value is unknown.
+
+				
+				CONSTRAINTS
+
+An ER enterprise schema may define certain constraints to which the contents of a database must conform. In this section we examine mapping cardinalities and participation constraints. 
+
+MAPPING CARDINALITIES 
+Mapping cardinalities, or cardinality rarios express the number of entities to which another entity can be associated viea a relationship set. 
+
+For a binary relationship set R between entity set A and B, the mapping cardinality must be one of the following:
+
+ONE-TO-ONE = An Entity in A is associated with at most one entity in B, and an entity in B is associated with at most one entity in A. 
+
+ONE-TO-ONE: An entity in A is associated with any number of entities in B. An entity in B, however can be associated with at most one entity in A.
+
+MANY-TO-ONE: An entity in A is associated with at most one entity in B. An entity in B, however can be associated with any nymber of entities in B. 
+
+MANY-TO-MANY: An entity in A is associated with any number of entities in B, and an entity in B is associated with any number of entities in A. 
+
+The appropriate mapping cardinality for a particular relationship set obviously depends on the real-world situation that the relationship set is modeling. 
+
+
+	       	       	    PARTICIPATION CONSTRAINTS
+The participation of an entity set E in a relationship set R is said to be total if every entity in E participates in at least one relationship in R. If only some entities in E participate in relationship in R, the participation of entity set E in relationship R is said to be partial. 
+
+For example we expect every student entity to be related to at least one instructor through the advisor relationship. Therefore the participation of student in the relationship set advisor is total. In contrast an instructor need not advise any students. Hence it is possible that only some of the instructor entities are related to the student entity set through the advisor relationship and the participation of instructor in the advisor relationship set is therefore partial. 
+
+
+				     KEYS 
+The values of the attribute values of an entity must be such that they can uniquely identify the entity. In other words no two entities in any entity set are allowed to have exatly the same vlaue for all attributes. 
+
+Therefore the values of the attribute values of an entity must be such that they can uniquely identify the entity. Int other word no two entities in an entity set are allowed to have exatly the same value for all attributes. 
+
+A key for an entity is a set of attributes that suffice to distinguish entities from each other. The concepts of superkey candidate key and primary key are applicable to entity set just as they are applicable to relation schemas. 
+
+Keys also help to identify relationship uniquely and thus distinguish relatinships from each other. The primary key of an entity set allows us to distinguish among the various entities of the set we need similar mechanism to distinguish among the various relationship of a relationship set. Let R be a reletionship set involving entity sets E1,E2..En. LEt primary_key(Ei) denote the set of attributes that forms the primary key for entity set Ei. Assume for now that the attribute names of all primary keys are unique. The composition of the primary key for a relationship set depends on the set of attributes associated with the relationship set R. 
+	
+If the relationship set R has no attributes associated with it then the set of attributes
+	primary-key(E1) ∪ primary-key(E2) ∪···∪ primary-key(En)
+describes an individual relationship in set R. 
+
+If the relationship set R has attributes a1, a2,..., am associated with it, then the set of attributes
+primary-key(E1) ∪ primary-key(E2) ∪···∪ primary-key(En) ∪ {a1, a2,..., am}
+describes an individual relationship in set R. In both of the above cases, the set of attributes primary-key(E1) ∪ primary-key(E2) ∪···∪ primarykey(En) forms a superkey for the relationship set. 
+
+The structore of the primary key for the relationship set depends on the mapping cardinality of the relationship set. As an illustration, consider the entity set instructor and student, and the relationship set_advisor, with attribute date. Syppose that the relationship set is many-to-many. Then the primary key of advisor consists of the union of the primary keys of instructor and student. If the relationship is many-to-one from student to instructor, that is each student can have have at most one advisor then the primary key of advosir is simply the primary key of student. 
+
+
+
+				REMOVING REDUNTANT ATTRIBUTES
+				       IN ENTITY SETS 
+Once the entities and their corresponding attributes are chosen the relationship sets among the various entities are formed. These relationship sets may result in a situation where attributes in the various entity sets are redundant and need to be removed from the original entity sets. 
+
+
+
+
+			    ENTITY SET RELATIONSHIP ER DIAGRAMS
+ER Diagrams consists of the following major components 
+RECTANGELS DIVIDED INTO TWO PARTS represents entitys sets. First part contains the name of the entity set. The second part contains the names of all the attributes of the entity set 
+
+DIAMONDS represents relationship sets 
+
+UNDIVIDED RECTANGLES represent the attributes of a relationship set. Attributes that  are part of the primary key are underlined. 
+
+LINES LINK entity et to relationship sets. 
+DASHED LINE link attributes of a relationship set to the relatinship .
+DOUBLE LINES indicate total participation of an entity in a relationship set 
+DOUBLE DIAMONDS represent identifying relationship sets linked to weak entity sets.
+
+
+				MAPPING CARDINALITY 
+ONE-to-ONE
+ONE-to-MANY
+MANY-to-ONE
+MANY-to-MANY
+
+ER diagrams also providde a way to indicate more complex constraints on the number of times each entity participates in relationships in a relationship set. A line may have an associated minimum and maximum cardinality. A miminum value of 1 indicates total participation of the entity set in the relatiosnhip set; that is each entity in the entity set occurs in at least one realationship in hat relationship. A maximum values of 1 indicates tha the entity participates in at omst one relationsip, while maximum value * indicates no limit.
+
+
+COMPLEX ATTRIBUTES(MUltivalued), Composite 
+
+birden fazla degeri olabilen attributeler suslu parantez icinde gosterilierler 
+complex value olan attributeler indentation yapilarak yazilirlar
+derived value'lar yanlarina parantez konularak gosterilirler ornegin age() 
+
+name 
+   first_name
+   last_name
+   middle_name
+
+{phone_number}
+
+age() 
+
+
+
+ROLES 
+We indicate roles in E-R diagrams by labeling the lines that connect diamonds to rectangles. 
+
+NONBINARY RELATIONSHIP SETS 
+Nonbinart relationship sets can be specified easily in an E-R diagram. For example we can connect three entity sets to a relationship easily. Like project, instructor, student connected to proj_guide. 
+
+
+WEAK ENTITY SET 
+An entity set that does not have sufficient attributesto form a primary kes is termed a weak entity set. An entity set that has a primary key is termed a strong entity set. For a weak entity set to be meaningful it must be associated with another entity set, called IDENTIFYING or OWNER ENTITY set. Every weak entity must be associated with an idenfifying entity; that is, the weak entity set is said to be existence dependednt on the idenftifying entity set. 
+
+The identifying entity set is said to OWN the weak entity set that is identifyies. The relationship associating the weak entity set with the identifying entity set is called identifying relationship. The identifying relationship is many-to-one from the weak entity set to the identifying entity set, and the participation of weak entity set in hte relationship is total. The identifying relationship set should not have any descriptive attributes since any such attributes can instead be associated with the weak entity set. 
+
+Although a weak entity set does not have a primary key we nevertheless need a means of disitnguish  among all those entities in the weak entity set that depend on one particular strong entity. The DISCRIMINATOR of a weak entity set is a set of attributes that allows this distinction to be made. Discriminators are underlined with dashed lines. 
+
+course -> identifying entity set 
+sec_course -> identifying relationship 
+
+In the case of the entity set section its primary key is {course_id, sec_id, year, semester} where course_id is the primary key of the identifying entity set namely course and {sec_id, year, semester} distinguishes section entities for the same course. 
+
+In E-R diagrams, a weak entity set is depicted via a rectangle, like a strong entity set, but there are two main differences; 
+
+=> The discriminator of a weak entity is underlined with a dashed rather than a solid line. 
+=> The relationship set connecting the weak entity set to the identifying strong entity set is depicted by a double diamond. 
+
+A weak entity set can participate in relationships other than the identifying relationship. For instance, the section entity could participate in a relationship with the time slot entity set, identifying the time when a particular class section meets. A weak entity set may participate as owner in an identifying relationshi with another weak entity set. It is also possible to have a weak entity set with more than one identifying entity set. A particular weak entity would then be identified by a combination of entities, one from each identifying entity set. The primary
+key of the weak entity set would consist of the union of the primary  keys of the identifying entity sets, plus the discriminator of the weak entity set.
+
+			REDUCTION TO RELATIONAL SCHEMAS 
+
+
+
+			ENTITY-RELATIONSHIP DESING ISSUES 
+
+			       EXTENDED E-R FEATURES 
+SPECIALIZATON
+An entity set may include subgroupings of entities that are distinct in some way from other intities in the set. For instance a subset of entities within an entity set may have attributes that are not shared by all the entities in the entity set. The E-R model provides a means for representing these distinctive entity gorupings. As an example the entity set person may be further classified as one of the following employee or student. 
+
+Each of these person types is described by a set of attributes that includes all the attributes of entity set person plus possibly additional attributes. For example employee entities may be described further by the attribute tot_cred. the process of designating subgroupings within an entity set is called specialization. The specialization of person allows us to distinguish among person entities accourding to whether they correspond to employees or students: ing general a person could be an employee a sudent both or neither. 
+
+	   student 
+person ===
+	   employee 
+
+HERE we can say student IS A person 
+Employee is a person. Which means there is a ISA representation 
+
+The way we depict specialization in E-R diagram depends on whether an entity may belong to multiple specialized entity set or if it must belong to at most one specialized entity set. The form wheere multiple set permitted is called OVERLAPPING SPECIALIZATION, while int the form at most one permitted is called DISJOINT SPECIALIZATION.  
+The specialization relationship may also be referred to as a SUPERCLASS-SUBCLASS relationship. 
+
+GENERALIZATION 	
+The refinement from an initial entity set into successive levels of entity subgroupings represents a top-down design process in which distinctions are made explicit. The design process may also proceed in a bottom-up manner, in which multiple entity sets are synthesized into a higher-level entity set on the basis of common features.
+
+Alt varliklari birlestirerek ust varliklarla eslestiririz buna generalization denir. 
+Ust tarafta bulunan Varlik siniflarina ise SUPERCLASS yad SUBCLASS olarak isimlendirilir.
+ 
+For all practical purposes, generalization is a simple inversion of specializatin. WE apply both process, in combination, in the course of designing the E-R scheme for enterprise. 
+
+Specialization stems from a single entity set; it emphasizes differences among entities within the set by creating distinct lower-level entity sets. These lower level entity sets may have attributes, or may participate in relationships, that do not apply to all the entities in the higher-level entity set
+
+On the basis of the enttities generalization synthesizes these entity sets into a single, higher level entity set. Generalization is used to emphasize the similarities among lower-level entity sets and to hide the differences; it also permits an economy of representation in that
+shared attributes are not repeated
+
+
+ATTRIBUTE INHERITANCE
+A crucial property of the higher-and lower-level entitites created by specialization and generalization is ATTRIBUTE INHERITANCE. The attributes of the higher-level enttity sets are said to be inherited by the lower-level enttity sets. Attribute inheritance applies through all tiers of lower-level entity sets. 
+A lower-level entity set also inherits participation in the relationship sets in which its higher-level entity participates. Like attribute inheritance participation inheritance applies thorugh all tiers of lower-level enttity set. 
+
+
+=> A higher-level entity set with attributes and relationship that apply to all of its lower-level entity sets. 
+=> Lower-level entity set with distinctive features that apply only within a particular lower-level entity set. 
+
+
+CONSTRAINTS ON GENERALIZATIONS
+
+Condition-Defined: In condition-defined lower-level entity sets, membership is evaluated on the basis of whether or notan entity satisfies an explicit condition or predicate. 
+
+User-Defined: User-defined lower-level entity sets are not constrained by a membership condition raher the database user assigns entities to a given entity set. For instance, let us assume that, after 3 months of employment, university employees are assigned to one of four work teams. We therefore represent the teams as four lower-level entity sets of the higher-level employee
+entity set.
+
+
+A second type of constraint relates to whethher or not enttities may belong to more than one lower-level entity set within a single genralization. the lower level entity sets may be one of the following: 
+
+Disjoint: A disjointness constraint requires that an entity belong to no more than one lower-level entity set. 
+Overlapping: In overlapping generalizations the same entity may bleong to more than one lower-level entity set within a single generalization. For an illustration consider the employee work-team example, and assume that certain employees participate in more han one work team. A given employee may therefore appear in more than one of the team entity sets that are lower level entity sets of employee. 
+
+
+				    AGGREGATION 
+
+One limitation of the E-R model is that it cannot express relationshiip among relationships. Aggregation is an abstraction thorugh which relationships are treated as higher-level entities. 
+
+
+REDUCTION TO RELATION SCHEMAS 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

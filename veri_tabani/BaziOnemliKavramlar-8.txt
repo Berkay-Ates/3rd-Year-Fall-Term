@@ -1,0 +1,143 @@
+Bolum 8'de bazı konu başlıkları ve önemli noktalar:
+
+Outline (Sunu 8.2)
+-----------------------------------
+Complex veri: Atomic olmayan, Composite, multivalue ve/veya Nested veri, text veri, spatial (uzamsal) veri
+Bunları tetikleyen en önemli etken "WEB uygulamaları". 
+Çünkü data ve metadata çok değişken! Bir varlık tipi için niteliklerin sayısı değişkenlik gösterirken, bir nitelik değerinin çok değerli olması çok yaygın.
+
+
+1-) Semi-Structured Data (Sunu 8-3)
+-------------------------------------
+
+complex data'nın "saklanması" ve "transferi" için en verimli model semi-structure modeli ==> flexible schema,  multi-valued types ((multi)set, array, map),  Nested Models(JSON, XML), key-value stores, document-store, graph-store..
+
+Mesela, icerik özelliklerine gore kategorize edilmis text veri setİ: Tipik olarak, Sender, Recipient, Subject, Date, e gore gruplanabilen e-mail (veya tweet) veri seti buna guzel bir ornek. Fakat her bir e-mail unstructured veri.
+
+Saklamada Niye verimli? 
+	çünkü veriyi dağtmadan tek yerde (array gibi) veya nested (JSON, document-store gibi ) saklıyoruz ve JOIN maliyeti olmuyor.
+	Ne kaybettik (veya zarar gördü)?  Veri bütünlüğü, consistency
+
+Transferde niye daha iyi?
+	Klasik transfer data formatı HTML. Bu sadece text formatted data içeriyor. Oysa JSON, XML veri+şema  gönderiyor. Yani verinin transfer edildiği yerde sorgulanması mümkün.
+
+Ek Okuma:  https://medium.com/@varun.sja/structured-data-vs-unstructured-data-vs-semi-structured-data-what-is-the-difference-f0e88eaba560
+
+
+Features of Semi-Structured Data Models​ ( Sunu 8.4-5)
+-----------------------
+Esnek şema modeli: Her kayıt için ihtiyaç mikdarınca nitelik (wide column) veya çok sayıda "sabit sayıda" nitelik modeli (sparse column)
+	Wide-column VT örnekleri: Apache Cassandra, ScyllaDB, Apache HBase, Google BigTable, and Microsoft Azure Cosmos DB.
+	Sparse-column VT: İlişkisel VT'lari, Columnar NoSQL DBs (SciDB, PostGIS). Her kolondaki bütün veri yer verimi yüksek şekilde saklanması.
+	
+Array VT'larının en önemli özelliği yüksek verimde veri sıkıştırma ==> MMDB veya sıkıştırmayı açmadan veriyi işleme vb gibi.
+
+
+JSON (Sunu 8.8)
+--------------
+verbose, text veri ==> Yer verimi (yapısal verinin saklanmasına göre) düşük. Özellikle "saklamada" sıkıştırılmış JSON (BSON)
+
+Ek okuma: https://attacomsian.com/blog/what-is-json
+
+
+
+Knowledge Representation (Sunu 8.12)
+--------------------
+Veri <-> Bilgi
+
+K.maraş?
+
+Veri modelleme: ER  --> EER (biraz daha anlamsal veri modeli)
+Bilgi Modellleme: Ontoloji  
+	-- Kavramlar ve aralarındaki ilişki ve muhakeme, çıkarım yapma
+	-- kavramsallaşmanın ifade edilmesi (specification of conceptualization)
+
+
+Veri/Bilgi modelleme Ortak yonleri:
+	-- Abstraction process
+	-- Varlıklar, bağıntılar, kısıtlar, genelleştirme, ozelleştirme, kümeleme.
+
+Farklılıkları:
+-----------
+-- Bilgi modelleme daha kapsamlı (mesela zaman ve uzamsal bilgi, kurallar,..)
+-- ve en önemlisi reasoning (infering, çıkarım yapma)
+-- Veri modelleri üst-veri merkezli. Bilgi modelleri "üst-veri" + "kaynak(entity, recourse)"
+-- Veri modeli gerçekleme --> İlişkisel model veya İlişkisel olmayan model
+    Bilgi modeli gerçekleme --> RDF
+    
+Web <-> Semantic WEB
+Web'de "bilgi" paylaşımına imkan sağalayarak ortak bir "bilgi havuzu" olusumu, Dağıtık bilginin kullanımı ==> Semantic WEB.
+anlamsal WEB gerçeklenmesinde bir çok yapı (framework) kullanıyor: 
+	-- RDF, 
+	-- XSL, XSLT,
+	--WSDL (web service desciption lang)
+	--SOAP
+
+Aynı zamanda Yapay zekada bir konu:
+	 Geniş çaplı bilgi temsili + erişim/arama
+	 Geniş çaplı bilgi temsili + erişim/arama + Akıl yürütme (çıkarım, reasoning)!
+VT contexinde bilgiyi nasıl temsil edeceğiz: Bunun standardı: RDF : Esnek bir ER-modeli
+--2 triple formu var:
+	-- (ID, attribute-name, value)​
+	-- (ID1, relationship-name, ID2)​
+
+Başka yerde metadata(şema) yok. Yeni nitelik/ilişki, yeni object(resource) eklemek çok kolay. RDF txt dosyası veya XML dosyası olabilir.
+
+RDF, Web'de dağıtık olan bir çok metada bilgisi için entegre edilmiş bir yapı sağlıyor. Bu arama motorlari için çok elverişli bir arama zemini. 
+Gunumuzde arama motorlari sadece text-search yapmıyor. anlamsal (semantic) arama yapıyor. Bu knowledege-graph (RDF) entity verisi sayesinde oluyor.
+Cunku RDF veri tabanınin yapı tasi triple'ler. yani "ID1, ID2 ile alakası" saklanıyor. 
+
+2013 sonrasında Google'da Bilgi Graflarının indekslenmesi ile Semantic Web'de onemli ilk adim atildi.
+
+Ek Okuma: https://cambridgesemantics.com/blog/semantic-university/learn-sparql/sparql-vs-sql/
+
+RDF store veya triple store, RDF veriyi tutan VT'larına verilen isimler. Bunlar SQL veya NoSQL olabilir.
+Ornekler:  Apache Jena - TDB,  Amazon Neptune, GraphDB, MarkLogic
+ 
+
+
+Reference Types (Oracle-style)​  ( Sunu 8.21)
+--------------------------
+Tablo tanımlamada referans etmede kolaylık.
+Sunuda Person tipi ref-tipi içeriyor. Boylece asagidaki Department tablosunda head niteliğinin tipi ref(..) oldu. Yabancı anahtar nitelik domain'i Birincil anahtar nitelik domain'ine uyumu "otomotik".
+bu JOIN'i ortadan kaldıran bir gelişme değil elbette.
+
+create type Department (​
+     dept_name varchar(20),​
+     head ref(Person) scope people);​
+
+
+
+
+
+Ranking using TF-IDF​ (Sunu 8.25)
+-----------------------
+Arama netice çok sayıda döküman ile sonuçlanmasi yüksek olası olduğu için, sonuçların "derecelendirilmesi" gerekiyor.
+Aramada 2 esas:​
+	Terimin dökümandaki frekansı  ( TF)​
+	Terimi içeren dökümanların sistemdeki frakansı  ( DF )
+TF aranan dökümanın derecesi ile doğru orantılı, DF ise ters orantılı.
+
+Fromullerde geçen log'un manası "normalizasyon, daha gerçekçi ölçek" için. Daha fazla bilgi için:    https://www.quora.com/Why-does-TF-IDF-use-a-log
+Sunudaki formulde TF(d, t) = log(1 + n(d,t)/n(d)); bir dökümandaki terimlerin sayısı (yani n(d)) çok fazla olduğunda n(d,t)/n(d)  değerinin linear olarak 0'a gitmesini "hafifletmek" için.
+
+
+
+Ranking Using Hyperlinks​ ( Sunu 8.27)
+--------------------------------------
+Google arama motorunun güncel hali, Google Hummingbird, PageRank ile beraber bir cok algoritma kullanıyor. 
+ilgili ozet bir site:
+https://www.holisticseo.digital/theoretical-seo/hummingbird/
+
+Arama motorlari ile istifade edilebilecek diger bir site:
+https://dzone.com/refcardz/graph-powered-search-neo4j-amp-elasticsearch
+
+SearchEngine'lerde kullanılan index yapıları: "inverted index": https://nlp.stanford.edu/IR-book/html/htmledition/an-example-information-retrieval-problem-1.html
+Bunlardaki Inverted index deki tipik index kaydı < keyword,DF | document-ids (or bitmap)>    "keyword,DF":dictionary,   doc-ids: postings
+Bunlar "load-once-and-read workloads" icin ideal yapılar. Cunku bir "keyword"un bulundugu dokümanların bulunması look-up sorgusu.  Bunların olusturlması hizli araması hızlı fakat guncellenemesi cok yavas. Arama motorlarında bunların guncellenmesi zaten nadir!! (https://www.quora.com/In-database-design-what-exactly-is-the-difference-between-inverted-index-and-a-normal-index)
+Dictionary MM'e sigabilir. Ancak buyuk arama motorlarinda compression, caching, "dağtık hash tablosu" veya "binary tree" esaslı arama teknikleri ile dictionary'de arama iyilestirilir.
+
+İliskisel model ve ozellikle veri ambarlarında yaygın olarak kullanılan inverted index : "bitmap index" Mesela bir kolon(nitelik) üzerideki bir bitmap indeks nitelikteki her farklı deger için o değerin hangi satırlarda oldugunu bitmap ile saklar. Gene dedigimiz gibi olusturmak çok hızlı fakat veri guncellemede bitmap bastan olusturmak gerekiyor. ( Indeksler konusunda buna tekrar deginecegiz)
+
+OLTP (operational) veri tabanlarında ise yaygın index B-tree, linear hash. Hem sorgu hem güncelleme performansı oldukça iyi. 
+

@@ -1,0 +1,76 @@
+
+                        File system implementation 
+The FILE ORGANIZATION MODULE knows about files and thier logical blocks,
+as well as physical blocks.
+
+The LOGICAL FILE SYSTEM manages metadata information. Metadata includes all 
+of th file-system structure except the actual data. 
+
+A FILE CONTROL BLOCK contains information about the file including ownership 
+permissions and location of the file content. 
+
+Boot control block can contain information needed by  the system to
+boot an operation system from that volume. 
+
+A volume control block contains volume details such as the number of 
+blocks in teh partition or size of the blocks 
+
+A per-file FCB(file control block) contains many details about the files
+it has a unique identifier number to allow association with a directory 
+entry. 
+
+An in-memory MOUNT TABLE contains infromation about each mounted volume 
+
+The SYSTEM-WIDE OPEN-FILE TABLE contains a copy of the FCB of each open 
+file, as well as other information. 
+
+The PER-PROCESS OPEN-FILE TABLE contains a pointer to the appropriate 
+entry in the system-wide open-file table, as well as other information 
+
+When a process closes the file the per-process table entry is removed and 
+the system-wide entry's open count is decremented. 
+
+
+                        PARTITION AND MOUNTING 
+
+The boot file locations is special for the system because at boot loading 
+the system has no information about file system so there must be a special 
+handling for the file system at the boot loading. 
+
+
+The ROOT PARTITION which contains the operating-system kernel and sometimes 
+other system files is mounted at boot time. 
+
+
+                        Virtual File Systems 
+To isolate the basic system call functionality from the implementation details.
+The file-system implementation consist of three major layers 
+1- File System interface 
+2- Virtual file system VFS 
+3- 
+
+
+
+C:\Users\atesb\OneDrive\Masaüstü\File_implementation.txt
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,205 @@
+                            File Systems 
+=> We just think and use files when we want to store something 
+=> OS and its FILE SYSTEM components provide users special tools to write 
+   files into the memory 
+
+=> The content of the file have to save int Hard Disk 
+
+
+FILE CONCEPT 
+-> Contiguous logical address space 
+-> Data 
+    - numeric 
+    - character
+    - binary 
+-> Program 
+
+                            File Structure 
+=> None - sequence of word bytes 
+=> Simple record structure 
+    - Lines 
+    - Fixed length 
+    - Variable length 
+=> Complex Structures 
+    - Formatted documents 
+    - Relocatable load file 
+=> Can simulate last two with method by insertingn appropriate control characters 
+=> Who decides:
+    - OS 
+    - Program 
+
+
+                        FILE ATTRIBUTES 
+NAMES: Only information kept in human readable form 
+Identifier: Unique tag (number) identifies file within file system 
+Type: Needed for systems that support different types 
+Location: Pointer to file location on device 
+Size: Current file size 
+Protection: Controls who can do reading, writing, executing
+Time,data,and user identification: Data for protection, security and usage 
+monitoring 
+
+=> Information about files are kept in the directory structure which is
+maintained on the disk
+
+
+FILES AND DIRECTORIES 
+-> There are two bacis things are stored on disk as part of the area controlled 
+   by the fire system 
+
+   - files (store ocntent)
+   - directory information(can be a tree): keeps info about files, their
+   attributes or locations 
+
+
+FILE OPERATIONS 
+-> File is an abstract data type 
+-> Common Operations that are supported by the Operationg Systems 
+    - Create 
+    - Write 
+    - Read 
+    - Reposition within file 
+    - Delete 
+    - Truncate 
+
+-> Open(F) - search the directory structure on disk for entry F, and move the 
+    content of entry to meomory 
+
+-> Close(f) - move the content of entry F, in memory to directory structure 
+   on disk 
+
+
+OPEN FILES 
+- When a file is not opened no information about that file would be kept in 
+memory. However following informations kept in memory when a file opened 
+
+Several pieces of data are needed to manage open files: 
+-File pointer: pointer to last read/write location, per process that has 
+               the file open 
+-File open count: counter of number of tiems a file is open- to allow 
+                removal of data from open-file table wehen last processes
+                doeses it 
+-Disk location of the file: cache of data access information 
+-Access rights: per-process access mode information 
+
+
+File Locking 
+-Provided by some operating systems and file systems 
+-Mediates access to a file 
+-Mandatory or advisory: 
+    - Mandatory-> access is denied depending on locks held and requested
+    - Advisory-> processes can find status of locks and decide what to do 
+
+
+                            Access Methods 
+-> Sequential Access 
+    - read next 
+    - write next 
+    - reset 
+    - no read after last write 
+
+-> Direct Access 
+    - read n 
+    - write n 
+    - position to n read next, write next 
+    - rewrite n 
+n=relative block number 
+
+                            File Sharing 
+-Each user that has an account in the computer has a username and a unique 
+user ID (UID)
+-The administrator can create groups. A group may have a set of usernames 
+(users) associated with it. Each group has a unique group ID (GID)
+
+
+                    FILE SHARING - MULTIPLE USERS 
+                            PROTECTION 
+- Protection is based on the use of UserIDs and GroupIDs 
+- Each file has associated protection bits (permissions) for userID and groupID 
+        - User ID: read, write, execute? 
+        - Group ID: read, write, execute?
+        
+user IDs: IDentify users, allowing permissions and protections to be per-user 
+Group IDs: allow users to be in groups, permitting group access rights 
+
+
+                    FILE SHARING - CONSISTENCY SEMANTICS 
+Consistency semantics: specify how multiple users are to access a shared 
+                       file simultaneously 
+
+
+    -> Unix file system UFS implementation
+        -Writes to an open file visible immediately to other users of the 
+        same open file 
+
+    -> AFS has session semantics 
+        -> Writes only visible to sessions starting after the file is closed 
+
+
+
+                        PROTECTION
+-> File owner/creator should be able to control
+    - what can be done (read,write,execute...)
+    - by whom (owner,others,group member )
+
+-> Types of access (what can be done)
+-Read 
+-Write
+-Execute 
+-Append
+-Delete
+-List 
+
+                        ACCESS LIST AND GROUPS     
+-> Mode of access: read, write, execute 
+-> Three classes of users 
+                            RWX
+        a- owner access     111
+        b-group access      110
+        c-public access     001
+
+-> Ask manager to create a group (unique name), say G, and add some users 
+to the group 
+-> For a particular file (say game) or subdirectory define an appropriate access 
+
+                            chmod test game 
+Attach a group to a file 
+                            chgrp G game 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

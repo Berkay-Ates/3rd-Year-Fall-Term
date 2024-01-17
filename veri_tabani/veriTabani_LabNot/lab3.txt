@@ -1,0 +1,142 @@
+LAB3
+    =>Constrains
+    =>views 
+    =>sequence 
+    =>union-intersect-except 
+
+
+Constrains
+
+    PRIMARY KEY 
+    => 1. yol constraint ekleme ve silme
+        create table team (team_id varchar(10), team_order numeric(2), constraint pk_team PRIMARY KEY team_id);
+
+        alter table team drop constraints pk_team; 
+
+
+    => 2. yol constraint ekleme ve silme
+        create table team (team_id varchar(10) PRIMARY KEY , team_order numeric(2));
+
+        alter table team drop constraints pk_team;
+
+
+    FOREIGN KEY 
+    => 1. yol constraint ekleme 
+        create table student (id numeric(2),name varchar(12), constraint fk_student FOREIGN KEY  (id) references tc_no(id) on delete cascade);
+
+    => 2. yol constraint ekleme
+        create table student (id numeric(2) REFERENCES tc_no(id), name varchar(12));
+
+        create table student(id numeric(2), FOREIGN KEY (id) REFERENCES tc_no(id))
+
+        *** foreign key kisiti icin default olan isimlendirme tabloAdi_sutunAdi_fkey seklindedir 
+
+    FOREIGN KEY SILME 
+    => Alter table student drop constraint fk_student
+
+    SONRADAN FOREIGN KEY EKLEME 
+    => Alter table student add constraint fk_student FOREIGN KEY (id) references tc_no(id) on delete cascade;
+
+
+    CHECK 
+    => 1. yol check ile constraint ekleme 
+        create table student (id numeric(2),ibnelik numeric(3),hardworking numeric(2) , constraint ibnelik_ck check (ibnelik<10))
+
+
+VIEW 
+    => Bir sorgu sonucu olusan sanal tablo, sık kullanacagimiz bir sorguyu bir kez yazip, isimlendirme islemi
+       create view myView as select * from student where stdId < 1000; 
+       
+       *** student tablosunda id lerde yasanan herhangi bir guncelleme sonucunda view icerigi de ayni anda degisir 
+
+
+
+SEQUENCE OLUSTURMA 
+    => Otomatik bir sekilde belli bir sirada sayisal degerler uretmemizi saglar. Ornegin id degerinin yeni eleman geldikce artmasi gibi 
+
+        CREATE SEQUENCE sequence_ADI 
+                                      increment by 
+                                      start with 
+                                      maxvalue
+                                      nomaxvalue
+                                      minvalue
+                                      nominvalue
+                                      cycle
+                                      no cycle
+
+        create sequence mySequence increment by 1 minvalue 9 maxvalue 99 cycle;
+
+        #sequencin sonraki degerini alarak tabloya eleman ekleme 
+        => insert into employee (fname,ssn ) values ('john',nextval('sequence_Adi'));
+
+UNION-INTERSECTION-EXCEPT
+
+    INTERSECT
+    =>OperatinsSys ve Software departmaninda calisanlarin isim ve soyisimlerini bulan sorguyu yazin 
+    
+        select fname,lname from project,employee, works_on where essn=ssn and pnumber=pno and pname='OperatinsSys'
+        INTERSECT 
+        select fname,lname from employee, department where dno=dnumber and dname='Software';
+
+
+    UNION
+    =>OperatinsSys isimli projede veya software departmaninda calisanlarin ad,soyad,bilgilerini bulunuz 
+   
+        select fname,lname from project,employee, works_on where essn=ssn and pnumber=pno and pname='OperatinsSys'
+        UNION
+        select fname,lname from employee, department where dno=dnumber and dname='Software';
+
+    
+
+    EXCEPT
+     =>OperatinsSys isimli projede calisip software departmaninda calismayanlarin ad,soyad,bilgilerini bulunuz 
+
+        select fname,lname from project,employee, works_on where essn=ssn and pnumber=pno and pname='OperatinsSys'
+        EXCEPT
+        select fname,lname from employee, department where dno=dnumber and dname='Software';
+
+
+
+NOT EXIST KULLANIMI 
+    => Hicbir calisanin yada hicbir departmanin yoneticisi olmayan calisanlarin isimlerini bulunuz 
+
+    select * from employee as e where
+    NOT EXISTS (select null from department where mgrssn=e.ssn) and 
+    NOT EXISTS (select null from employee e2 where e.superssn = e2.ssn);
+
+
+IN KULLANIMI 
+    => Ismi john olan calisanlarin department isimlerini IN kullanarak bulunuz 
+
+    select dname from departement where dnumber in (select dno from employee where fname='John');
+
+
+GOMULU FONKSIYONLAR => COUNT, SUM , MAX, MIN, AVG 
+    => Sales departmaninda kac kisinin calistigini, en dusuk, en yuksek, ortalama ve toplam maasi bulunuz 
+
+        select count(*),
+                sum(salary),
+                max(salary),
+                min(salary),
+                avg(salary) 
+        from department , employee where dno=dnumber and dname='Sales';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,301 @@
+CHAPTER1 
+    database management system DBMS veritabani yonetim sistemidir 
+    veri tabani icindeki verileri yonetiminis aglayan yapilari 
+    icerir
+
+    database yonetimi hem veri semalari tanimlamalarini hem de db 
+    icindeki verilerin yonetimi asamalarini icerir. 
+
+    DATABASE SYSTEM APPICATIONS 
+    => Enterprise information (sales manufacturings..)
+    => Banking and Finance 
+    => universities 
+    => Airlines 
+    => Telecomminication 
+
+
+    PURPOSE OF DATABASE SYSTEMS 
+    
+
+    BEFORE DATABASE SYSTEMS 
+    Before the database systems informations are kept in the large files 
+    and file systems has lots of disadvantages such as
+    -Data redundancy and inconsistancy 
+    -Difficulty in accessing data 
+    -Data isolation 
+    -Integrity problem 
+    -Atomicity problems 
+    -Concurrent Access anomalies 
+    -Security problems 
+
+    => Neyseki gunumuzde gelistirilmis olan ibm,microsoft oracle db gibi
+       veri tabani yonetim sistemleri sayesinde verilerin degistirilmesi 
+       tanimlanmasi ve guvenligi dosyalarla saglanandan kat kat daha iyi 
+       bir notkada. 
+
+    
+
+    VIEW OF DATA 
+    A database system is a collection of interrelated data and a set of 
+    programs that allow users to access and modify these data. 
+
+    DATA ABSTRACTION 
+    => Herkes bilgisayar bilimci olmadigi icin uygulamalarin db katmani 
+       kullanicilara hisstettirilmeden arkada calisir ve on yuzde belirli 
+       bir seviyede sunulur 
+
+    =>Physical level 
+        En low level abstraction seviyesidir datanin nasil saklandigi 
+        bilgisine bu seviyede ulasilir. Physical level kompleks low-level
+        data structurelarini detayli bir sekilde aciklar 
+
+    =>Logical level 
+        Db de nelerin hangi iliskiler ile depolandigi bilgisinin tutuldugu 
+        bilgisi Logical level dedir. Database tasarimi yapan ve hangi bilginin
+        db de tutulacagina karar veren kisiler logical level abstraction 
+        seviyesinde kalmalilar. 
+
+
+    => View model 
+        En uste seviye abstraction levelidir. Sadece db nin bir kismini 
+        gosterir. 
+
+            view1 view2 view3 view4 view5 view6 ..... > users 
+
+                            LOGICAL LEVEL      > programmers , db admin  
+
+                            PHYSICAL LEVEL     > db admin 
+
+    Db adminleri db programcilarindan daha cok bilgiye sahip olabilirler 
+    ornegin physical seviyede hafizanin belirli addresslerinin belirli 
+    dataya ayrilmis olmasi isi veya bilgisi db adminlerinde olabilir. 
+
+    => Physical , Logical ve View katmanlarinin her birinde kullanicilarina 
+        ozel olarak belirli kisitlar vardir . 
+
+
+    INSTANCES AND SCHEMAS
+    => Db icindeki bir tablonun satirindaki veriye INSTANCE denir 
+    => Db nin genel tasarimina SCHEMA denir
+    => LOGICAL SCHEMAlar nadir olarak degistirilmelidir 
+    => Physical Schemalar kolayca degistirilebilirler bunun ozel olarak ismi 
+        physical schema independence dir 
+
+
+    PHYSICAL SCHEMA 
+    =>db nin physical seviyedeki tasarimini ifade edr 
+
+
+    LOGICAL SCHEMA
+    => db nin logical seviyedeki tasarimini ifade eder
+    => Gelistiriciler logical seviyedeki schemaya uyarak program gelistirirler  
+
+
+    => Bir veri tabani view seviyesinde birden fazla view schemasina sahip 
+       olabilir buna subschemas denir. (different view of schemas )
+
+    
+
+DATA MODELS 
+    RELATIONAL MODEL 
+        => Iliskisel model tablolardan olusur ve her tablonun arasinda 
+        bir iliski vardir . 
+        => bildigimiz tablolar ve icindeki varliklardan olusur tablolar  
+        ve tablonun ozellikleri arasina bir iliski vardir 
+
+    Entity-Relationship Model 
+        => Entity ve Relationship varliklarindan olusur 
+
+
+    Object Based Data Model 
+        => Object Based Data model combines object oriented data model 
+        and relational data model.
+
+
+    Semistructured Data Model 
+        => 
+
+
+
+DATABASE LANGUAGES 
+    => Veritabani sistemi hem data definition language DDL , hem de data 
+    manipulation DML destegini saglamalidir. 
+
+    => DDL ile veri tabani semalari tanimlanir 
+    => DML ile de veri tabani icindeki veriler degistirilir 
+
+
+    In practice, the data-definition and data-manipulation languages are not
+    two separate languages; instead they simply form parts of a single database 
+    language, such as the widely used SQL language
+
+DML (Data manipulation Languages)
+
+    PROCEDURAL DML 
+    => Require a user to specify what data are needed and how to get those data 
+
+    DECLERATIVE DML or NONPROCEDURAL DMLs 
+    => Require a user to specify what data are needed without specifying how to 
+    get those data 
+
+    A query is a statement requesting the retrieval of information. The portion of
+    a DML that involves information retrieval is called a query language.   
+
+
+DDL (Data Definition Languages)
+    => Database semalari DDL dilleri kullanilarak yapilir. 
+    => Db icindeki veriler DDL tarafindan saglanan consistency constraintsleri 
+       saglamak zorundadir. 
+
+    =>Domain Constraints
+         A domain of possible values must be associated with every attribute 
+        
+    => Referential integrity 
+        There are cases where we with to enduse that a value that appears 
+        in one relation for a gibve nset of attributes also appears in certain 
+        set of attributs in another relations. 
+
+    Assertions. 
+    => An assertion is any condition that the database must always satisfy.
+       domain constrains and referantial integrities also kind of assertions but 
+       every restrictions does not expressed bu those such as "every dos must "
+       have 1 owner. 
+
+    Authorization.
+    => We may want to differentiate among the users as far as the type of
+       access they are permitted on various data values in the database. 
+       Most common authorizations are READ authorization, Insert Authorization , 
+       UPDATE authorization , DELETE authorization. 
+
+
+  => DDL ciktilari DATA DICTIONARY isimli yapilarda saklanir bu kisimlar 
+     data hakkindaki bilgilerdir (data about the data)
+
+
+
+    RELATIONAL DATABASES 
+        A relational database is based on the relational model and uses a 
+        collection of tables to represent both data and the relationships 
+        among those data. It also includes a DML and DDL.
+
+
+
+    DATABASE DESIN 
+        Conceptual schema is developed at conceptual-design phase, which provides 
+        a detailed overview of the enterprise. 
+
+        At the end the teorideki yapi implemente edilir bu asamaya ise logical -design face 
+        denir 
+
+    ER MODELS 
+        Entities are described in a database by a set of attributs . 
+        Relationship is an association among several entities 
+        Entity set and Relationship set consist from same type of sets or relations 
+
+
+DATA STORAGE AND QUERYING 
+    The functional components of a database system can be broadly dvided into 
+    the STORAGE MANAGER AND QUERY PROCESSOR components. 
+
+
+    STORAGE MANAGER is important because the data should be moved from memory 
+    to the ssd. To reduce this we need storage manager 
+    =>File manager 
+    =>Transaction Manager 
+    =>Buffer Manager 
+    => Authorization and integrity maager 
+
+
+
+
+
+    QUERY PROCESSOR optimizes queries and 
+        The query processor is important because it helps the database system to
+        simplify and facilitate access to data.
+
+        =>DDL Interpreter 
+        =>DML Compiler =>which translates DML statements in a query language into an
+        evaluation plan consisting of low-level instructions that the query evaluation
+        engine understands.
+        
+        =>Query evaluation engie => executes low level instrucions
+        
+
+
+TRANSACTION MANAGEMENT 
+    => A transaction is a collection of operations that performs a single logical
+    function in a database application. Each transaction is a unit of both atomicity
+    and consistency. 
+
+    The transaction manager consist of tthe concurrency-control and the 
+    manager and the recovery manager. 
+
+
+DATABASE USERS and ADMINISTRATORS 
+
+    Naive users => unsophisticated users who interact with the system by invoking one 
+                of the application programs that have been written previously 
+
+
+    Application Programmers 
+
+    Sophisticated users 
+    Specialized users 
+
+DATABASE ADMINISTRATOR 
+
+    A person who has such central control over the system is called a 
+    DATABASE SYSTEM ADMINISTRATOR (DBA). The responsibilities of DBA is 
+    Schema Definition
+    Storage structure and access-method definition 
+    Schema and physical organization modification 
+    Granting of authorization for data access 
+    Routine manintanance 
+    
+
+
+               
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

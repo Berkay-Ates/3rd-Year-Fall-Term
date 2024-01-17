@@ -1,0 +1,55 @@
+JDBC ile veri tabanina baglanmak: 
+=> Once connection nesnesini olusturuyoruz 
+=> String olarak queryimizi olusturuyoruz
+=> Queryi create statement ile db ye gonderip queryi db de hazirlatiyoruz. 
+=> Execute query ile queryinin sonuclarini aliyoruz. 
+=> Gelen sonuclar bize bir tablo olarak geliyor biz bu tabloyu isleyerek icinden       	istedigimiz bilgileri aliyoruz. 
+
+=> Query islemi bittikten sonra statement objemizi kapatmamiz gerekir 
+=> Statement ile ayni sekilde connection objemizi de kapatmamiz gerekir. 
+
+ 
+
+PARAMETRELI QUERYLER 
+=> Once connection nesnesini olusturuyoruz
+=> String olarak querimizi hazirliyoruz ve disaridan gelecek olan parametreler 	yerine de soru isareti koyuyoruz (?)
+=> String sorgumuz daha hazir olmadigi icin CreateStatement yerine PreparedStateent 	olusturarak sorgumuzu db ye gonderiyoruz
+=> PreparedStatement objesi uzerinden soru isaretleri yerine parametreleri 	ayarladiktan sonra querimiz db uzerinde execute edilebilir hale geliyor. 
+=> Parametreleri ayarlanmis statementi execute ettirerek sorgu sonucunu aliyoruz. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

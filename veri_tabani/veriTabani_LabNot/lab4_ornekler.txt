@@ -1,0 +1,217 @@
+HAVING ANAHTAR KELIMESI 
+    => Grupları filtrelemek için, WHERE ifadesi yerine HAVING ifadesi kullanılır
+
+
+ORN 
+    Ortalama maasin uzerinde calisan calisanlarin isimlerini ve maaslarini bulunuz 
+
+        =>      select fname, salary from employee 
+                where salary > (select avg(salary) from employee);
+                
+                    fname   |   salary
+                   ---------+--------
+                    James   |  55000
+                    Jared   |  85000
+                    Alex    |  89000
+                    John    |  81000
+                    Evan    |  92000
+                    Josh    |  56000
+                    Andy    |  53000
+                    Tom     |  62500
+                    Jenny   |  61000
+                    Kim     |  79000
+                    Bonnie  |  70000
+                    Alec    |  60000
+                    Nandita |  62000
+                    Bob     |  96000
+
+                
+
+        => count ve sum gibi aggregate fonksiyonlari her grup icin ayri ayri calisirlar 
+
+                select fname, salary , avg(salary),count(*) 
+                from employee 
+                where salary > (select avg(salary) from employee) group by fname,salary;
+
+
+                    fname   | salary |        avg         | count
+                   ---------+--------+--------------------+-------
+                    Jared   |  85000 | 85000.000000000000 |     1
+                    Kim     |  79000 | 79000.000000000000 |     1
+                    Tom     |  62500 | 62500.000000000000 |     1
+                    Alec    |  60000 | 60000.000000000000 |     1
+                    James   |  55000 | 55000.000000000000 |     1
+                    Josh    |  56000 | 56000.000000000000 |     1
+                    Jenny   |  61000 | 61000.000000000000 |     1
+                    Bonnie  |  70000 | 70000.000000000000 |     1
+                    Evan    |  92000 | 92000.000000000000 |     1
+                    Andy    |  53000 | 53000.000000000000 |     1
+                    John    |  81000 | 81000.000000000000 |     1
+                    Nandita |  62000 | 62000.000000000000 |     1
+                    Bob     |  96000 | 96000.000000000000 |     1
+                    Alex    |  89000 | 89000.000000000000 |     1
+
+                *** avg calisinca her grup icin ayri ayri hesaplama yapmis oldu 
+
+ORN 
+    Yanlizca ortalama maasin 50000 in uzerinde oldugu bolumler icin departman numaralarini ve ortalama maaslarini bulunuz 
+
+            select dno, avg(salary) 
+            from employee
+            group by dno 
+            having avg(salary) > 50000 
+
+
+ORN
+    Proje adlarini ve her projede calisanlarin sayisini bulun 
+
+            select count(*), pname 
+            from employee , works_on
+            group by pname 
+
+ORN 
+    Yanlizca toplam 100 saatten fazla olan projeler icin proje adlarini ve toplam saatlerini bulun 
+
+            select sum(hours) , pname,pno from works_on , project 
+            where pno = pnumber 
+            group by pno,pname 
+            having sum(hours) > 100;
+
+
+ORN 
+    Birden fazla projede calisan calisanlarin adlarini bulunuz 
+
+        select fname ssn 
+        from employee , works_on
+        where essn = ssn 
+        group by ssn 
+        having count(*) > 1
+
+
+ORN 
+    Yanlizca calisan sayisi tek olan departmanlar icin departman numaralarini ve toplam calisan sayisini bulun 
+
+        select count(*), dno 
+        from employee 
+        group by dno 
+        having dno%2 = 1;
+
+
+ORN 
+    Ortalama maasin genel ortalama maastan yuksek oldugu departman numaralarini bulun 
+
+        select dno , avg(salary)
+        from employee
+        group by dno 
+        having avg(salary) > (select avg(salary) from employee) 
+        order by dno;
+
+
+ORN 
+    Toplam calisilan saat sayisi en yuksek olan projeleri bulun 
+     
+        select pnumber,pname,sum(hours)
+        from works_on, project
+        where pno = pnumber 
+        group by pname,pnumber
+        order by sum(hours) DESC
+        limit 1;
+
+
+ORN 
+    Toplam calisilan saat suresinin ortalama saatin en az iki kati olan oldugu projeleri bulunuz 
+
+
+        select pno,pname
+        from works_on,project
+        where pno = pnumber
+        group by pno , pname
+        having sum(hours) > 2*(select avg(hours) from works_on);
+
+ORN 
+    En dusuk ve en yuksek maasin 20k dan fazla oldugu departmanlari bulunuz 
+
+        select dname
+        from employee,department
+        where dno=dnumber
+        group by dname
+        having min(salary) +20000 < max(salary);
+
+ORN 
+    Toplam maas gideri en yuksek olan ilk 3 departmani bulunuz 
+
+        select dno , sum(salary)
+        from employee 
+        group by dno 
+        order by sum(salary) desc
+        limit 3;
+
+
+ORN 
+    Birden fazla lokasyonlardaki calismis olan calisanlari bulun 
+
+        select fname 
+        from employee,works_on,project
+        where ssn = essn and pno = pnumber 
+	group by fname 
+	having count(*) > 1;
+
+
+ORN 
+    Ikiden fazla projede calismis calisan sayisinin departmandaki toplam calisan sayisinin 
+    %50 sinden fazla oldugu departmanlari bulunuz
+
+        select dno 
+        from employee e 
+        where (select count(*) from works_on w where w.essn = e.ssn ) > 0.5 (select count(*) from employee where dno=e.dno)
+        group by dno
+
+
+ORN 
+    Projede calisan calisanlarin ortalama maasinin 4 numarali departmandaki 
+    en yuksek maastan yuksek oldugu proje numarasini bulun
+
+
+        select p.pnumber 
+        from project p , works_on w , employee e 
+        where ssn = essn and w.pno = p.pnumber 
+        group by p.pnumber 
+        having avg(salary) > (select max(salary) from employee where dno = 4);
+
+
+ORN 
+    En az bir calisanla ayni maasa sahip olan ancak ayni departmanda olmayan calisanlarin isimlerini bulun
+
+        select e.fname , e.lname 
+        from employee e 
+        where salary in (select salary from employee group by salary having count(count(distinct dno)>1))
+
+
+ORN  
+    Departmanlarindaki tum calisanlarin ortalama maasiyla ayni maasa sahip calisanlarin isimlarini bulun 
+
+    
+    select e.fname , e.lname 
+    from employee e
+    WHERE e.salary = (select avg(salary) from employee where dno=e.dno group by dno);
+
+
+
+ORN 
+    Kendi departmanlarinda en yuksek maasi alan ancak herhangi bir projede calismamis calisanlarin isimlerini bulun 
+
+
+    select e.fname , e.lname 
+    from employee e
+    WHERE e.salary = (select max(salary) from employee where dno=e.dno group by dno)
+          and e.ssn not in (select distinct essn from works_on);
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,294 @@
+CREATE OR REPLACE FUNCTION ornek1 (num1 NUMERIC, num2 NUMERIC)
+RETURNS NUMERIC AS $$
+
+DECLARE 
+toplam NUMERIC;
+BEGIN
+
+	toplam:=num1+num2;
+	RAISE NOTICE 'sayi1:%, sayi2:%',num1,num2;
+	return toplam;
+END;
+$$ LANGUAGE 'plpgsql';
+
+
+
+RAISE 
+=> Bilgilendirme ve hata mesaji yazdirmak icin kullanilir 
+	RAISE mesaj_turu MESAJ;
+
+MESAJ TURLERI 
+-DEBUG
+-LOG
+-INFO
+-NOTICE
+-WARNING
+-ECXEPTION 
+
+Ornek 
+RAISE NOTICE 'bilgilendirme';
+RAISE EXCEPTION 'Hata Mesaji';
+RAISE NOOTICE 'Salary here is %',sal_variable; 
+
+
+PL/pgSQL fonksiyonlari, sadecce tek bir deger dondurmek zorunda degildir. Karmasik sonuclari veya bir tabloyu da dondurebiliriz. 
+Bu tarz composit veri tiplerini dondurmek icin RECORD tanimlari kullanilmaktadir 
+
+=> CREATE TYPE tur_ismi AS (isim1 TUR, isim2 TUR, isim3 TUR);
+
+
+ORN:
+CREATE TYPE urunler AS (miktar1 INTEGER, miktar2 INTEGER)
+
+depo URUNLER
+
+
+
+ORNEK2
+SSNi parametre olarak verilen calisanin ismini calistigi departmenin ismini ve amaasini ekrana yazdiran PL/pgSQL blogunu yazin. Bir SSN vererek fonksiyonu cagirin
+
+CREATE TYPE yeni_tur AS (isim VARCHAR(15), dep_isim VARCHAR(25), maas INTEGER)
+
+CREATE OR REPLACE FUNCTION ornek2 (eno employee.ssn%type)
+RETURNS yeni_tur AS $$
+
+DECLARE 
+bilgi yeni_tur;
+
+BEGIN
+	select fname,dname,salary INTO bilgi
+	from employee e, department d
+	where e.dno=d.dnumber AND e.ssn = eno
+
+	RAISE NOTICE ' calisan ismi %,departan: %, 						maas:%',bilgi.isim,bilgi.dep_isim,bilgi.maas
+
+	RETURN bilgi 
+END;
+$$ LANGUAGE 'plpgsql';
+
+
+SELECT orek2('123456789')
+DROP FUNCTION ornek2(employee.ssn%type);
+
+
+CURSOR 
+-> Eger bir tablo dondurmek istiyorsak CURSOR tanimlayarak sonucu bunun uzerinden dondurebiliriz. 
+
+cursor_ismi CURSOR FOR sql_query;
+
+ORNEK
+cursor_all CURSOR FOR SELECT * FROM employee
+
+ORNEK:
+Numarasi verilan bir departmandaki calisanlarin isimlerini bulan bir fonksiyon yaziniz. Bir departman numarasi vererek fonksiyonu cagiriniz
+
+CREATE or REPLACE FUNCTION ornek3(dnum NUMERIC)
+RETURNS void AS $$
+DECLARE
+	yeni_cur CURSOR FOR SELECT fname, lname 
+			    FROM employee
+			    WHERE dno=dnum;
+BEGIN
+	FOR satir IN yeni_cur LOOP
+		RAISE INFO 'Employee name is % %',satir.fname,satir.lname
+	END LOOP;
+END;
+$$ LANGUAGE 'plpgsql';
+
+
+ORNEK 
+Departman numarasi verilen bir departmandaki calisanlarin toplam maasini(SUM() fonksiyonundan yararlanmadan) bulan bir fonksiyon yaziniz 
+
+CREATE FUNCTION ornek4 (dnum NUMERIC)
+RETURNS NUMERIC AS $$
+DECLARE 
+	toplam_maas NUMERIC;
+	curs CURSOR FOR SELECT salary FROM employee WHERE dno = dnum;
+BEGIN 
+	toplam_maas :=0
+	
+	FOR satir IN curs LOOP
+		toplam_maas := toplam_maas + satir.salary;
+	END LOOP;
+	RETURN toplam_maas;
+END
+$$ LANGUAGE 'plpgsql';
+
+
+ORNEK-5
+Numarasi verilen bir projede calisanlarin maaslarini verilen bir degere tam bolunebiliyorsa o kisilerin ad, soyad ve maas bilgilerini HAVING fonksiyonu kullanmadan listeleyen ve geri donduren fonksiyonu yaziniz. 
+
+CREATE TYPE calisan AS (isim varchar(15), soyisim varchar(15), maas integer)
+
+CREATE OR REPLACE FUNCTION calisan_listele(pnum project.pnumber%TYPE, bolen INTEGER)
+RETURNS calisan[] AS $$
+
+DECLARE 
+	cal calisanp[];
+	i integer;
+	cmp_cursor CURSOR FOR SELECT fname, lname, salary FROM employee, works_on 	WHRE ssn=essn AND pno=pnum;
+
+BEGIN 
+	i:=1;
+	FOR emp_record IN emp_cursor LOOP
+		IF emp_record.salary%bolen =0 THEN
+			cal[i] ] emp+record
+			i :=i+1
+		END IF;
+	END LOOP;
+RETURN cal;
+END;
+LANGUAGE 'plpgsql';
+
+SELECT calisan_listele('61',16)
+DROP FUNCTION calisan_listele(project.pnumber%type,integer);
+
+
+
+ORN :
+Belirli bir SSN'ye sahip kisinin calistigi tum projelerdeki toplam calisma saatini hesaplayan bir fonksiyon yaziniz
+
+CREATE OR REPLACE FUNCTION toplam_saat(worker_ssn Employee.SSN%TYPE)
+RETURNS NUMERIC AS $$
+
+DECLARE 
+	total_hours NUMERIC;
+	cursor_works_on cursor for select hours from works_on where essn=worker_ssn;
+
+BEGIN
+	total_hours:=0;
+	For saat in cursor_works_on LOOP
+		total_hours := total_hours + saat.hours;
+	END LOOP;
+	
+	RETURN TOTAL_HOURS;
+END
+
+$$ LANGUAGE 'plpgsql';
+
+SELECT TOPLAM_SAAT('123456789');
+
+
+
+ORNEK 
+/*belirli bir departmandaki calisanlarion ortalama maasini bulan fonksiyonu yaziniz 
+*/
+CREATE OR REPLACE FUNCTION AVERAGE_SAL(DEP_NO INTEGER)
+RETURNS NUMERIC AS $$
+
+DECLARE 
+	ORT_MAAS NUMERIC;
+	TOT_COUNT NUMERIC;
+	CURSOR_DEPARTMENT CURSOR FOR SELECT salary FROM EMPLOYEE WHERE DNO=DEP_NO;
+BEGIN
+		ORT_MAAS :=0;
+		TOT_COUNT :=0;
+		FOR ITEM IN CURSOR_DEPARTMENT LOOP
+			ORT_MAAS := ORT_MAAS + ITEM.SALARY;
+			TOT_COUNT := TOT_COUNT+1;
+		END LOOP;
+		IF TOT_COUNT>0 THEN
+			RETURN ORT_MAAS/TOT_COUNT;
+		ELSE 
+			RETURN 0;
+		END IF;
+END
+$$ LANGUAGE 'plpgsql';
+
+SELECT AVERAGE_SAL(4);
+
+drop function Average_sal(employee.dno%type);
+
+
+
+
+ORNEK 
+Toplam calisan saatinin en yuksek oldugu projeyi bulan fonksiyonu bulunuz.
+CREATE OR REPLACE FUNCTION HIGHEST_WORKED_PROJECT()
+RETURNS VARCHAR AS $$
+
+DECLARE 
+	MOST_WORKED_PROJECT_NAME VARCHAR(50);
+	MOST_WORKED_PROJECT NUMERIC;
+	CURSOR_PROJECT CURSOR FOR SELECT PROJECT.PNAME, SUM(HOURS) AS TOPLAM FROM PROJECT,WORKS_ON WHERE PNUMBER=PNO GROUP BY PNAME;	
+
+BEGIN 
+	MOST_WORKED_PROJECT:=0;
+	FOR ITEM IN CURSOR_PROJECT LOOP
+		RAISE NOTICE 'PROJE ISMI:% , PROJE NO:%',ITEM.PNAME,ITEM.TOPLAM;
+		IF MOST_WORKED_PROJECT < ITEM.TOPLAM THEN 
+			MOST_WORKED_PROJECT := ITEM.TOPLAM;
+			MOST_WORKED_PROJECT_NAME = ITEM.PNAME;
+		END IF;
+	END LOOP;
+	RETURN MOST_WORKED_PROJECT_NAME;
+END
+ 
+$$ LANGUAGE 'plpgsql';
+
+SELECT HIGHEST_WORKED_PROJECT();
+
+
+
+
+ORNEK 
+BELIRLI BIR PROJE NUMARASINA SAHIP BIR PROJEDE CALISAN VE MAASI BELIRLI BIR TUTARIN UZERINDE OLAN CALISANLARIN ADLARINI SOYADLARINI VE MAASLARINI DONDUREN BIR FONKSIYON YAZINIZ.
+ 
+CREATE TYPE EMPLOYEE_INFO AS (FNAME VARCHAR(50), LNAME VARCHAR(50),SALARY INTEGER);
+CREATE OR REPLACE FUNCTION GET_WORKER_ON_PROJECT(INPUT_PNO INTEGER,INPUT_SALARY INTEGER)
+RETURNS EMPLOYEE_INFO[] AS $$
+
+DECLARE 
+
+	CURSOR_WORKERS CURSOR FOR SELECT FNAME,LNAME,SALARY 
+							  FROM EMPLOYEE,WORKS_ON
+							  WHERE WORKS_ON.PNO = INPUT_PNO 
+							  AND WORKS_ON.ESSN = EMPLOYEE.SSN
+							  AND SALARY > INPUT_SALARY;
+							  
+	EMP_DATA EMPLOYEE_INFO[];
+	I INTEGER:=1;
+
+BEGIN 
+	
+	FOR ITEM IN CURSOR_WORKERS LOOP
+		
+		EMP_DATA[I] := ITEM;
+		I := I+1; 
+		
+	END LOOP;
+	RETURN EMP_DATA;
+
+END
+
+$$ LANGUAGE 'plpgsql';
+
+select GET_WORKER_ON_PROJECT(3,10000);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

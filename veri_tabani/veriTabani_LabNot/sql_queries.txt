@@ -1,0 +1,39 @@
+==> VIEW OLUSTURMA 
+    - create VIEW myView select * from table; 
+    - select * from myView where fname='myname';
+
+    * some db system allow view realation to be pyhsically stored
+      such views are called Materialized view 
+    * 
+
+==> Constrains on a Single Relation 
+    - not null (Bos olamaz)
+    - primary key (sutun_ismi)
+    - uniquie (candidate keys they are)
+    - check (degerin belli sartlari sagladigini kontrol eder)
+
+==> Foreign Keys 
+    - foreign keys can be sspecified as part of the SQL create 
+      table statement 
+    
+    - BY default a foreign key reference the primary-key attributes 
+      of the referenced table 
+    
+    - foreign key (dept_name) references department 
+                                on delete cascade
+                                on update cascade 
+
+    - instead of cascade we can use set null or set defalt 
+
+
+
+
+
+
+
+
+
+
+
+
+

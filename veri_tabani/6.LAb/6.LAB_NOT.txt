@@ -1,0 +1,319 @@
+ 			psql fonksiyonlar 		2:49 PM 12/16/2023
+
+PL/pgSQL Avantajlari 
+1- Fonksiyon ve Triggerlar olusturulabilir. 
+2- Dongusel ve kosula bagli islem adimlari daha kolay yapilabilir 
+3- Karmasik sorgulamalar ve hesaplamalar yapilabilir 
+4- Kullanicinin kendi amacina yonelik fonksiyon yazmasi saglanabilir 
+5- PL/pgSQL SQL'in tum veri tipi operator ve hazir fonksiyonlarini tanir ve kullanir
+
+
+PL/pgSQL FONKSIYON DONUS TIPLERI 
+1- pl/pgsql tek bir deger dondurmek zorunda degildir. 
+2- Birden fazla deger dondurulecekse <out> anahtar sozcugu kullanilacaktir
+3- pl/pgsql fonksiyonlari basit tipte veri dondurebilecegi gibi birlesik (composite)    	tipte veri de dondurebilir.
+4-Bir sonuc kumesinin(tablonun) addresini gosteren bir isaretci(pointer) dondurebilir
+5-Butun foksiyonlar deger dondurmek zorunda da degildir. 
+
+			    ORNEK FONKSIYON 
+	CREATE FUNCTION fonksiyon_adi (param1 tipi, param2 tipi)
+		[RETURNS ciktinin veri tipi] AS $$ 
+	
+		DECLARE 
+			tanimlamalar;
+		
+		BEGIN
+			komutlar; 
+
+			[RETURN]  [cikti degeri];
+
+		EXCEPTION
+			kural disi tanimlamar
+
+		END $$ LANGUAGE plpgsql;
+		
+		
+
+	CREATE FUNCTION fonksiyon_adi (param1 tipi, param2 tipi,[OUT] paramN tipi)
+		AS ' 
+	
+		DECLARE 
+			tanimlamalar;
+		
+		BEGIN
+			komutlar; 
+
+		EXCEPTION
+			kural disi tanimlamar
+
+		END ' LANGUAGE plpgsql;
+
+
+=> dondurulecek degerler ya returns ile yada out ile belirtilir
+=> kod baslangic noktasi $$ yada ' isareti ile belirtilir. 
+
+
+DECLARE ORNEGI 
+isim tur := ilk_deger (ilk deger opsiyoneldir)
+	
+	user_id 	INTEGER;
+	quantity 	NUMERIC;
+	url 		VARCHAR(20)
+	my_var		tabloIsmi.sutunIsmi%TYPE 
+	maas 		employee.salary%TYPE
+
+
+CREATE OR REPLACE KULLANIMI 
+Bir fonksiyonu duz create yerine CREATE OR REPLACE anahtar kelimesi ile olusturursa
+bu fonksiyon db de varsa silinir bastan olusturulur yoksa sifirdan olusturulur. 
+
+FONKSIYONUN KULLANIMI
+SELECT fonksiyon_adi(parametre_degerleri);
+
+FONKSIYONUN SILINMESI
+DROP FUNCTION fonksiyon_adi(parametre_tipleri);
+
+=> SQL de bulunan fonksiyonlar normal bir programlama dilindeki gibi paramtere almadan return yapma return yapmadan sadece parametre alma gibi ozelliklere sahip olabilirler. 
+
+
+
+
+ORNEK
+-- Adi verilen bir departmandaki calisanlarin ortalama maasini bulan bir fonksiyon yaziniz 
+
+CREATE OR REPLACE FUNCTION find_avg(depname department.dname%TYPE)
+	RETURNS real AS'
+	DECLARE
+	average_sal numeric;
+	
+	BEGIN
+		SELECT AVG(SALARY) into average_sal
+		FROM employee,department
+		WHERE department.dname = depname and employee.dno = dnumber;
+		return average_sal;
+	END;
+	
+	'LANGUAGE PLPGSQL;
+
+ORNEK
+--- Departman ismindeki tabloda bulunan minimum ve maksimum depno bilgilerini alip min_depno ve 
+--- max_depno isimli degerlere atayan ve bu degerleri out ile tanimlandigi icin geri donduren   
+--- fonksiyonu yaziniz 
+	
+CREATE OR REPLACE FUNCTION find_min_and_max(out min_dep department.dnumber%TYPE, OUT max_dep NUMERIC)
+	AS'
+		BEGIN 
+		SELECT MIN(DNO), MAX(DNO) INTO min_dep_no, max_dep_no FROM EMPLOYEE;	
+		END;
+'LANGUAGE PLPGSQL;
+
+select find_min_and_max();
+
+
+
+ORNEK
+--- Departman ismindeki tabloda bulunan minimum ve maksimum depno bilgilerini alip min_depno ve 
+--- max_depno isimli degerlere ataan fonksiyonlari yaziniz 
+	
+CREATE OR REPLACE FUNCTION find_min_and_max(out min_dep_no NUMERIC, OUT max_dep_no NUMERIC)
+	AS'
+		BEGIN 
+			SELECT MIN(DNO), MAX(DNO) INTO min_dep_no, max_dep_no FROM EMPLOYEE;	
+		END;
+'LANGUAGE PLPGSQL;
+
+select find_min_and_max();
+
+
+
+ORNEK
+--- 6 nolu departmandaki calisanlarin sayisi 10dan az ise departmandaki tum calisanlarin 
+--- maasina %5 zam yapan fonksiyonu yaziniz 
+
+CREATE OR REPLACE FUNCTION make_interest_to_6()
+RETURNS void AS'
+DECLARE
+	num_worker NUMERIC(3,2):=0;
+BEGIN
+	SELECT COUNT(*) INTO num_worker 
+	FROM employee
+	where dno=6;
+	
+	IF(num_worker<10) THEN
+		UPDATE employee
+		SET salary = salary*1.05
+		WHERE dno=6;
+	END IF;
+END;
+'LANGUAGE PLPGSQL;
+
+DROP FUNCTION make_interest_to_6()
+
+
+SELECT make_interest_to_6()
+
+
+
+				IF-ELSE-ELSEIF KULLANIMI 
+
+	IF kosul THEN
+		yapilacaklar;
+
+	ELSEIF kosul THEN
+		yapilacaklar;
+
+	ELSE
+		yapilacaklar
+	END IF;	
+
+
+ORNEK
+ 		IF number=0 THEN 
+			result:='zero';
+		
+		ELSE number>0 THEN
+			result:='positive';
+			
+		ELSE number<0 THEN
+			result:='negative';
+
+		ELSE 
+			result:='NULL';
+
+		END IF;
+
+
+				CASE TANIMLARI 
+
+		CASE secici
+			WHEN secici_kosulu1 THEN yapilacaklar1;
+			WHEN secici_kosulu2 THEN yapilacaklar2;
+			...
+			WHEN secici_kosuluN THEN yapilacaklarN;
+		[ELSE secici_kosulu(N+1)]
+		END CASE
+
+
+		CASE X
+		WHEN 1, 2 THEN
+			msg := 'one or two';
+		WHEN 3,4 THEN
+			msg := 'three or four';
+		ELSE
+			msg := 'other value';
+		END CASE;
+
+
+ORNEK
+CREATE OR REPLACE FUNCTION myfunc1(x integer)RETURNS text AS $$
+DECLARE
+msg text;
+
+BEGIN
+	case x 
+		when 1,2 then
+			msg:='one or two';
+	
+		when 4,3 then
+			msg:='four or three';
+			
+		ELSE
+			msg:='other values';
+		
+		END CASE;
+		RETURN msg;
+
+END;
+$$ LANGUAGE PLPGSQL;
+
+
+select myfunc1(2);
+
+
+
+				WHILE KULLANIMI 
+
+		WHILE dongu_kosulu LOOP:
+			yapilacaklar...
+		END LOOP;
+
+
+			
+				FOR KULLANIMI 
+
+	FOR sayac IN baslangic .. bitis
+	LOOP
+		kodlar.....
+	END LOOP;
+
+
+	FOR sayac IN REVERSE baslangic...bitis BY kacar
+	LOOP
+		kodlar....
+	END LOOP;
+
+
+	FOR sayac IN baslangic..bitis BY kacar
+	LOOP
+		kodlar...
+	END LOOP; 
+
+
+ORNEKLER:
+
+DO $$
+BEGIN
+	FOR x IN 1..5
+	LOOP
+		RAISE NOTICE 'SAYI: %',x;
+	END LOOP;
+END; $$
+
+
+
+DO $$
+BEGIN
+	FOR x IN REVERSE 5..1
+	LOOP
+		RAISE NOTICE 'SAYI: %',x;
+	END LOOP;
+END; $$
+
+
+
+DO $$
+BEGIN
+	FOR x IN 1..5 BY 2
+	LOOP
+		RAISE NOTICE 'SAYI: %',x;
+	END LOOP;
+END; $$
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

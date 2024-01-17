@@ -1,0 +1,261 @@
+					8259 PIC 
+KESME KAYNAKLARI 
+Kesme olusturan iki temel kaynak mevcuttur bunlardan ilki yazilimsal kaynaklar ikincisi ise donanimsal kaynaklardir. 8086'nin donanim kesmelerini algilamak uzere iki tane kontrol bacagi mevcuttur. Bunlar INTR(interrupt request) ve NMI(Non-Maskable Interrup) olarak adlandirilir. Ayrica kullanimlarinda belirgin farkliliklar vardir. 
+
+
+MASKELENEMEZ KESMELER (NMI)
+Mikroislemci uzerindeki NMI bacagi cevre birimlerinde olusan kritik durumlarin mikroislemciye bildirilmesinde kullanilir. Bu bacaga gelen sinyaller (kesme istekleri) hemen degerlendirilir. Ornegin bellekte olusan bir hata bu bacak uzerinden gonderilen isaret ile mikroislemciye iletilmekte ve ekrana "memory parity error" gibi bir hata messajini cikartmaktadir. Genele olarak bellekte boyle bir hata olusmasi durumunda sistemin calismaya devam etmesi mumkun degildir. 
+
+
+MASKELENEBILIR KESMELER(INTR)
+Mikroislemci uzerindeki INTR (Interrupt Request) bacagi, ozel donanimlar ile veya 8259 tumdevresi uzerinden surulebilmektedir. 8259 tumdevresinin gorevi kullanicinin belireyecegi durumlara bagli olrak bazi cevre birimlerinden gelen kesmelerin goz ardi edilebilmesini saglamak yani gelen istekleri belirlenen islem polistikasi dahilinde mikroislemciye yansitmamaktir. IF( interrupt Flag) degerine bakarak bu tipteki kesmeler dikkate alinir (IF<-1 enable) veya alinmaz (IF<-0). INTR ucundan gelen kesme isteklerinin 8086 tarafindan karsilanmasi durumunda _INTA ucu lojik 0'a getirilir. 
+
+				KESME VEKTOR TABLOSU 
+Kesme olustugunda mevcut CS:IP ile gosterilen kodun yurutulmesi birakilarak kesmeye iliskin fonksiyonun adresine iliskin kesim ve isaret degerleri yuklenir. 
+
+Her kesmeye iliskin fonksiyonun hangi bellek addresinde yer aldigi KESME VEKTOR TABLOSU ile tutulur. Kesme vektor tablosu bellek uzayinda 0000H-003FFH adres araligindaki 1024 byte'lik alandadir. Kesme Vektor tablosu toplamda 256 kesme icin ilgili fonksiyonlarin isaret ve kesim degerlerini saklayabiliriz. 
+
+
+KESME YURUTME SURECI 
+Donanim kaynakli kesmelerin yurutulme sureci yazilim kaynakli kesme yurutme surecleri ile aynidir.
+
+DONANIMSAL KESMELER 
+NMI ucu aktif oldugunda kesme vektor tablosunun 008H adresinde yer alan vectord numarasi 02H olan kesme islenir. NMI ucuna gelen kesme isteklerinde vektor numarasi mikroislemci tarafindan icsel olarak otomatik bir sekilde 02H olarak cozumlenir. 
+
+
+INTR ucu aktif oldugunda hangi numarali kesme vektorunun yurutulecegi harici olarak mikroislemciye bildirilmelidir. Intel 00H-1Fh arasinda yer alan vektor numaralarini mikroislemci kullanimi icin ayirmistir. Genel kullanim icin 20h-0ffH vektor numralari kullanilabilir. 
+
+_INTR ucunun aktif olmasiyla esanli olarak harici bir sekilde d0-d7 uclarindan saglanan deger kesme servis programi adresi olmayip kesmenin vektor numarasidir. Vektor tablosundan harici olarak verilen vektor numarasina giddildiginde kesme servis programinin addreslerine erisilecektir. 
+
+
+				KESME ISLEMI 
+=> Siradaki islem bittiginde islemci 
+- Komut isleme ile olusan single-step NMI, INTR ve INT sirasiyla bir kesme olup olmadigini kontrol eder.
+- Kesme varsa 
+	- pushf
+	- IF<-0 , TF<-0 (INTR, single step kesmeleri engellenir)
+	- push cs
+	- push ip
+	- IP<- kesme_vektor_tablosu , CS<- kesme vektor tablosu 
+
+	- kesme alt programi yurutulur
+	- IRET ile donulur
+	- pop ip 
+	- pop cs 
+	- popf (kesme oncesi IF<-1 olarak ayarlanmis olsa, kesme alt programi 			suresinde IF<-0 yapilmisti, kesme donusunde POPF ile otomatik 			olarak kesmeler acik.)
+
+	
+				KESME BAYRAKLARI 
+=> INTR ucu sadece IF=1 ise kesme olusturabilir. 
+=> TF=1 ise her komut islendikten sonra single step kesmesi olusur
+=> STI (SET INTERRUPT FLAG), CLI (CLEAR INTERRUPT FLAG)
+=> TF icin ozel komut yoktur
+
+-> DAISY CHAIN
+
+		     8259 PROGRAMMABLE INTERRUPT CONTROLLER 
+8259A programlanabilir kesme kontrol devresidir. 
+Kesme isteklerine oncelik atayabilir
+Tek basina 8 farkli kesme vektoru saglar
+MASTER(1)/SLAVE(8) formatinda 64 farkli kesme vektoru saglar
+
+UC TANIMLARI 
+_CS
+	Giris ucudur 
+	Secim ucu aktif 0 bir sekilde calisir
+
+_WR
+	Yazma ucu aktif 0 bir giris ucudur. 8259un 8086 dan komut kabul etmesini 	saglar
+
+_RD
+	Okuma ucu aktif 0 bir giris ucudur. 8259 un veri yoluna durum bilgisini 	cikmasini saglar. 
+
+D0-D7
+	Cift yonlu veri yolu. Kontrol komutlari, durum bilgisi ve kesme vektor 
+	numarasi bilgisi bu veri yolu ile aktarilir. 
+
+CAS0-CAS2
+	Kaskat baglanti uclari. Coklu 8259 kullanimi icin kaskat baglanti uclari 	olup ana 8259 icin ciis yardimci 9259lar icin ise giris yonlu calisan 	uclardir. 
+
+_SP/_EN	
+	(Slave Program/ Enable Buffer) tamponlama kipinde 8259 ic mandallarini 	aktif eder. coklu kipte _SP=1 ana 8259u _SP=0 yardimci 8259 u belirler 
+	
+
+INT 
+	Kesme ucu/ 8086'nin INTR ucuna baglanarak kesme istegini iletir. 
+
+
+IR0-IR7
+	Kesme istek uclari. Kenar tetikleme ve seviye kipinde kesme istegi 	uretebilir. 
+
+_INTA 	Kesme onayi 8086 _INTA ucuna baglidir. _INTA ucunun aktif olmasi ile 8259 	kesme vektor numarasini 8086 ya saglar. 
+
+
+A0	8259 adres ucu. _CS,_WR,_RD ile birlikte 8259 adreslemesinde ve 	programlanmasinda kullanilir 	
+	
+
+8259 programlanabilir kesme kontrol tumdevresi 8 adet dis birimin kesme isteklerini karsilamak uzere kullanilmaktadir. 8259 yardimiyla INTR ucunda olustutulan kesme istekleri, IF bayragindaki degere gore engellenebilirken NMI bacagi uzerinden gelen kesmeler IF bayraginin hicbir etkisi yoktur. 
+
+8259 kesmeler arasinda oncelik belirlemede kullanilabilir. Tek bir 8259, 8 farkli kesme istegine karsilik 8 ardisik kesme vetor numarasi saglayabilir. Kaskat begli yapida ise bir ana 8259 ve bunun her bir kesme istek ucuna bagli sekiz 8259 kullanilarak toplamda 64 farkli kaynaktan gelen kesme isteklerine kesme vektor numarasi saglanabilir. 
+
+
+			8259 KONTROL VE AYAR YAZMACLARI 
+Ders kapsaminda tek bir 8259 kullanilacaktir. Bu sebeple _SP/_EN =1 olarak kullanilmistir
+
+8259, dort adet ilkelendirme komut yazmaci (Initialization Command Word -ICW) ve uc adet operasyonel komut yazmaci (Operation Command Word -OCW) kullanilarak programlanabilir.
+
+_CS	A0	ERISIM
+ 0	0	ICW1
+ 0	1	ICW2,ICW3,ICW4
+ 1	x	8259 adreslenmez
+
+
+			8259 ICW1 kontrol bitleri
+
+	D7	D6	D5	D4	D3	D2	D1	D0
+	0	0	0	1	LTM	0	SGNL	ICW4
+
+
+D7,D6,D5 -> 8086 icin 
+
+LTM=0 -> Seviye tetiklemeli kesme istegi 
+LTM=1 -> Kenar tetiklemeli kesme istegi 
+
+SGNL=1 -> Tek 8259
+SGNL=0 -> Kaskat 8259
+
+ICW4=1 -> ICW4 kullanilacak 
+ICW4=0 -> ICW4 kullanilmayacak 
+
+
+			8259 ICW2 kontrol bit'leri 
+	D7	D6	D5	D4	D3	D2	D1	D0
+	T7	T6	T5	T4	T3	T2	T1	T0
+
+      T7--T0 IR0 kesme vektor tipi, diger IR'ler buna gore sirayla deger alir
+
+		
+			
+		8259 ICW3 kaskat baglantida yardimci 8259 
+	D7	D6	D5	D4	D3	D2	D1	D0
+	S7	S6	S5	S4	S3	S2	S1	S0
+
+	Si=1 -> IR'ya yardimci 8259 bagli 
+	si=0 -> Irya yardimci 8259 bagli degil
+
+
+			8259 ICW2 kontrol bit'leri 
+	D7	D6	D5	D4	D3	D2	D1	D0
+	0	0	0	0	0	ID2	ID1	ID0
+
+		
+		
+		ID2 ID1 ID0 yardimci 8259 ID degeri 
+
+	D7	D6	D5	D4	D3	D2	D1	D0
+	0	0	0      SFNM	BUF	MS     AEOI	qPM
+
+SFNM=1 => Tamamen ic ice gecmis ozel mod 
+
+
+BUF MS 
+0   0		tek 8259
+1   0		kaskat kip yardimci 8259
+1   1		kaskat kip ana 8259
+
+
+AEOI
+AEOI=1	=> otomatik kesme sonlandirma 
+AEOI=1 => normal kesme sonlandirma 
+
+
+qPM
+qPM = 1 => 8086 ilki bos iki _INTA kullanimi 
+qPM = 0 => MSC80 tek _INTA kullanimi 	
+
+
+Tek ana 8259 kullanimi icin ICW4 icin 03H degeri kullanilacaktir. Bu sayede kesme sonandirmanin otomatik ele alindigi ve ilki bos olmak uzere iki _INTA ile vektor numarasi aktarimi saglanabilir. 
+
+
+259 OCW yazmaclarinin erisiminde kullanilan adresler 
+
+	_CS	A0	Erisim
+	0	0	0CW2,0CW3
+	0	1	0CW1
+	1	X	8259 adreslenmez
+
+	
+
+			OCW1 Kontrol Bitleri 
+	D7	D6	D5	D4	D3	D2	D1	D0
+	M7	M6	M5      M4	M3	M2     	M1	M0
+				
+			M = 1 kesme maskele 
+			M = 0 kesme maskeleme 
+
+
+
+			OCW2 Kontrol Bitleri 
+	D7	D6	D5	D4	D3	D2	D1	D0
+	R	SL	EOI     0	0	L2     	L1	L0
+	ozel kesme sonlandirma			ozel kesme sonlandirma 
+		komutlari			komutlarinda IR secimi 
+
+
+	
+			OCW3 Kontrol Bitleri 
+	D7	D6	D5	D4	D3	D2	D1	D0
+	0	ESMM	SMM     0	1	P     	RIR	RIS
+		ozel maskeleme			IR, IS yazmac okuma 
+		    kipi				komutlari 
+
+
+9259'un okunabilir uc adet durum yazmaci bulunmaktadir. Bunlar KESME ISTEK YAZMACI (IRR interrupt request register), SERVISTE YAZMACI (ISR in service register) ve KESME MASKELEME YAZMACI (imr - INTERRUPT MASK REGISTER) OLARAK SIRALANABILIR. IRR,ISR ve IMR 8 bitlik yazmaclardir. 
+IRR hangi kesme istek uclarinin aktif oldugunu gosterir. 
+ISR hangi kesme isteklerinin servisinin devam etmekte oldugunu gosterir. Ornegin IR6 ucundaki kesme istegi karsilanmaya basladiginda ISR = 01000000 degerini alir. IR6 kesme isteginin karsilanmasi tamamlanmadan IR3 istegi de aktif olursa ISR = 010010000 degerini alir. 
+IMR hangi kesme isteklerinin maskelenecegini belirler. IRR ve ISR okumalari OCW3 D0-D1 bitleri uzerinden programlanir, programlamayi takip eden bir sonraki okuma cevriminde IRR veya ISR den hangisi secilmisse A0=0 adresinden okunur. IMR okumasi A0=1 adresinden yapilir.  
+
+Kitapta kullanildigi haliyle 8259 yardimiyla kesmenin ele alinmasi asagidaki surece gore yurutulur 
+1- IR7-0 uclarindan biri veya birden fazlasi 1 e cikar 
+2- 8259 istekleri degerlendirip CPU ya INTR gonderir
+3- CPU _INTA ile karsilik verir 
+4- _INTa 8259 a ulastiginda otomatik olarak en yuksek oncelikli kesmeye iliskin ISR
+biti 1, IRR biti 0 yapilir 
+5- CPU ikinci _INTA darbesini gonderir 9259 karsilik olarak kesme vektor numarasini veri yoluna koyar 
+6- AEOI kipinde ISR biti 0 yapilarak kesme sureci sonlandirilir. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

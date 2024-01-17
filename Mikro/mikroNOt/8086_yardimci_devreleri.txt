@@ -1,0 +1,144 @@
+
+8086 mikroislemcinin fonksiyonel bir seklide kullanilabilmesis icin saat darbe 
+uretici ve buffer mandallarina ihtiyaci vardir.
+
+DARBE URETICI DEVRE 
+    Darbe uretici devre reset anindan sistemin kararli hale gelmesine kadar MP yi 
+    bekletir ve sonrasinda uygun saat darbelerini MP ye iletir. 
+
+
+BUFFER Mandallari 
+    Bufferlar ise zaman cogullamali kullanilan uclar birbirinden fonksiyonel olarak 
+    ayristirilir ve cok sayida baglanti yapacak olan uclar uygun sekilde ayristirilir. 
+
+
+
+SAAT DARBE URETICI (8284)
+
+    => 8284 temel olarak 4 gorevi yerine getirir. 
+        8086 icin saat darbesi uretmek 
+        RESET synchronization 
+        READY uyumlulugu 
+        G/C birimleri icin Transistor Transitor Lojik(TTL) uyumlu darbe uretmek 
+
+
+
+BUF BUFFERING 
+
+    8086 da zaman cogullamali olarak sunulan uclarin uygun sekilde bufferlanmasi 
+    gerekmektedir. Benzer sekilde birden fazla girisi suren 8086    kontrol uclarinin 
+    da uygun sekilde bufferlanmasi gerekmektedir. 
+
+    74373 tum devresi 8 bit mandal 
+    74245 tum devresi 8 bit cift yonlu mandal 
+    7244 tumdevresi ise 8 bit tampon olarak gorev yapmaktadir 
+
+
+    74373 
+        => Zaman cogullamali uclarda address degeri olusturuldugunda bu degerler bellek 
+        ve G/C birimlerine iletebilmek icin tutulur. 
+
+
+
+    74245 
+        => Veri uclarinda giris veya cikis yonlu olarak tutma ve tamponlama islemi 
+        gerceklestirilir. 
+
+
+    74244 
+        => Cesitli kontrol uclari icin tamponlama gorevi yapilir. 
+
+
+YOL ZAMANLANMASI 
+    => Bellege veri yazma isleminde 
+        oncelikli olarak islem yapilacak olan bellek address degeri olusturulur 
+        yazilacak olan veri degeri veri yoluna olusturulur 
+        _WR=0 olusturulur, M/_IO=1 tanimlanir.
+
+
+    => Bellekten okuma isleminde 
+        oncelikli olarak islem yapilacak olan bellek addresi address yolunda olusturulur 
+        _RD=0 olusturulur, M/_IO=1 tanimlanir
+        okunacak veri degeri veri yolundan kabul edilir. 
+
+    => 8086 Bellek ve G/C birimlerine erisimde yol cevrimleri (Bus Cyle) olarak adlandirilan 
+    zamanlamalari kullanmaktadir. 8086 icin her bir bus cycle 4 saat darbesi surmektedir 
+
+    OKUMA CEVRIMI 
+        T1 -> ilk zaman darbesi 
+            => address yolunda address degerleri olusturulur 
+            => ALE,DT/_R, M/_IO icin de uygun degerler atanir 
+            =>  
+
+        T2 
+            => _WR , veya _RD ile _DEN kontrol isareti olusturulur 
+
+        T2 sonucu eger READY=1 degilse "TW" isimli bekleme durumuna gecilir. Bu zaman 
+        suresince cevre birimlerine erisim suresi saglar 
+
+
+        T3  
+            => veri yolu orneklenir 
+
+        T4
+            => T4 suresinde bellek veya GC birimlerine yazma islemi tamamlanir 
+
+        
+    YAZMA CEVRIMI
+        Yazma islemi de benzer sekilde 4 cycle da tamamlanir. Oncelikle yazilacak olan 
+        degerler veri yoluna birakilir sonrasinda M/_IO durumlarina gore ilgili yazma 
+        konumunun addresi olusturulur ve yazilacak veri karsiya iletilir. 
+
+        => yazma durumunda yazilacak deger MP icerisinde oldugu icin okuma durumunda 
+        oldugu gibi bir bekleme durumu olusmaz. 
+
+
+        
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

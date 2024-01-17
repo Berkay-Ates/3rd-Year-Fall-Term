@@ -1,0 +1,178 @@
+                    MASS STORAGE STRUCTURE              
+Magnetic Disks 
+Magnetic diskt provide the bulk of secondary storage for modern 
+computer systems. 
+
+There may be thousands of concentric cylinders in a disk driva and 
+each tracks may contain hundereds of sectors. The storage capacity 
+of common disk drives is measured in gigabytes. 
+
+SOLID STATE DISK (SSD)
+Simply described an SSD is nonvolatile memory that is used like a 
+hard drive. 
+
+MAGNETIC TYPES  
+Tapes are used mainly for backup for storag of infrequently used 
+information, and as a medium for transferring information from one 
+system to another. 
+
+DISK STRUCTURE 
+Modern magnetic disk drives are addressed as large one-dimensional 
+arrays of LOGICAL BLOCKS, where the logical block is the smallest 
+unit of transfer. The size of a logical block is ususally 512 bytes. 
+
+The one-dimesional array of logical blocks is mapped onto the sectors 
+of the disk sequentially. 
+
+
+Disk yuvarlak donen bir yapi uzerinden veri okundugu icin veri okuyan 
+kisim iceri dogru geldikce donme basina okunan sector veya veri 
+miktari azalir. Bu azalmayi engellemek icin diskin donme hizi artabilir 
+veya daha az veri okunmasina izin verilebilir (constant angular velocity). 
+
+
+DISK ATTACHMENT 
+Computers access disk storage in two ways. One way is via I/O ports 
+or HOST-ATTACHED STORAGE this is common on small systems. The other 
+way is via a remote host in a distributed file system this is referred 
+to as NETWORK-ATTACHED STORAGE. 
+
+HOST ATTACHED STORAGE (storage arrays)
+Host attached storage is storage accessed through local I/O pors. These 
+ports use several technologies.
+
+STORAGE ARRAY NETWORK
+SAN is one or more storage arrays connected together. 
+
+
+NETWORK ATTACHED STORAGE
+A network attached storage device is a special purpose storage system 
+that is accessed remotely over a data network. Clients access network 
+attached storage via a remote procedure call interface such as NFS
+for UNIX systems or CIFS for Windows machines. 
+
+
+                        DISK SCHEDULING 
+For the magnetic disks the SEEK TIME is the time for the disk arm to 
+move the heads to the cylinder containing the desired sector. The 
+ROTATIONAL LATENCY is the additional time for the disk to rotate the
+desired sector to the disk head. 
+
+
+If the desired disk drive and controller are available, the request 
+can be serviced immediately. If the drive or controller is busy, any 
+new requests for service will be placed in the queue of pending request
+for that drive. 
+
+Any one of the several disk-scheduling algortims can be used to choose 
+one of the waiting jobs from the waiting queue. 
+
+
+FCFS SCHEDULING 
+First Come First Served yaklasiminda ilk gelen ilk hizmeti alir. 
+
+
+SSTF SCHEDULING
+It seems reasonable to service all the requests close to the current
+head position before moving the head far away to service other requests. 
+This assumption is the basis for the SHORTHEST-SEEK-TIME=FIRST (SSTF)
+algorithm. The SSTF algorithm selects the reqest with the least seek 
+time from the curret head position.  
+
+
+SCAN SCHEDULING
+In the SCAN ALGORITHM, the disk arm starts at one end of the disk 
+and moves toward the other end, servicing requests as it reaches each 
+cylinder, until it gets to the other end of the disk. At the other end 
+the direction of head movement is revrsed and servicing continues. 
+
+
+C-SCAN Scheduling 
+Like SCAN, C-SCAN moves the head from one end of the disk to the other 
+servicing requests along the way. When the head reaches the other end 
+however it immediately returns to the beginnig of the disk without 
+servicing any request on the return trip. 
+
+
+LOOK SCHEDULING
+More commonly the arm goes only as far as the final request in each 
+direction. Then it reverses direction immediately without goind all 
+the way to the end of the disk. Versions of SCAN and C-SCAN that follow 
+this pattern are called LOOK and C-LOOK scheduling, because they look 
+for a request before continuing to move in a given direction. 
+
+
+                SELECTING A DISK SCHEDULING ALGORITHM 
+The disk-scheduling algorithm should be written as a separate module 
+of the operating system alllowing it to be replaced with a different 
+algorithm if necessary. 
+
+
+
+                        DISK MANAGEMENT 
+DISK FORMATTING 
+Before a disk can store data it must be divided into sectors that the 
+disk controller can read and write. This process is called low-level 
+fromatting, or physical formatting. 
+
+
+BOOT BLOCK 
+The initial BOOTSTRAP program tends to be simple. It initializes all 
+aspects of the system, from CPU registers to device controllers and 
+the contencts of main memory and then start the operating system. 
+
+For most computers the bootstrap is stored in read-only memory ROM. 
+A disk that has a boot partition is called A BOOT DISK or SYSTEM DISK. 
+
+Store bootstrap loader in the boot Rom whose only job is to bring in
+a full bootstrap program from disk. the full bootstrap program can be 
+changed easily a new version is simply written onto the disk. 
+
+
+The Windows systems places its boot code in the first sector on the
+hard disk, which it terms the master boot record. or MBR. Boooting 
+begins by running code that is resident in the systems ROM memory. 
+This code directs the system to read the boot code from the MBR. 
+In addition to containing boot code, the MBR contains a table listing 
+the partitions fo the hard disk and a falg indicating which partition 
+the system is to be booted from. Once the system identifies the boot 
+partition, it reads the first sector from that partition  and continues 
+with the remainder of the boot process, which includes loading the various
+subsystems and system services.
+
+
+                        SWAP-SPACE MANAGEMENT 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

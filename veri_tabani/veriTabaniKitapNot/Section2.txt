@@ -1,0 +1,160 @@
+INTRODUCTION TO THE RELATIONAL MODEL
+
+RELATIONAL DATA MODEL
+    A relational database consists of a collection of tables, each of which 
+    is assigned a unique name.
+
+    => In relational model the term relation is used to refer to a table . 
+    => The tuple is used to refer to a row. 
+    => The term attribute refers to a column of table. 
+    => Relation istanace is refer to a specific instance of a relation 
+
+
+
+DATABASE SCHEMA 
+    => database schema is the logical design of the database.
+     
+    => Database Instance is a snapshot of the data in the database 
+        at a given instant in time. 
+
+    
+    => In general a relation schema consist of a list of attributes and their 
+    corrsponding domains. Aslinda her tablo bir relationdur diyebiliriz 
+
+
+
+KEYS 
+    Superkey 
+        A superkey is a set of one or more attributes that, taken collectively
+        allow us to identify uniquely a tuplle in the relation
+
+    
+    Candidate keys 
+        Such minimal superkeys are called candidate keys. 
+        if id is candidate key alone , then id,name do not candidate key 
+        because id already candidate by itself. 
+
+
+    Primary key 
+        One of the candidate keys choosen as primary key to distinguish 
+        elements in a relation. 
+
+
+        Primary keys should choosen very carefully that its value never or 
+        very very rarely changes 
+
+
+    Foreign key 
+        A relation say r1 may include among its attributes the primary key 
+        of another realation say r2. This attribute is called a FOREIGN KEY. 
+        r1 referencing r2. 
+
+        r1 is also called referencing relation 
+        r2 is called referenced relation 
+
+
+    REFERENTIAL INTEGRITY 
+        A referential integrity constraint requires that the values appearing 
+        in specified attributes of any tuple in the referencing relation also
+        appear in specified attributes of at least one tuple in the referenced 
+        relation
+
+
+
+    Schema Diagrams 
+
+        A database schema along with primary key and foeigh key dependencies 
+        can be depicted by schema diagrams. 
+
+        schema diagrams consists from relations 
+        
+
+    RELATIONAL QUERY LANGUAGES 
+        A query language is a language in qhich a user request informatin 
+        from the database. 
+
+        PROCEDURAL language requires instructions to perform a sequence 
+        of operations on the database to comput the desired result. 
+
+        NONPROCEDURAL language does not require the instructions it just 
+        need commands to do. SQL IS NONPROCEDURAL LANGUAGE. 
+
+
+        The relational algebra is procedural whereas the tuple relational 
+        clculus and domain relational calculus are nonprocedural. 
+
+
+    JOIN 
+        the join operation allows the combining of two relations by merging 
+        pairs of tuples, one from each relation into a single tuple. 
+
+        Natural join tablolarin elemanlarinin birbirleri ile ayni olan 
+        elemanlari varsa bu elemanlari birbirleri ile birlestirerek yeni bir 
+        tabloda tuple olrak kaydeder ve sonuc olarak bu tabloyu dondurur. 
+
+
+    CARTESIAN PRODUCT 
+        combines tuples from two relations but unlike the join operation 
+        its reasult contains all pairs of tuples from two relations reagrdless
+        of whether heir attribute values match. 
+
+    Union 
+        union operation perform normal set union of two similarly structured 
+        tables/
+
+    
+
+    RELATIONAL ALGEBRA 
+        Relational algebra defines a set of operations on relations paralelling 
+        the usual algebraic operations such as addition substraction .
+
+        Selection 
+        Projection 
+        Natural join 
+        Cartesian Product 
+        Union 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

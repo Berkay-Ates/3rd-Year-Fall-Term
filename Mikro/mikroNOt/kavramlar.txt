@@ -1,0 +1,161 @@
+VON NEUMAN MIMARISI 
+    => program ve veri addresslerine ulasirken ayni yolu kullanan mimariyi 
+        temsil eder 
+
+
+HARWARD MIMARISI 
+    => program ve veri addreslerine ulasirken farkli baglanti yollarini 
+    kullanan yapiyi temsil eder 
+
+
+Little Endian 
+    => verinin dusuk anlamli bytindan yuksek anlamli bytina dogru yerlestirme 
+    islemini dusuk addresten yuksek adrese dogru gerceklestiren mantik anlayisina 
+    Little Endian;format denir. Bu yaklasimin tam tersi seklinde bir yakalasim 
+    ile dusuk addresleri buyuk anlamli byte verileri ile dolduran format ise 
+    Big Endian olarak isimlendirilir. 
+
+
+DATA BUS
+    => veri aktarimini saglayan yapilar data bus olarak isimlendirilir 
+
+
+CONTROL BUS 
+    => control isaretlerinin aktarilmasini saglayan yapilara control bus denir 
+
+
+ADDRESS BUS
+    => Hangi bellek veya cevre biriminin hangi icerigine erisilecegini belirleyen 
+    yapinin ismi de address bustur. 
+
+ALU 
+    => Islemci icerisinde yer alan cesitli aritmetik ve lojik islemleri kontrol 
+    uclarina ve iki adet giris degerlerine gore yerine getiren bir tumdevreyi 
+    ifade etmektedir. Alu icerisinde herhangi bir kod cozumu yoktur burada sadece 
+    + - / * gibi aritmetik islemler yerine getirilir. 
+
+
+Onbellek CACHE 
+    => bellek hiararsisinde yazmaclardan sonra elen birimlerdir. Erisim hizi 
+    ana bellege gore yuksek olup veri erisiminin ZAMAN YERELLIGI (temporal locality)
+    ve KONUM YERELLIGI (spatial locality) ozelliginden yararlanarak ortalama 
+    veri erisimi suresinin azalmasini saglar. 
+
+
+MERKEZI ISLEM BIRIMI CPU 
+    => Fonksiyonel bloklarin farkli tumdevreler seklinde ana kart uzeridne 
+    bir araya getirilmesiyle olusturuldugu islemci yapisi CPU olarak isimlendirilir 
+
+
+MIKRO ISLEMCI 
+    => Islemci icerisindeki fonksiyonel bloklari tek bir tumdevrede barindiriyorsa 
+    bu yapi mikroislemci olarak isimlendirilir
+
+    => Mikroislemciler genel amacli kullanim icin tasarlanmistir. Bir mikroislemci 
+    fonksiyon gosterebilmesi icin cesitli bellek ve cevre birimleri ile yardimci 
+    tumdevrelere ihtiyac duyar. 
+
+
+MIKRODENETLEYICI MIKROCONTROLLER 
+    => Tek  tumdevrede mikroislemici, bellek birimleri, cevre birimleri ve 
+    yardimci devreleri barindiran temel giris/cikis ve knotrol gorevleri yurutmek 
+    uzere tasarlanmis tumdevrelere ise MIKRODENETLEYICI ismi verilir.
+
+
+YONGADA SISTEM (system on chip SoC)
+    =>SoC yaklasimi ise ozellikle cep telefonlari ile gormekte oldugumuz tek 
+    tumdevre icerisinde mikrodenetleyici, kablosuz haberlesme, haberlesme 
+    modemleri, hucresel haberlesme modemleri, grafik islem birimleri gibi
+    birimleri sunan mimarileri ifade etmektedir. 
+
+
+TIME MULTIPLEXING 
+    => Mikroislemci sistemlerinde fonksiyonel uclarin fazlaligi ve fiziki 
+    uc sayisinin yetersiz kalmasi dolayisiyla komut yurutme cevriminin farkli
+    zaman araliklarinda ayni uclarin farkli gorevlerde kullanilmasi ile cozum 
+    elde edilmistir. Bu durum zaman cogullama (time multiplexing) olarak 
+    isimlendirilmektedir. 
+
+
+Pipeline 
+    => Mikroislemci sistemlerinde komut yurutulesinden sorumlu olan aralarinda 
+    girdi cikti iliskisi bulunan bloklarin birbirini bekleyecek sekilde tasarlanmasi 
+    seri yurutme olarak isimlendirilirken, bu bloklardan her birinin siradaki 
+    komutlarin ilgili alt gorevini yurutebilmesi ile komutlari paralel olarak 
+    isleyen yapiya Pipeline denir. 
+
+
+PREFETCH QUEUE 
+    => program belleginden bir seferde birkac komutun okunarak mikroislemic 
+    icerisindeki onyukleme kuyruguna (PREFETCH QUEUE) alinmasi soz konusu 
+    olmustur. 
+
+
+CISC ve RISK mimarileri 
+    => CISC -> complex instruction set 
+    => RISK -> reduced instruction set 
+
+
+8086 MIKROISLEMCI 
+    => 8086 mikroislemci VON NEUMAN mimarisinde, CISC organizasyonunda tasarlanmmis 
+    olup little endian formatinda veriyi saklamaktadir. Dolayisiyla 8086 komutlarinin 
+    yurutulme sureleri ve makine kodu karsiliklarinin kapladigi alanlar birbirinden 
+    farkli olabilir.
+
+
+VERI OKUMA SEKILLERI 
+    => 8086 tek okuma yazma cevriminde 
+    cift addresten 8 bit, cift addressten 16 bit 
+    ve tek addresten 8 bit 
+    veri erisimini desteklemektedir.
+
+    => Buna karsilik tek addresten 16 bitlik veri okuma islemi icin 2 cevrimlik 
+    tek addresten veri okuma islemi gerekmektedir. 
+    
+     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

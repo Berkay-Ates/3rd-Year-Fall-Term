@@ -1,0 +1,450 @@
+Cpu is one of the main resource in pc so scheduling of cpu is one of the most crucial works of the OS.  
+
+CPU-I/O BURST CYCLE 
+=> Process execution consist of a  cycle of cpu execution and I/O wait. Process execution starts with CPU BURSTS. That is followed by an IO BURSTS, which is fallowed by cpu burst and so on. 
+
+=> The durations of CPU bursts have been measured extensively. Although they vary greatly from process to process and from computer to computer they tend to have a fequency curve. 
+=> An IO bound program typically has many short CPU bursts. A CPU-bound program might have a few long CPU burst. This distribution can be important in the selection of an appropriate cpu-Scheduling algoritm. 
+
+=============================================================================================
+processleri ready queue ye long term schedular lar ceker veya ready queue den memory e de long term schedualarlar ceker. Dolayisiyla hafizada olan process sayisi yani degree of multiprogramming long term schedularin belirledigi bir istir. Short term schedular hangi processin cpu ya gidecegini belirler. Dispatcher da processi cpu ya yukler. Cpu dan processin hem ready queue ya hem waiting queue ya gecmesi ihtimali vardir. Bunlar gelecek olan iterruptlarla olur. 
+=============================================================================================
+
+CPU SCHEDULER 
+Whenever the cpu becmoes idel the OS have to select one of the process in the ready queue to be executed. The selection process is carrried out by the SORT-TERM SCHEDULER or CPU SCHEDULAR. 
+
+PREEMPTIVE SCHEDULING 
+cpu-scheduling decisions may place under the folloing four circumstances 
+1- When a process switches from the running state to the waiting state 
+2- When a process switches from the runnning state to the ready state 
+3- When a process swithces from the waiting state to the ready state 
+4- When a process terminates 
+
+For situations 1 and 4 there is no choice in terms of scheduling. For 1 and 4 we say that the scheduling scheme is NONPREEMTIVE or COOPORATIVE. Otherwise it is PREEMPTIVE.
+
+Under nonpreemptive scheduling once the CPU has been allocated to a process the process keeps the CPU until it releases the cpu either by terminating or by switching to the waiting state. 
+
+Unfortunately preemptive scheduling can result in race conditions when data are shared among several processes. 
+
+Bir process sistem cagrisi yapip kerneli calistirirken Preemtion olursa kernel calisirken kesintiye mi ugrar? OS deal with this probelem by waiting either for a system call to complete or for an I/O block to take place beforee doing a context switch. 
+
+DISPATCHER 
+The dispatcher is the module that gives control of the CPU to the process selected by the short-term scheduler. This function involves the following 
+=>Switching context 
+=>Switching to user mode 
+=>jumping to the proper location in the user program to restart that program 
+
+Dispatcher invoked during every process switch. The time it takes for the dispatcher to stop one process and start another running is know as the DISPATCH LATENCY. 
+
+SCHEDULING CRITERIA 
+To evaluate the efficiency of Scheduling algorithms there are following criteiras:
+
+1-CPU UNTILIZATION
+We want to keep the CPU as busy as possible. 
+
+2-THROUGHPUT 
+One measure of work is the number of processes that are completed per time unit, called throughput. 
+
+3-TURNAROUND TIME 
+Turnaround time is the sum of the periods spent waiting to get into memeory, waiting in the ready queue, executing on the CPU and doing I/O. 
+
+4- WAITING TIME 
+ther cpu scheduling algoritm does not affect the amount of time during which a process executes or does I/O. It affects only the amount of time that a process spends waiting in the ready queue. Waiting time is the sum of the periods spent waiting in the ready queue. 
+
+5- RESPONSE TIME 
+Thus, another measure is the time from the submission of a request until the first response is produced. This measure, called response time, is the time it takes to start responding, not the time it takes to output the response.
+
+
+It is descrable to, 
+MAXIMIMIZE cpu utilization and throughput and 
+MINIMIZE turnaround time, waiting time and response time. 
+
+
+SCHEDULING ALGORITHMS 
+CPU scheduling deals with the problem of deciding which of the process in the ready queue is to be allocated the CPU. 
+
+FIRST-COME, FIRST-SERVED SCHEDULING (FCFS)
+=> With this scheme the process that reuests the CPU first is allocated the CPU first. 
+=> When the cpu is free it is allocated to the process at the head of ready queue. 
+=> The average waiting tiem under the FCFS policy is often quite long.
+
+=> The average waiting time under an FCFS policy is generally not minimal and may vary substantially if the process Cpu burst times vary greatly. 
+
+=> Cpu ve I/O bound processler FCFS yaklasiminda her daim verimli bir sekilde calisamayabilir
+Ornegin kisa cpu isi olan processler uzun surece cpuburst bir processi cpu kuyrugunda bekleyebilirler bu esnada IO tamamen bosta kalir veya IO si yapildiginda CPU tamamen bosta kalir.
+
+=> There is a Convoy EFFECT as all the other processes wait for the one big process to get off the CPU. 
+
+
+=> FCFS algorithm is nonpreemptive.Once the CPU has been allocated to a process, that process keeps the CPU until it releases te CPU, either by terminating or by requesting I/O.
+
+
+SHORTEST JOB FIRST SCHEDULING 
+=> This alorith associates with each process the length of the process next CPU burst. When the CPU is available it is assigned to the process that has the smallest next CPU burst. 
+=> Sometimes it is also called Sorthest Job First Algorithm. 
+
+
+=> Moving a short process before a long one decreases the waiting time of the short process more than it increases the watign time of the long process. Consequently the average waiting time decreases. 
+
+=> The real difficulty with the SJF algorithm is knowing the length of the next cpu request.
+=> SJF scheduling is used frequently in long-term scheduling Although the SJF algorithm is optimal it cannot be implemented at the level of short-term cpu scheduling. 
+
+=> The next cpu burst is generally predicted as an exponantial average of the measured lengths of previous CPU burst. We can define the exponantial average with the following formula :
+
+T(n) -> nth length of the CPU burst.
+tau(n+1) -> our predicted value for the next CPU burst.\
+tau(n) -> stores the past history. 
+
+tau(n+1) = aT(n) + (1-a)tau(n)
+
+=> More commonly a=1/2 so recent history and past history are equally weighted. 
+
+=> THE SJF algorith can be preemptive or nonpreemptive. The choice areises when a new process arrives at the ready queue while a previous process is still executing. The next cpu burst of the newly arrived process may be shorter than what is left of the currently executiong process.  
+
+
+=> SJF algoritmasi ready queue ye gelen yeni process hali hazirda cpu da kosan processden daha kisa sureliyse cpu da olan processi preemt eder ve yeni geleni cpu y alir. 
+
+
+PRIORITY SCHEDULING 
+Cpu is allocated to the proces with the highest priority. Equal priority processes are scheduled in FCFS order. 
+
+Some systems use low numbers to represent low priority other use low numbers for high priority. 
+
+Internally Defined Priority 
+=> Time limits, memory requirements, the number of open files and the ratio of average I/O burst to average cpu burst have been used in computing priorities. 
+
+External Priorities 
+=> External priorities are set by criteria outside the operating system such as the importance of the process the type and amount of funds being paid for computer use the department sponsoring the work and other often political factors. 
+
+
+PRIORITY SCHEDULING PREEMPTIVE OR NONPREEMPTIVE 
+A preemptive priority scheduling algorith will preempt the cpu if the priority of teh newly arrived procss is higher than the priority of the currently running proces. A nonpreemptivepriority scheduling algorith will simply put the new proces at the head of the ready queue. 
+
+
+A major probelm with priority shceduling algorithm is INDEFINITE BLOCKING or STARVATION. A priority scheduling algorithm can leave some low-priority processes waiting indefinitely. 
+
+=> Solution to the problem of indefinite blockage of low priority process is aging. AGING involves gradually increadsing the priority of processes that wait in the system for a long time. 
+
+
+ROUND-ROBIN SCHEDULING 
+RR scheduling algorith is designed especially for time sharing systems. A small unit of time called TIME QUANTUM or TIME SLICE  is defined (10 to 100 milliseconds). Ready queue is like a Circular queue and CPU scheduler goes around the ready queue allocating the CPU to each process for a time interval of up to 1 time quantum. 
+=> To implement RR shceduling, we again treat the ready queue as a FIFO queue of processes. 
+ 
+
+=> in a time slice whether the process voluntarily left the cpu or process would be removed by schedular in the end of the time slice. 
+
+=> SO we can deduce that RR scheduling algorithm is preemtive. 
+
+=> q time slice 
+-> n process count 
+=> Each process must wait no longer than (n-1)xq time units until its next time quantum .
+
+=> IF Time Quantum is exteremly large then RR algorithm is the same as the FCFS. 
+=> If the quantum is extremely small the RR approach can result in a large number of context switches. 
+
+=>Turnaround time also depends on the size of the time quantum. 
+
+
+MULTILEVEL QUEUE SCHEDULING 
+FOREGROUND (interactive) prosses, BACKGROUND (batch) processes, those two types of processes have different response time requirements and so may have different scheduling needs. 
+
+ 
+=>A MULTILEVEL QUEUE scheduling algorithm partitions the ready queue into several separate queues. The processes are permanently assigned to on queue generally based on some property of the process such as memory size, process priority or process type. 
+
+=> Each queue has its own scheduling algorithm. Lets look at an example of a multilevel queue scheduling algorithm with five queues, listed belown in order of priority \
+
+1- System processes 
+2- Interactive processes 
+3- Interactive editing processes 
+4- Batch processes 
+5- Student processes 
+
+
+=> No process in the batch queue for example could run unless the queues for system processes, interactive processes and interactive editing proresses were all empty. 
+=> If an interactive editing process entered the ready queus while a batch process was running the batch process would be preempted. 
+
+=> Processler multilevel quee kullaniminda queue ler arasinda gecis yapamazlar ama yuksek oncelikli bir queue deki process de her daim alttaki processleri keser. Kendi seviyesinde olan bir processle de scheduling algoritmasina gore yarisir. 
+
+
+MULTILEVEL FEEDBACK QUEUE SCHEDULING 
+Normally when the multilevel queue scheduling algorithm is used processes are permanaently assigned to a queue when they enter the system. For example processes do not move from one queue to the other since processes do not change their foreground or background nature. 
+
+INCONTRAST TO THAT The multilevel feedback queue allows a process to move between queues. The idea is to separate processes according to the characteristics of their cpu bursts. If a process uses too much CPU time it will be moved to a lower priority queue. This scheme leaves I/O-bound and interactive processes in the higher priority queues in addition a process that waits too long in a lower priority queue may be moved to a higher-priority queues. 
+
+
+=> A process that arrives for that arrives for queue 1 will preemt a process in queue 2. A process in queue 1 will in turn be preempted by a process arriving for queue 0. 
+
+
+=> ILK gelen process Q0 a girer burada 8mikrosaniye cpu burst sureleri verilir. Eger buradaki bir process bitemiyorsa bu process Q1 e gider, buradaki cpu burst 16 mikrosaniyedir. Eger process burdada bitemiyorsa FCFS ile schedule edilen son queue nin icine alinir. Yeni eklenen queue nin tailine alinir. Q1 den birinin hizmet alabilmesi icin Q0 dan hicbirinin hizmet almiyor olmasi yani Q0 in bos olmasi gerekir. 
+
+=> Her queue icin farkli scheduling algoritmasi kullanilabilir.
+
+In general a multilevel feedbasck queue scheduler is defined by the following parameters. 
+-> The number of queues
+-> The scheduling algorithm for each queue
+-> The method used to determine when to upgrade a process to a higher priority queue
+-> The method used to determine when to demote a process to a lower priority queue
+-> The method used to determine when to demote a process to a lower priority queue
+
+
+THREAD SCHEDULING 
+
+=> User level threads are managed by a thread library and the kernel us unaware of them. To run on CPU user level threads must ultimately be mapped to an associated kernel level thread. 
+
+
+CONTENTION SCOPE 
+On systems implementing the manytoone and manytomany models the thread library schedulers user-level threads to run on an available  Light Weight Process (LWP). This scheme is known as a PROCEESS CONTENTION SCOPE (pcs). To decide which kernel-level thred to schedule onto a cpu the kernel uses SYSTEM CONTENTION SPOPE (scs). 
+
+
+PTHREAD SCHEDULING 
+PTHREAD SCOPE PROCESS (PSP) schedules threads using PCS scheduling
+PTHREAD SCOPE SYSTEM (PSS) schedules threads using SCS scheduling
+
+
+=> PSP schedules user-level threads onto available LWP. Pss scheduling polichy will create and bind an LWP for each user-level thread on manytomany systems, effectively mapping threads using the onetoone policy. 
+
+=> The pthread IPC provides two functions for getting and setting the contenction scope policy. 
+
+
+MULTIPLE PROCESSOR SCHEDULING 
+
+APPROACHES TO MULTIPLE PROCESSOR SCHEDULING 
+
+=> one method called ASYMMETRIC MULTIPROCESSING where cpu scheduliing in a multiprocessor system has all scheduling decisions,I/O proccessing and other system activities handeld by a single processor. Others execute only user code. 
+
+=> second method is SYMMETRIC MULTIPROCESSING (SMP) where each processor is self-scheduling. All processes may be in a common ready queue or each processor may have its own private queue of ready processes. 
+
+
+PROCESSOR AFFINITY 
+=> To have cache coherency SMP systems try to avoid migration of processes from one processor to another and instead attempt to keep a process running on the processor. This is known as POCESSOR AFFINITY. 
+
+
+SOFT AFFINITY 
+=> The OS will attempt to keep process onn a single processor but it is possible for a process to migrate between procesors.
+
+HARD AFFINITY 
+=> Allowing a processes to specify a subset of processors on which it may run. 
+
+
+=> NUMA (non-uniform memory access) in which CPU has faster access to some parts of main memory than to other parts. Typically, this occurs in systems containing combined CPU and memory boards. The CPUs on a board can access the memory on that board faster than they can access memory on other boards in the system. If the operating system’s CPU scheduler and memory-placement algorithms work together, then a process that is assigned affinity to a particular CPU
+can be allocated memory on the board where that CPU resides
+
+
+LOAD BALAMCING 
+=> On SMP systems it is important to keeep the workload balanced among all processors to fully utilize the benefits of having more than one processor. 
+
+=> LOAD BALANCING attempts to keep the workload evenly distributed across all processors in an SMP systems. 
+
+=>If each core has its own private queue then LOAD BALANCING is crucial however if there is a common queue than LOAD BALANCING mostly unnecessary. 
+
+=> There are two general approaches to load balancing PUSH MIGRATION and  PULL MIGRATION. 
+
+ With push migration, a specific task periodically checks the load on each processor and—if it finds an imbalance—evenly distributes theload by moving (or pushing) processes from overloaded to idle or less-busy processors. Pull migration occurs when an idle processor pulls a waiting task from a busy processor. 
+
+=> Interestingly load balancing often counteracts the benefits of processor affinity.
+
+
+MULTICORE PROCESSORS 
+Place multiple processor cores on the sampe physical chip resulting in a MULTICORE PROCESSOR. Each core maintains its architectural state and thus appears to the operating system to be a separate physical processor. SMP systems that use multicore processor is much more efficient. 
+
+=> When a processor accesses memory it spends a signifigant amount of time waiting for the data to become avaliable. This situation known as a MEMORY STALL, may occur for various reasons such as cache miss. 
+
+=> To remedy this situation many recent hardware designs have implemented multithreaded processor cores in which two or more hardware threads are assigned to each core. That way if one thread stals while waiting for memory the core can switch to another thread.  As a result each time still only one operation can be done in cpu core but it supports multiple threads in same time. 
+
+
+COARSE-GRAINED and FINE-GRAINED 
+=> With coarse-grained multithreading a thread executes on a processor unitl a long-latency event such as a memory stall occurs. However the cost of switching threads is high since the intruction pipelene must be flushed before the other thread can begin executon on the processor core. 
+
+=> Fine-grained multithreding switches between threads at a much finer level of ranularity at the boundary of an instruction cycle. 
+
+
+=> Multithreaded multicore processor actually requires two different levels of scheduling. On one level are the scheduling decisions that must be made by the operating sytem as it chooses which software thread to run each hardware thread.
+
+=> A second level of scheduling specifies how each core decids which harware thread to run. 
+
+
+REAL TIME CPU SCHEDULING 
+SOFT REAL-TIME SYSTEMS provide no guarantee as to when a crittical real-time process will be scheduled. They guarantee only that the process will be given preference over noncritical process. 
+
+HARD REAL-TIME SYSTEMS  have stricker requiremests. A task must be serviced by its deadline service after deadline has expired is the same as no servicee at all. 
+
+MINIMIZING LATENCY 
+When event occurs the system must respond to and service it as auickly as possivle. We refer to EVENT LATENCY as the amount of time that elapses from when an event occurs to when it is serviced. EVENT LATENCY sensitivity changes system to system such as F16 have to have very less event latency. 
+
+TWO TYPES OF LATENCIEES AFFECT THE PERFORMANCE OF REAL-TIME SYSTEMS 
+=> Interrupt Latency 
+=> Dispatch Latency 
+
+INTERRUPT LATENCY refers to the period of time from the arrival of an interrupt at the cpu to the start of the routine taht services the interrupt caused event. One important factor contributing to interrupt latency is the amount of time intterrupts may bedisabled while kernel data structures are being updated. 
+n
+The amount of time required for the scheduling dispatecher to stop one process and start another is known as DISPATCH LATENCY. 
+
+
+REAL TIME SYSTEM SCHEDULING METHODS OR ALGORITHMS 
+
+PRIORITY-BASED SCHEDULING 
+=> More important tasks are assigned higher prioritites. If the scheduler also supports preemption a process currently running on the cpu will be preempted if a higher priority process becomes available to run. 
+
+
+=> The processes are considered periodic. That is, they require the CPU at constant intervals (periods). Once a periodic process has acquired the CPU, it has a fixed processing time t, a deadline d by which it must be serviced by the CPU, and a period p. The relationship of the processing time, the deadline, and the period can be expressed as 0 ≤ t ≤ d ≤ p. The rate of a periodic task is 1/p. 
+
+periodic => Require the cpu at constant intervals.
+processing time => once a periodic process has acquired the cpu it has a fixed processing time t 
+deadline => by which process must be serviced by the cpu. 
+rate => the rate of a periodic task is 1/p 
+
+=> Using a technique known as an ADMISSION-CONTROL algorithm the scheduler does one of two things. It either admists the process guaranteeing that the process will complete one time or rejects the request as impossible if it cannot guaranteee that the task will be serviced by its deadline. 
+
+
+=> What is unusual about this form of scheduling is that a process may have to announce its deadline requirements to the scheduler. Then, using a technique known as an admission-control algorithm, the scheduler does one of two things. It either admits the process, guaranteeing that the process will complete on time, or rejects the request as impossible if it cannot guarantee that the task will be serviced by its deadline.
+
+
+
+RATE MONOTONIC SCHEDULING 
+
+The RATE-MONOTONIC scheduling algorithm schedules periodic tasks using a static priority policy with preemption. The shorter the period the higher the priority the longer the period the lower the priority. 
+
+
+
+EARLIEST DEADLINE FIRST SCHEDULING 
+EDF scheduling dynamically assigns priorities according to deadline. The earlier the deadline the higher the priority the later the deadline the lower the priority. When a process becomes runnable it must announce its deadline requirements to the systeem . Priorities may have to be adjusted to reflect the deadline of the newly runnable process. 
+
+
+PROPORTIONAL SHARE SCHEDULING 
+PROPORTIONAL SHARE schedulers operate by allocating T shares among all applications. An application can receive N shares of time thus ensuring that the application have N/T of the total processor time. 
+
+
+T = 100 
+
+A = 50 Shares 
+B = 15 
+C = 20 
+
+An admission control policy will admit a client requestion a particular number of shares only if sufficent shares are availabel. Total share is 85 for A B and C if there is also D with 30 share addmission control center will deny D entry into system. 
+
+
+
+POSIX REAL-TIME SCHEDULING 
+Posix defines two scheduling classes for real-time threads
+SCHED_FIFO
+SCHED_RR 
+
+sched_fifo 
+=> sched_fifo schedules threads according to a first-come first-served policy using a fifo queue. However there is no time slicing among threads of equal priority. Therefore the highest-priority real-time thread at the front of the FIIFO queue will be granted the cpu until it trerminates or blocks 
+
+
+sched_rr
+=> sched_rr users round robin policy. It is similar to sched_fifo except that it provices time slicing among threads of equal priority.
+
+The POSIX  API specifies the following two functions for getting and setting the scheduling pol.
+pthread attr getsched policy(pthread attr t *attr, int *policy)
+pthread attr setsched policy(pthread attr t *attr, int policy)
+
+
+LINUX SCHEDULING ALGORITHM 
+Before linux was using traditional unix synchronizing algorithm. After that linux used O(1) scheduler. Because it led to poor response times for interactive processes that are common on may desktop now linux uses COMPLETELY FAIR SCHEDULER(CFS).  
+
+Linux assigns cpu proportions to the process proportionally to their priority. As lower nice value means as higher priority Nice values range from -20 to +19. 
+
+CFS does not use discrete values of time slices and instead identifies a TARGETED LATENCY which is an interval of time during which every runnable task shoudl run at least once. Proportion of cpu time are allocated from the value of targeted latency. 
+
+The CFS scheduler doesn't directly assign priorities. Rather it records how long each task has run by maintaining the VIRTUAL RUN TIME of each task using the per-task variable vruntime.
+
+The virtual run time is associated with a decay factor based on the priority of a task: lower priority tasks have higher ratees of decay than higher priority tasks. 
+
+
+For tasks at anormal priority (nice=0), virtual run time is identical to actual physical run time. thus if a task with default priority runs for 200  milliseconds it vruntime will also be 200 milliseconds. However if a lower priority task runs for 200 milliseconds its vruntime will be higher than 200 milliseconds. Similarly if a higher priority task runs for 200 milliseconds its vruntime will be less than 200 milliseconds. 
+
+To decide which task to run next the scheduler simply select the task that has the smallest vruntime value. In addition a higher priority task that becomes available to run can preempt a lower priority task. 
+
+
+
+LINUX uses two separate priority ranges one for REAL TIME tasks and a second for NORMAL TASKS. REAL TIME tasks are assigned static priorities. withing the range of 0 to 99 and normal tasks are assigned priorities from 100 to 139. 
+
+
+WONDOWS SCHEDULING 
+ The Windows scheduler ensures that the highest-priority thread will always run. The portion of the Windows kernel that handles scheduling is called the dispatcher.A thread selected to run by the dispatcher will run until it is preempted by a higher-priority thread, until it terminates, until its time quantum ends, or until it calls a blocking system call, such as for I/O.
+
+
+=> Priorities are divided into two classes. THe VARIABLE CLASS contains threads having priorities from 1 15 and the REAL TIME CLASS contains threads with priorities rangign from 16 to 31. There is also thread running at priority 0 that is used for memory management. 
+
+
+If no ready thread is found the dispatche will executee a special thread called IDLE THREAD. 
+THE WINDOWS API identifies the following six priority classes to which a process can belong.
+• IDLE PRIORITY CLASS
+• BELOW NORMAL PRIORITY CLASS
+• NORMAL PRIORITY CLASS
+• ABOVE NORMAL PRIORITY CLASS
+• HIGH PRIORITY CLASS
+• REALTIME PRIORITY CLASS
+
+
+A thread within a given priority classes also has a relative priority. Thevalues for relative priorities include:
+• IDLE
+• LOWEST
+• BELOW NORMAL
+• NORMAL
+• ABOVE NORMAL
+• HIGHEST
+• TIME CRITICAL
+
+Priority class and relative priority combine to give numeric priority.
+
+
+ALGORITHM EVALUATION 
+To select an scheduling algorithm we must first define which criteria we have such as high throughput or response time.
+
+DETERMINISTIC MODELING 
+One major class of evaluation methods is analytic evaluation. Analytic evaluation uses the given algorithm and the system workload to produce a formula or number to evaluate the performance of the algorithm for that workload.
+
+=> Deterministic modeling is one type of anaylytic evaluation. This method takes a particular predetermined workload and defines the performance of each algorithm for that workload. 
+
+=> QUEUEING MODELS 
+
+On many systems, the processes that are run vary from day to day, so there is no static set of processes (or times) to use for deterministic modeling. What can be determined, however, is the distribution of CPU and I/O bursts. These distributions can be measured and then approximated or simply estimated. The result is a mathematical formula describing the probability of a particular CPU burst.
+
+
+LITTLES FORMULA
+n => average queue length
+W => average waiting time in queue
+LAMDA => the average arrival rate for new processes. 
+
+n = LAMDA x W => this equation known as LITTLE'S FORMULA 
+
+SIMILATIONS 
+To get more accurate evaluation of scheduling algorithms we can use similations. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

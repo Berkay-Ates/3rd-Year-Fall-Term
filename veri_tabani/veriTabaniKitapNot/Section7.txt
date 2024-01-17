@@ -1,0 +1,151 @@
+			RELATIONSAL DATABASE DESIGN 
+It is possible  to generate a set of relation schemas directly from the E-R design. 
+
+Design Alternative: Larger Schemas
+Design Alternative: Smaller Schemas
+
+We need to write a rule that says 'if there were schema (dept_name,budget) then dept_name is ablo to serve as the primary key. THis rule is specified as a FUNCTIONAL DEPENDENCY 
+		dept_name -> budget 
+
+
+Observations such as these and the rules (functional dependencies in particular) that result from them allow the database designer to recognize situations where a schema ought to be split or decomposed into two or more schemas. Finding the right decomposition is much harder for schemas with a large number of attributes and several functional depencencies. To deal with this we shall rely on a forma methodolagy that we depelop later in this chapter. 
+
+If there is mistakes in decomposition there would be information loss or ambiguity in joining the decomposed schemas. Clearly we would like to avoid such decompositions. WE shall refer to such decompositions as being LOSSY DECOMPOSITIONS and conversely to those that are not as LOSSLESS DECOMPOSITIONS. 
+
+				
+			ATOMIC DOMAINS AND FIRST NORMAL FORM
+When we create tables from E-R design that contans multivalued or composite attributes we eliminate this substructures. For composite attributes we let each component be an attribute in its own right. For multivalues attrubutes we create one tuple for each item in a mutivalued set. In the relational model we formalize this idea that attributes do not have any substructure. A domain is atomic if elements of the domain are considered to be indivisible units. We say that a relation shcema R is in first normal form. 1NF if the domains off all attributes of R are atomic. 
+
+If a attribute just a number however if that number consists from combination of subparts for example first 3 digit is year and last 3 digit is dep_number then we cannot say this number attribute is atomic. Moreover if such a attribute exists in schema we cannot say this schema is in first normal form. 
+
+ In many domains where entities have a complex structure, forcing a first normal form representation represents an unnecessary burden on the application programmer, who has to write code to convert data into atomic form. There is also the runtime overhead of converting data back and forth from the atomic form. Support for nonatomic values can thus be very useful in suchdomains
+
+
+
+		   DECOMPOSITION USING FUNCTIONAL DEPENDENCIES 
+A instance of a relation that satisfies all such resl-world constraints is called a LEGAL INSTANCE of the relation. A legal instance of a databes is one whre all the rlelations instances are legal instances. 
+
+A superkey is a set of attributes that uniquely identifies an entir/e tuple, a functional dependency allows us to express onstraints that uniquely identify that values of certain attrubutes. 
+
+• Given an instance of r(R), we say that the instance satisfies the functional
+dependency a → b if for all pairs of tuples t1 and t2 in the instance such that
+t1[a] = t2[a], it is also the case that t1[b] = t2[b].
+
+• We say that the functional dependency a → b holds on schema r(R) if, in
+every legal instance of r(R) it satisfies the functional dependency.
+
+
+Using the functional-dependency notation, we say that K is a superkey of r(R) if
+the functional dependency K → R holds on r(R). In other words, K is a superkey
+if, for every legal instance of r(R), for every pair of tuples t1 and t2 from the
+instance, whenever t1[K] = t2[K], it is also the case that t1[R] = t2[R] (that is,
+t1 = t2).
+
+WE SHALL USE FUNCTIONAL DEPENDENCIES IN TWO WAYS: 
+
+1-To test instances of relations to see whether they satisfy a given set F of functional dependencies. 
+2-To specify constraints on the set of legal relations. WE shall thus concern our selves with only those relation instances that  satisfy a given set of functional dependencies. If we wish to constrain ourselves to relations on schema r(R) that satisfy a set F of functional dependencies, we say F holds on r(R). 
+
+TRIVIAL 
+Some functional dependencies are said to be trivial because they are satisfied by all relations. For example, A → A is satisfied by all relations involving
+attribute A. Reading the definition of functional dependency literally, we see that,for all tuples t1 and t2 such that t1[A] = t2[A], it is the case that t1[A] = t2[A]. Similarly, AB → A is satisfied by all relations involving attribute A. In general, a functional dependency of the form a → b is trivial if b ⊆ a.
+
+
+It is important to realize that an instance of a relation may satisfy some functional dependencies that are not required to hold on the relation’s schema. In the instance of the classroom relation of Figure 8.5, we see that room number → capacity is satisfied. However, we believe that, in the real world, two classrooms in different buildings can have the same room number but with different room capacity. Thus, it is possible, at some time, to have an instance of the classroom relation in which room number → capacity is not satisfied. So, we would not include room number → capacity in the set of functional dependencies that hold on the schema for the classroom relation. However, we would expect the functional dependency building, room number → capacity to hold on the classroom schema
+
+
+Given that a set of functional dependencies F holds on a relation r(R) it may be possible to infer that certain other functional dependencies must also hold on the relation. For example given a schema r(A,B,C) if functional dependencies A → B and B → C, hold on r, we can infer the functional dependency A → C must also hold on r. 
+This is because given any value of A there can be only one correspondign value for B, and for that value of B there can only be one correspondign value for C. We fill use the notation F+ to denote the CLOSURE of the set F, that is the set of all functional dependencies that can be inferred given set F. Clearly F+ contains all of the functional dependencies in F. 
+
+			     BOYCE-CODED NORMAL FORM 
+One of the more desirable normal forms tha we can obtain is Boyce-Coded Normal Form (BCNF). It eliminates all redundancy that can be discovered based on functional dependencies. A relation schema R is in BCNF with respect to a set F of functional dependencies if, for all functional dependencies in F+ of the form a->b where a ⊆ R and b ⊆ R, at least one of the following holds:
+
+• a → b is a trivial functional dependency (that is, b ⊆ a).
+• a is a superkey for schema R.
+
+We now state a general rule for decomposing that are not in BCNF. Let R be a schema that is not in BCNF. Then there is at least one nontrivial functional dependency   a → b such that a is not a superkey for R. We replace R in our design with two schemas:
+• (a ∪ b)
+• (R − (b − a))
+
+When we decompose a schema that is not in BCNF, it may be that one or more of the resulting schemas are not in BCNF. In such cases, further decomposition is required, the eventual result of which is a set of BCNF schemas.
+
+
+BCNF AND DEPENDENCY PRESEVATION 
+We have seen several ways in which to express databse consistency constrainst: primary-key constraints, functional dependencies, check constraints assertions and triggers. Testing all of this can be costrly so one solution is design the databse in a way that constraints can be tested efficiently. 
+
+We shall see that in some cases decomposition into BCNF can prevent efficient testing of certain functional dependencies. 
+
+In BCNF design there is no schema that includes all the attributes appearing in the functional dependency. Because our design makes it computationally hard to enforcce this functional dependency we say our design is not dependency preserving. Because dependency preservation is usualy considered desirable, we consider another normal form weaker than BCNF that will allow us to preserve dependencies that normal form is called third normal form. 
+
+
+				THIRD NORMAL FORM 
+BCNF requires that all nontrivial dependencies be of the form a->b, wehre a is a superkey. Third normal form 3NF relaxes this constraint slightly by allowing certain nontrivial funtional dependencies whose left side is not a superkey.
+
+A relation schema R is in THIRD NORMAL FORM with respect to a set F of functional dependencies if, for all functional dependencies in F+ of the form a → b, where
+a ⊆ R and b ⊆ R, at least one of the following holds:
+
+• a → b is a trivial functional dependency.
+• a is a superkey for R.
+• Each attribute A in b − a is contained in a candidate key for R.
+
+Note that the third condition above does not say that a single candidate key must
+contain all the attributes in b − a; each attribute A in b − a may be contained in
+a different candidate key.
+
+Observe that any schema that satisfies BCNF also satisfies 3NF, since each of its functional dependencies would satisfy one of the first two alternatives. BCNF is therefore a more restrictive normal form than is 3NF. 
+
+
+We have seen the trade-off that must be made between BCNF and 3NF when there is no dependency-preserving BCNF design.
+
+
+Comparison of BCNF and 3NF
+Of the two normal forms for relational database schemas, 3NF and BCNF there are
+advantages to 3NF in that we know that it is always possible to obtain a 3NF design
+without sacrificing losslessness or dependency preservation. Nevertheless, there
+are disadvantages to 3NF: We may have to use null values to represent some of
+the possible meaningful relationships among data items, and there is the problem
+of repetition of information.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
