@@ -1,0 +1,629 @@
+                        CHAPTER 11 
+
+BILISIM SUCLARI-1
+Avrupa Ekonomik Toplulugu bilisim suclarini 5'e ayirmistir
+-> Bilgisayarda veya herhangi bir yerde bulunan bir kaynaga ulasip 
+    bu kaynagi bozmak veya baska yere aktarmak. 
+-> Bir sahtekarlik yapmak icin pc deki bilgileri bozmak veya silmek 
+-> Bilgisayar sisteminin calismasini engellemek 
+-> Ticari anlamda yararlanmak icin pc programinin sahibini zarara
+    ugratmak 
+-> Yetkisiz bir sekilde sisteme girip degisiklikler yapmak 
+
+
+BILISIM SUCLARI -2
+-> Bir bilgisayar ile gerceklestirilen suclar 
+-> Bilgisayar veya bir bilgi sistemi uzerinde islenen suclar 
+-> bilisim ortaminda yapilan yayimlar ve hizmetler ile islenen suclar 
+-> Islenen suc ile ilgili bilgilerin bilgisayarda tutulmasi 
+-> Bilgisayar aglarinda islenen suclar 
+-> Fikri mulkiyet haklarinin calisnmasi 
+
+BILISIM SUCLARI ILE ILGILI YASALAR 
+-> Yeni Turk Ceza Kanunu ( TCK-5237 )
+    sisteme girme, verileri yok etme, banka kartlarina zarar verme vs. 
+-> Yeni Ceza Mahkemeleri Kanunu (CMK-5271)
+-> Elektronik Imza Kanunu (5070)
+-> Internet Ortanimda Yapilan Yayinlarin Duzenlenmesi ve Bu Yayinlar 
+    Yoluyla Islenen Suclarla Mucadele Edilmesi Hakkinda Kanun (5651)
+-> Kisisel Verilerin Korunmasi Kanunu (6698)
+
+
+Turkiye AVRUPA SANAL SUCLAR SOZLESMESINI 2010 da kabul etmis ve 
+2014 de bu sozlesmedeki maddelere uymayi kabul etmistir. 
+
+AVRUPA SANAL SUCLAR SOZLESMESI KAPSAMI 
+-> Bilgisayar veri ve sistemlerinin gizliligine, butunlugune ve kullanimina 
+acik bulunmasina yonelik suclar 
+-> Bilgisayarla iliskili suclar 
+
+BILISIM SUCLARINI SORUSTURMA VE KOVUSTURMA 
+-> Bilisim suclarinin niteligi bilinen suclardan farkli oldugu icin sorusturma 
+   ve kobusturmanin buna gore yapilmasi gerekir. bilisim ve ilgili suclari 
+   digerlerinden ayiran ozellikleri 
+
+-> Sucun islendigi yer ile sucu isleyen ayni yerde olmayabilir 
+-> Sorusturmanin hizli olmasi gerekir 
+-> Kanitlarin toplanmasi ozel bilgi gerektirir 
+-> Olayi ancak bilisim uzmanlari degerlendirebilir 
+
+
+ADLI BILISIM 
+Bilisim ortamlarindan elde edilen bulgularin cesitli teknik donanim 
+ve yazilimlar kullanilarak hukuki kanitlara donusturulmesi surecidir
+
+-> Adli bilisimin ilgilandigi alanlar 
+    -> Disk ile ilgili calismalar  
+    -> Bellek uzerindeki calismalar 
+    -> Bilgisayar agi ile ilgili olanlar 
+    -> Gezgin sistemler ile ilgili calismalar 
+
+-> Calisma alanina bakilmaksizin adli bilisim suclari 3 asamada surdurulur 
+    -> Kanit (delil) elde etme ve saklama 
+    -> Inceleme ve cozumleme 
+    -> Raporlama ve mahkemeye sunma 
+
+
+Bilgisayar Belleginde Bulunan Bilgiler 
+    -> Bilgisyarin belleginde bulunan bilgiler delil olabilir. 
+
+Bilgisayarin Diskinde Bulunan Bilgiler 
+    -> Bilgisayar diskinde bulunan ve olusturulma, sahiplik gibi sonradan 
+    degistirilebilir bilgiler adli kanit niteligi tasimazlar. 
+
+CD/DVD Uzerinde Bulunan Bilgiler 
+    -> Cd veya DVD uzerindeki zaman bilgisi de degistirilebilecegi icin 
+    cd veya dvd de adli delil olamaz. 
+
+Tasinabilir Disk ve Cubuk Bellek Uzerinde Bulunan Bilgiler 
+    -> Tasinabilir disk veya cubuk bellek icindeki verilerin zaman damgasi 
+    gibi ozellikleri de degistirilebilecegi icin tasinabilir disk veya 
+    cubuk bellek de adli kanit ozelligi tasimaz. 
+
+UZAK ORTAM ve BULUTTA BULUNAN BILGILER 
+    -> Uzak ortam ve bulutta saklanan verilerin adli delil olarak 
+    degerlendirilebilmesi icin oncelikle bu ortami saglayan kurulusa
+    guvenmek gerekir. 
+
+E POSTALAR 
+    -> Bazi e postalar kanit olarak sunulabilmektedir fakat, e posta 
+    gibi verilerin kanit olarak sunulabilmesi icin e posta hizmeti 
+    saglayicisina ve e postaya ait verilerin toplanis sekline guvenilmesi 
+    gerekmektedir. 
+
+
+ADLI KANIT TOPLAMA-1 
+    -> Bilgisayarda bulunan veriler toplanip olay yerinde kopyalarinin 
+    alinmasi sonra ilgili bilgisayar veya veri kaynaginin taraflara geri 
+    verilmesi gerekir. Mahkemeye sunulan cd/dvd gibi kanitlarin kaynaklarinin
+    da mahkemeye sunulmasi gerklidir. 
+
+
+INCELEME VE COZUMLEME 
+    Toplanan veriler sifrelenmis ise bu sifrelenin asilmasi icin de 
+    ilgili uzmanlara ihtiyac vardir. 
+
+RAPORLAMA 
+    Ilgili calismalar tamamlandiktan sonra elde edilen bilgiler hakimin 
+    anlayacagi sekilde raporlanarak mahkemeye sunulmalidir. 
+
+
+
+ADLI BILISIM CALISMALARI=1 
+
+    DISK INCELEMESI 
+    BELLEK INCELEMESI 
+    BILGISAYAR AGI INCELEMESI 
+    GEZGIN SISTEMLERIN INCELENMESI (cep telefonu vs)
+
+
+
+ADLI BILISIMIN ONEMI 
+    Adli bilisim kurumu gunumuzde suclularin ortaya cikarilmasi kadar 
+    sucsuzlerin belirnelnmesinde de onemli bir rol oynar dolayisiyla 
+    bu bakimdan en az adli tip kadar onemli bir kurumdur. 
+
+
+
+
+YASALAR 
+-> Turk Ceza Kanunundaki Bilisim ile Ilgili Maddeler TCK-5237 
+    -> Fikir ve Sanat Eserleri Kanunu (5846)
+    -> Elektronik Imza Kanunu (5070)
+    -> Internet Kanunu (5651)
+    -> Kisisel Verilerin Korunmasi Kanunu (6698)
+    -> 
+
+
+                        CHAPTER 10
+                 (EGITIM ARASTIRMA YAYIN ETIGI)
+Universitelerin temel olarak uc gorevi bulunmaktadir 
+-> Egitim 
+-> Arastirma 
+-> Yayin 
+
+OGRENCILER ICIN ETIK ILKE VE KURALLAR 
+Bir ogrencinin egitim ve ogrenim hayati boyunca ozen gostermesi 
+gereken davranislar etik ilke ve kurallar su acilardan ele alinmalidir 
+    -> Ogrenci olarak uymasi gereken etik ilke ve kurallar 
+    -> Arkadaslari ile iliskilerinde uymasi gereken etik ilke ve kurallar 
+    -> Ogretim elemanlarina karsu uymasi gereken etik ilke ve davranislar 
+    -> Universiteye karsi davranislari ile ilgili etik ilke ve kurallar 
+
+
+
+OGRETIM ELEMANLARI ICIN ETIK ILKELER 
+Bir ogretim uyesinin temel olarak uc gorevi vardir: 
+    -> Ogrencileri egitmek ve ogretmek 
+    -> Bilimsel arastirma yapmak 
+    -> Toplumun bilgilendirilmesi ve bilinclendirilmesini saglamak 
+
+Ogretim Elemaninin Uymasi Gerken Etik ilke ve kurallar: 
+    -> Bilgilerini Guncelleme
+    -> Ogretim Niteligini Gelistirme 
+    -> Dogru ve Durust Olma 
+    -> Verici Olma 
+    -> Sabirli olma 
+    -> Kitap Yazma 
+    -> Dersi Yardimcisina Verdirme 
+    -> Ogrenciyi Asagilama 
+    -> Zamana Saygisizlik 
+    -> Calismalara Ogrencileri Katma 
+    -> Duzgun Sinav Yapmak 
+    -> Kendisi Icin Istekte Bulunma 
+    -> Kayirma 
+    -> Hediya Almama 
+    -> Yetkinligini Bilme 
+    -> Devamlilik 
+
+
+
+            AKADEMIK OZGURLUK, TUTARLILIK VE SORUMLULUK 
+Bir Universitede bilimsel arastirmalarin yapilabilmesi icin gerkli 
+kosullar soyle siralanmaktadir 
+-> Akademik Ozgurluk 
+-> Akademik Ozerklik 
+-> Akademik Etik 
+-> Akademik Yarasirlik 
+
+
+AKADEMIK ARASTIRMALARDA YAPILAN YANLISLAR 
+-> Uydurma 
+-> Carpitma 
+-> Asirma 
+-> Korsanlik 
+-> Cogaltma 
+-> Dilimleme 
+-> Yazar haklarinda yaniltma 
+-> Destegi gizleme ve tarafli yayinlar 
+-> Tarafli kaynaklar 
+
+UYDURMA 
+-> Arastirma sirasinda elde edilmeyen verileri elde edilmis gibi gostermektir 
+
+CARPITMA 
+-> Arastirma sonuclarinin istenilen bicime getirmek amaciyla arastirma 
+kayitlarinda kullanilan aygitlarda ve islemlerde degisiklik yapma eylemine 
+verilen addir. 
+
+KORSANLIK 
+-> Yayimlanmis bir yayinin tumunu veya bir bolumunu kaynak gostermeden 
+veya yazarinin onayini almadan kendi yayini gibi yeniden yayinlama
+eylemine korsanlik denmektir 
+
+COGALTMA 
+-> Ayni arastirma sonuclarini ayni anda birden fazla dergide yayimlanmasi 
+amaciyla gondermek ve yayimlatmak eylemine cogaltma adi verilmektedir. 
+
+DILIMLEME 
+-> Tek bir arastirmanin sonuclarini bolerek birden fazla yayin halinde 
+sunma eylemine dilimleme adi verilmektedir. Amac yayin saysini artirmaktir 
+
+
+YAZARLIK HAKLARINDA YANILTMA 
+-> Bir arastirmaya katkisi olmayan bir kisinin adini ekleme veya katkisi 
+olan bir arastirmacinin adini yazmama ya da yazarlarin ad siralarini 
+katkilarina uygun olmayan bicimde yazma eylemlerine yazar haklarinda 
+yaniltma adi verilmektedir. 
+
+
+DESTEGI GIZLEME VE TARAFLI YAYINLAR 
+-> Bilimsel calismalar ticari kuruluslar tarafindan desteklenmektedir 
+bilimsel calismanin sonunda ticari kurumlarin yapmis oldugu destegi 
+gizleyerek calismanin yayinlanmasi dogru degildir. 
+
+
+TARAFLI KAYNAKLAR 
+-> Bir arastirmaya iliskin yayinin kaynaklar bolumunde yalniz calismayi 
+olumlu yonde destekler nitelikteki calismalari gostermek desteklemez 
+nitelikteki calismalari kaynaklar icinde yer vermemek dolayisiyla kaynaklari 
+tarafli olarak secmek eylemine tarafli kaynaklar ile yaniltma eylemi denir. 
+
+
+ETIK OLMAYAN DAVRANISLARIN NEDENLERI 
+-> EGITIM EKSIKLIGI 
+-> BIREYSEL OZELLIKLER 
+-> BILIMDE NICELIGIN NITELIGIN ONUNE GECMESI 
+-> MALI NEDENLER 
+
+
+
+                    MESLEK VE MUHENDISLIK ETIGI 
+                            (CHAPTER 9)
+-> Ahilik 
+
+-> Meslek Etigi 
+Meslek etiginin temel amaclari 
+    -> Meslek ici rekabeti duzenlemek 
+    -> Yetersiz ve ilkesiz uyeleri ayiklamak 
+    -> Hizmet hedeflerinin korunmasini saglamak 
+    -> Meslek disiplinini saglamak 
+    -> <eslege bagliligi saglamak 
+
+Meslek etiginin Temek ilkeleri 
+    -> Dogruluk 
+    -> Uasallik 
+    -> Yeterlik 
+    -> Guvenilirlik 
+    -> Meslege baglilik 
+
+
+MUHENDISLERIN GOREV VE SORUMLULUKLARI -1 
+-> Zorunluluk 
+-> Sorumluluk 
+-> Ozen 
+-> Kinama ya da Odullendirme 
+
+Muhendisin Kendine Karsi Sorumluluklari 
+Topluma Karsi Sorumluluklar 
+Dogaya ve Cevraye Karsi Sorumlluluklar 
+Isveren ve Musteriye Karsi Sorumluluklar 
+Meslege ve Meslektaslara karsi sorumluluklar 
+
+
+BILGISAYAR MUHENDISLERININ SORUMLULUKLARI 
+En genel degerlendirme ile bir projenin gelistirilmesine iliskin evreler 
+dort asamali olarak kabul edilir 
+    -> Planlama ve secim 
+    -> Cozumleme 
+    -> Kurulum ve isletme 
+
+Bir bilism projesi icin bu asamalari ayrintilari:
+-> Kavramsal Calismalar 
+-> Gereksinimlerin Belirlenmesi 
+-> Cozumleme 
+-> Tasarim 
+-> Gerceklestirme 
+-> Sinama 
+-> Kurulum ve Isletmeye Alma 
+-> Bakim 
+
+
+URETIM ve UYGULAMA ile ILGILI SORUMLULUKLAR 
+Uretim ve uygulama sirasinda gorev alanlar ustlendikleri gorev ile 
+baglantili sorumluluk tasirlar. Bu tur sorumluluga ROL TEMELLI SORUMLULUK 
+adi verilir. 
+
+
+Bir sistemin kullanimi sirasinda ortaya cikan bir sorunu arastirmak ile 
+ilgili sorumluluga EDILGEN SORUMLULUK adi verilmektedir. 
+
+Uretim asamasinda gorev alanlarin sorumluluklari ETKEN SORUMLULUK 
+olarak tanimlanir 
+
+HATA KAYNAKLARI 
+-> Uretim Hatasi 
+-> Yanlis Karar 
+-> Ongoru 
+-> Eylem Ozgurlugu 
+
+
+                    
+
+                    FIKIR VE SANAT ESERLERI 
+                            (BOLUM 8)
+Telif hakki tanim olarak eser sahibinin ozelliklerini tasiyan 
+    ilim ve edebiyat 
+    muzik 
+    guzel sanatlar 
+    sinema 
+gibi her turlu fikir ve sanat yapiti uzerinde sahip olunabilecek maddi 
+ve manevi haklari ifade eder. 
+
+-> Telif haklarinin korumasi 70 yildir. 
+
+SINAI HAKLAR 
+Bir bulus, yenilik yeni tasarim veya ozgun calismanin bunu gerceklestiren 
+adina kaydedilmesi ve boylece urunu uretme ve satma hakkina belli bir sure 
+icin sahip olmasini saglayan hakka sinai hak denilmektedir. 
+-> Marka
+-> Lisanas 
+-> Cografi Isaret, Geleneksel Urun Adi, Tasarimlar 
+-> Patent 
+-> Faydali model (10 yil)
+-> Calisanlarin Buluslari 
+
+YAZILIMLARIN KORUNMASI 
+-> Bir yazilima patent verilmemektedir. 
+
+
+TERSINE MUHENDISLIK 
+ACIK KAYNAK KODLU YAZILIMLAR 
+
+KAYNAK KODU EMANETCILIGI 
+-> Kaynak kodlarinin calinmasina karsi onlem 
+-> Yazilimlarinin gelecegini guven altina almak 
+
+
+                BILISIM SUCLARI SALDIRI VE DOLANDIRICILIKLAR 
+                                (CHAPTER 7)
+TEKNIK ACIDAN SALDIRILAR 
+-> Etken ve Edilgen Saldiri ve Dolandiriciliklar 
+-> ICeriden ve Disaridan Yapilan Saldiri ve Dolandiriciliklar 
+-> Amaca Yonelik Saldiri ve Dolandiriciliklar 
+
+
+AB UYUMLU YASALARIMIZA GORE SUCLAR 
+-> Ozel hayata ve hayatin gizli alanina karsi islenen suclar 
+-> Mal varligina karsi islenen suclar 
+-> bilisim alaninda islenen suclar 
+
+
+=> ETKEN EDILGEN SALDIRILAR 
+    Etken Saldirida Amac 
+        -> Bilgileri okumak 
+        -> Verileri degistirmek 
+        -> Verileri silmek 
+        -> Calismayi durdurmak 
+        -> Sistem kaynaklarina zarar vermek 
+
+    Edilgen Saldirilarda Amac 
+        -> Bilgileri Okumak 
+
+
+=> Iceriden ve Disaridan Yapilan Saldirilar 
+
+    -> Iceriden Yapilan Saldirilar 
+        -Salam dilimi 
+        -Dis uzman 
+        -Sanal Saatli bomba 
+        -Bilgi Hirsizligi 
+
+    -> Disaridan Yapilan Saldirilar 
+        -Bilgi sisteminden bilgi calma 
+        -Bilgileri degistirme 
+        -Bilgileri silme 
+        -Bilgisayarin calismasini aksatma ya da durdurma 
+            - Tus izleme 
+            - Ekran Kopyalama 
+            - Tek Kullanimlik Parola 
+
+    
+Bilinen Ancak Bilisim Yoluyla Islenen Suclar 
+    - Mustehcenlik 
+    - Fuhus 
+    - Cocuklarin Cinsel Istismari 
+
+Ozel Hayata Karsi Uslenen Suclar 
+Mal varligina karsi islenen Suclar 
+
+Saldiri Bicimleri 
+    - Virus saldirilari 
+    - Kurtulmalik Yazilimlar ile Saldirilar 
+    - Bilgisyar Denetimli Sistemlere Saldirilar 
+
+
+
+
+                        AHLAK VE ETIK 
+                        (CHAPTER 6)
+AHLAK 
+    Kisilerin sosyal ortamdaki iliskilerini tanimlayan duzenleyen ve 
+    irdeleyen kurallar butunune ahlak denir. 
+
+Ahlak Duzeni 
+    Yonlendirici Kurallar 
+        - Bireyleri Yonlendiren Kurallar 
+        - Toplumlari Yonlendiren Kurallar 
+
+Ahlak Kurallari 
+    - Kurallari yazili degildir 
+    - Kurallari toplumda yasayanlarin hepsi bilir 
+    - Kurallar toplumun gneli tarafindan benimsenmistir
+    - Kurallar bir ksii veya bir grup icin gecerli degildir 
+
+
+
+ETIK 
+    -> Dogru ve yanlis ne demektir 
+    -> Iyi bir yasam nasil saglanir 
+    -> Haklar ve sorumluluklarimiz nelerdir 
+    -> Ahlakli karar nasil verilier 
+
+-> Toplum icinde, bireyler arasindaki ve bireyler ile toplum arasindaki 
+iliskileri belirleyen degerleri kurallari ve toreleri arastiran bir 
+felsefe alanidir. 
+
+
+AHLAK: Toplumun cogunlugu tarafindan dogru kabul edilen kural, deger 
+ve ilkeler kumesidier. Dogru kabul edilen kural, deger ve ilkelerin
+nedenselligi arastirilmaz. 
+
+ETIK: Etik Kurallari mantiksal yoldan olusturmaya claisir. Bu nedenle 
+evrenseldir. Etik sosyal iliskilerin disinda is hayati ve bilimsel 
+calismalar icin de gecerlidir. 
+
+YASA: Devletin yasama gucu tarafindan belli bicimlere uyularak duzenlenen 
+ve yururluge girdikten sonra herkesin uymasi zorunlu olan uyulmadigi 
+zaman yaptirimlarla karsilasilan kualdir. 
+
+-> Bireysel Etik 
+-> Meslek Etigi 
+-> Kurumsal Etik 
+-> Bilisim Etigi 
+
+
+                    SURDURULEBILIR KALKINMA 
+                        (CHAPTER 5) 
+                    
+SUSTAINABLE DEVELOPMENT 
+
+-> Surdurulebilir kalkinmayla alakali uluslararasi cerceve 1992 de 
+    kururlmustur 
+    
+-> Haziran 1992 de Rio de JANERIO da tertiplenen BM Cevre ve Kalkinma 
+Konferansi, uluslarin cevreye duyarli yonetim sekilleri benimsemelerine 
+yonelik bir dizi ilkenin kabulu acisindan onemli bir adim olmustur 
+
+
+SURDURULEBILIR KALKINMA AMACLARI (SKA) Birlesmis Milletler uyesi 
+ulkeler tarafindan 2030 sonuna kadar ulasilmasi amaclanan hedefleri 
+iceren bir cagridir. 
+
+-> Tum bu kararlar 17 ana basliktan olusan sosyal, kulturel ve ekolojik 
+    meslelerin cozumune odaklanir 
+    .
+    .
+    .
+    .
+    . 
+
+-> OCAK 2016 da Yururluge Girmistir 
+
+
+
+                        GIRISIMCILIK 
+                         (CHAPTER4)
+
+-> Kar amaci ile riski ustune alan ve is kuran kisinin yaptigi atilim 
+-> Girisimcilik kurumsal duzeyde de olabilir 
+
+
+GIRISIMCILIGIN BOYUTLARI 
+- Firsatlari Degerlendirme 
+- Risk Alma 
+- Yenilikcilik 
+
+
+GIRISIMCILI IS KURMA SURECINDEKI TEMEL ADIMLARI 
+    1- Motivasyon 
+    2- Is Fikri 
+    3- Calisma Programi 
+    4- On Degerlendirme 
+    5- Yapilabilirlik Arastirmasi 
+    6- Is Plani 
+    7- Isi Kurmak 
+    8- Isi Gelistirmek 
+
+
+
+                        SUNUM HAZIRLANMASI 
+                            (BOLUM 3)
+
+Sunum Hazirlama 
+
+    Sunum Icerigi 
+        -Karsilama/Baslik Yansisi 
+        -Sunum Plani 
+        -Giris Yansisi 
+        -Konunun ve Diger Icerigin Aktarildigi Govde Yansilar 
+        -Sonuclar/degerlendirmeler/genel ozet 
+        -Sorular/gorusler/dinleyicilere tesekkur 
+
+    Yansi Hazirlama 
+        - Yansilar kalabalik tutulmamalidir 
+        - En az 18 punto kullanilmali 
+        - Italik yazi tiplerinden kacinilmalidir 
+        - Ayni yansida birden fazla renk kullanilmamali 
+        - Arka plan renkleri ve duzeninde koyu veya parlak renklerden 
+          kacinilmalidir. 
+
+
+        
+
+                    YASAM BOYU OGRENME 
+                        (CHAPTER 3)
+
+EGITIM BICIMLERI 
+    -> Orgun Egitim 
+    -> Yaygin Egitim 
+    -> Algin Egitim 
+
+
+Yasam boyu ogrenme kavraminin daha once ortaya atilan egitim kavramlarindan 
+bazi farklari 
+-> Bireyi merkez alan bir yaklasimin benimsenmesi 
+-> Okul disi ogrenmeye onem verilmesi 
+-> Egitimin belli bir zaman dilimminde sinirlandirlmamasi 
+
+
+                BILIMSEL YAYINLARIN HAZIRLANMASI 
+                        (CHAPTER 2)
+
+Bilimsel Yayinin Temel Bolumleri 
+- Introduction:Giris 
+- Methods:Ilgili Calismalar 
+- Results: Sonuclar 
+- Discussion: Tartisma 
+- References: Kaynakca 
+
+                ARASTIRMA YONTEM VE TEKNIKLERI 
+                        (CHAPTER 1)
+Bilimsel Arastirmalarin Asamalari 
+1- Problemin fark edilmesi 
+2- Problemin Tanimlanmasi 
+3- Cozum yollarinin tahmini 
+4- Arastirma yonteminin gelistirilmesi 
+5- Verilerin toplanmasi ve analizi 
+6- Karar verme ve yorumlama 
+
+
+ARASTIRMA YONTEM VE TEKNIKLERI 
+DATA(veri): Henuz islenmmeis ham bilgilerdir
+INFORMATION(malumat):Islenmis ozetlenmis, organize edilmis veri 
+KNOWLEDGE(Bilgi):Malumatin islenmis hali 
+WISDON(IRFAN,BILGELIK):Bilgi ve tecruvelerden elde edilen ve karar 
+                       verme asamasinda kullanilan degerli bilgi 
+
+
+IRFAN>BILGI>MALUMAT>VERI 
+
+
+Hipotez: Dogrulanacagi umulan dusunce 
+Teori: Dogrulanmis hipotezler 
+Kanun: Olgu haline gelmis formullerle ifade edilebilen hipotezlerin son hali 
+
+
+BILIMSEL ARASTIRMA YONTEMLERI 
+-> Tumdengelim 
+-> Tumevarim 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
